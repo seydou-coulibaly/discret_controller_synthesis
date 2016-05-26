@@ -1,0 +1,308 @@
+type numero=Un|Deux|Trois|Quatre|Cinq|Six|PointMort
+type lum = Low|Normal|High
+type couleur = Vert|Jaune|Rouge
+type position = Ville|Autoroute
+type etatPhares = Idle|Veilleuses|Codes|Phares
+type cause = PresencePieton|Presencevehicule|Feu|None
+
+node moteur(commande,cle:bool) returns (etat:bool)
+let 
+	automaton
+		state Allumer
+			do etat = true;
+			unless not commande & not cle then Eteint
+		state Eteint
+			do etat = false;
+			unless commande & cle then Allumer
+	end
+tel
+
+node vitesse (boiteDeVitesse:numero) returns (num: numero)
+let 
+	automaton
+		state Zero
+			do num = PointMort;
+			unless  boiteDeVitesse = Deux then Deuxieme
+			| boiteDeVitesse = Trois then Troisieme
+			| boiteDeVitesse = Quatre then Quatrieme
+			| boiteDeVitesse = Cinq then Cinquieme
+			| boiteDeVitesse = Six then Arriere
+			| boiteDeVitesse = Un then Premier
+		state Premier
+			do num = Un;
+			unless  boiteDeVitesse = Deux then Deuxieme
+			| boiteDeVitesse = Trois then Troisieme
+			| boiteDeVitesse = Quatre then Quatrieme
+			| boiteDeVitesse = Cinq then Cinquieme
+			| boiteDeVitesse = Six then Arriere
+			| boiteDeVitesse = PointMort then Zero
+		state Deuxieme
+			do num = Deux;
+			unless  boiteDeVitesse = Un then Premier
+			| boiteDeVitesse = Trois then Troisieme
+			| boiteDeVitesse = Quatre then Quatrieme
+			| boiteDeVitesse = Cinq then Cinquieme
+			| boiteDeVitesse = Six then Arriere
+			| boiteDeVitesse = PointMort then Zero
+		state Troisieme
+			do num = Trois;
+			unless  boiteDeVitesse = Un then Premier
+			| boiteDeVitesse = Deux then Deuxieme
+			| boiteDeVitesse = Quatre then Quatrieme
+			| boiteDeVitesse = Cinq then Cinquieme
+			| boiteDeVitesse = Six then Arriere
+			| boiteDeVitesse = PointMort then Zero
+		state Quatrieme
+			do num = Quatre;
+			unless  boiteDeVitesse = Un then Premier
+			| boiteDeVitesse = Deux then Deuxieme
+			| boiteDeVitesse = Trois then Troisieme
+			| boiteDeVitesse = Cinq then Cinquieme
+			| boiteDeVitesse = Six then Arriere
+			| boiteDeVitesse = PointMort then Zero
+		state Cinquieme
+			do num = Cinq;
+			unless  boiteDeVitesse = Un then Premier
+			| boiteDeVitesse = Deux then Deuxieme
+			| boiteDeVitesse = Quatre then Troisieme
+			| boiteDeVitesse = Trois then Troisieme
+			| boiteDeVitesse = Six then Arriere
+			| boiteDeVitesse = PointMort then Zero
+		state Arriere
+			do num = Six;
+			unless  boiteDeVitesse = Un then Premier
+			| boiteDeVitesse = Deux then Deuxieme
+			| boiteDeVitesse = Quatre then Troisieme
+			| boiteDeVitesse = Trois then Troisieme
+			| boiteDeVitesse = Cinq then Cinquieme
+			| boiteDeVitesse = PointMort then Zero
+	end
+tel
+
+node acceleration(moteur,frein, accelerateur:bool) returns (avance:bool)
+let 
+	automaton
+		state Move
+			do avance = true;
+			unless frein or not moteur then Stop
+		state Stop
+			do avance = false;
+			unless moteur & accelerateur then Move
+	end
+tel
+
+node retroviseurs (moteur: bool;lumiere:lum) returns (gerer:bool)
+let 
+	automaton
+		state Desacitve
+			do gerer = false ;
+			unless moteur & (lumiere = High) then PositionJour
+			| moteur & (lumiere = Low) then PositionNuit
+			| not moteur & (lumiere = Normal) then PositionNormale			
+		state PositionNormale
+			do gerer = true ;
+			unless moteur & (lumiere = High) then PositionJour
+			| moteur & (lumiere = Low) then PositionNuit
+			| not moteur then Desacitve
+		state PositionJour
+			do gerer = true ;
+			unless moteur & (lumiere = Normal) then PositionNormale
+			| moteur & (lumiere = Low) then PositionNuit
+			| not moteur then Desacitve
+		state PositionNuit
+			do gerer = true ;
+			unless moteur & (lumiere = High) then PositionJour
+			| moteur & (lumiere = Normal) then PositionNormale
+			| not moteur then Desacitve
+	end
+tel
+
+node essuieGlace (moteur, capteurPluie: bool; densite : lum) returns (etat: bool)
+let 
+	automaton
+		state Desactive
+			do etat = false;
+			unless moteur & capteurPluie then BalayageUnique
+		state BalayageUnique
+			do etat = true;
+			unless not capteurPluie or not moteur then Desactive
+			|moteur & capteurPluie & (densite = High) then BalayageContiu
+			|moteur & capteurPluie & (densite = Normal) then BalayageIntermittent
+		state BalayageIntermittent
+			do etat = true;
+			unless not capteurPluie or not moteur then Desactive
+			|moteur & capteurPluie & (densite = High) then BalayageContiu
+			|moteur & capteurPluie & (densite = Low) then BalayageUnique
+		state BalayageContiu
+			do etat = true;
+			unless not capteurPluie or not moteur then Desactive
+			|moteur & capteurPluie & (densite = Low) then BalayageUnique
+			|moteur & capteurPluie & (densite = Normal) then BalayageIntermittent
+	end
+tel
+
+node accident (detectionAccident: bool) returns (airbag, emissionAppelUrgence: bool)
+let
+	automaton
+		state Desactive
+			do (airbag, emissionAppelUrgence) = (false, false);
+			unless detectionAccident then Active
+		state Active 
+			do (airbag, emissionAppelUrgence) = (true, true);
+			unless not detectionAccident then Active
+	end
+tel
+
+node avertissement (detectionDepassementLigne, detectionVolantLibre,detectionDefaillanceTechnique, detectionVehiculeAngleMort:bool) returns (depassementLigne,volantLibre,defaillanceTechnique, dangerAngleMort:bool)
+let
+	automaton
+		state Idle
+		do (depassementLigne,volantLibre,defaillanceTechnique, dangerAngleMort) = (false,false, false, false);
+		unless detectionDepassementLigne or detectionVolantLibre or detectionDefaillanceTechnique or detectionVehiculeAngleMort then Detection
+		state Detection
+		do (depassementLigne,volantLibre,defaillanceTechnique,dangerAngleMort) = (detectionDepassementLigne, detectionVolantLibre,detectionDefaillanceTechnique,detectionVehiculeAngleMort);
+		unless not detectionDepassementLigne & not detectionVolantLibre & not detectionDefaillanceTechnique & not detectionVehiculeAngleMort then Idle
+	end
+tel
+
+node securite (presencePieton, presencevehicule:bool; feu : couleur) returns (frein:bool; causeFreinage: cause)
+let 
+	automaton
+		state Acceleration
+			do frein = false;
+			causeFreinage = None;
+			unless presencePieton then Pieton
+			| not presencePieton & presencevehicule then Vehicule
+			| not presencePieton & not presencevehicule & (feu <> Vert) then Feu
+		state Pieton
+			do frein = true;
+			causeFreinage = PresencePieton;
+			unless not presencePieton & not presencevehicule & (feu = Vert) then Acceleration
+			| not presencePieton & presencevehicule then Vehicule
+			| not presencePieton & not presencevehicule & (feu <> Vert) then Feu
+		state Vehicule
+			do frein = true;
+			causeFreinage = Presencevehicule;
+			unless not presencePieton & not presencevehicule & (feu = Vert) then Acceleration
+			| presencePieton then Pieton
+			| not presencePieton & not presencevehicule & (feu <> Vert) then Feu
+		state Feu
+			do frein = true;
+			causeFreinage = Feu;
+			unless not presencePieton & not presencevehicule & (feu = Vert) then Acceleration
+			| presencePieton then Pieton
+			| not presencePieton & presencevehicule then Vehicule
+	end
+tel
+
+node temperature (deactivated: bool; capteur:float) returns (qt: float; etat:bool)
+let
+	automaton
+		state Active
+			do etat = true;
+			qt = 19.0 -. capteur;
+			unless deactivated then Desactive
+		state Desactive
+			do etat = false;
+			qt = 0.0;
+			unless not deactivated then Active
+	end
+tel
+
+node controleurPhares(moteur,tdn,tin,cpn:bool) returns (codes,phares,veilleuses:bool; etat:etatPhares)
+let 
+	automaton
+		state Idle
+			do (codes,phares,veilleuses,etat) = (false, false, false,Idle);
+			unless tdn & moteur then Veilleuses
+		state Veilleuses
+			do (codes,phares,veilleuses,etat) = (false, false, true,Veilleuses);
+			unless tin or not moteur then Idle
+			|tdn then Codes
+		state Codes
+			do (codes,phares,veilleuses,etat) = (true, false, false,Codes);
+			unless tin then Veilleuses
+			|cpn then Phares
+			| not moteur then Idle
+		state Phares
+			do (codes,phares,veilleuses,etat) = (false, true, false,Phares);
+			unless cpn then Codes
+			| not moteur then Idle
+	end
+tel
+
+
+node automobile (lumiere,densitePluie:lum; cle,capteurPluie,commande,detectionAccident,detectionLigne, detectionVolantLibre,detectionDefaillanceTechnique, detectionAngleMort,presencePieton,presencevehicule,regulateurTemperature,td,ti,cp:bool;capteurTemperature:float;feu:couleur;boiteDeVitesse:numero) returns (moteur, etatRetroviseur, etatRegulateurTemperature,essuieGlace,accident,ligne,volantLibre,defaillanceTechnique,angleMort,stop,property:bool;causeFreinage:cause; vitesses:numero; quantiteRegule: float;phares: etatPhares;)
+contract
+ assume true
+ enforce property
+ with (c:bool)
+var
+lmoteur,lretroviseur,lessuieGlace,lairbag,lemissionAppelUrgence,lLigne,lvolantLibre,ldefaillanceTechnique, langleMort,lfrein,letatRegulateurTemperature,lcodes,lphares,lveilleuses,prop1, prop2,prop3:bool;
+lnumero:numero;
+lqt : float;
+lcause: cause;
+lstate: etatPhares;
+let
+	lmoteur = moteur(commande,cle);
+	lnumero =  vitesse (boiteDeVitesse);
+	lretroviseur = retroviseurs (lmoteur,lumiere); 
+	lessuieGlace = essuieGlace (lmoteur, capteurPluie,densitePluie);
+	(lairbag,lemissionAppelUrgence) = accident (detectionAccident);
+	(lLigne,lvolantLibre,ldefaillanceTechnique, langleMort)  = avertissement (detectionLigne, detectionVolantLibre,detectionDefaillanceTechnique, detectionAngleMort);
+	(lfrein,lcause) = securite (presencePieton, presencevehicule, feu);
+	(lqt, letatRegulateurTemperature) = temperature (regulateurTemperature, capteurTemperature);
+	(lcodes,lphares,lveilleuses,lstate)= controleurPhares(lmoteur,td,ti,cp);
+
+	prop1 =
+	prop2 =
+	prop3 = 
+	property= prop1 & prop2 & prop3;
+
+	moteur = lmoteur ;
+	etatRetroviseur = lretroviseur;
+	etatRegulateurTemperature = letatRegulateurTemperature;
+	essuieGlace = lessuieGlace;
+	accident = lairbag or lemissionAppelUrgence;
+	ligne = lLigne;
+	volantLibre = lvolantLibre;
+	defaillanceTechnique = 	ldefaillanceTechnique;
+	angleMort = langleMort;
+	stop = lfrein;
+	causeFreinage = lcause;
+	vitesses = lnumero;
+	quantiteRegule = lqt;
+	phares = lstate;
+tel
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

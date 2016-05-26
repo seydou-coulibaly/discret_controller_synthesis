@@ -1,0 +1,12 @@
+node sum(i : int) returns (o : int)
+var v : int;
+let
+  v = (o + i);
+  o = 0 fby v
+tel
+
+node minus(x : int; z : int) returns (y : int)
+let
+  y = (x - z)
+tel
+

@@ -1,0 +1,140 @@
+type lumValue = Null|Low|Normal|High
+type command = Open|Close|SwitchOn|SwitchOff|Nothing
+type lampState = On|Off
+type shutterState = Closed|Opened|Closing|Opening
+
+node shutter(copen,cclose,stopdown,stopup:bool;outdoorlum:lumValue) returns (cmd:command;shutterlum:lumValue;shutterstate:shutterState)
+
+let
+
+ automaton
+
+  state Closed
+  do
+   if copen then cmd = Open else cmd = Nothing end;
+   shutterlum = Null;
+   shutterstate = Closed;
+
+  until copen then Opening
+
+ 
+  state Opening
+  do
+   cmd = Nothing;
+   if outdoorlum = Null then shutterlum = Null else shutterlum = Low end;
+   shutterstate = Opening;
+   until stopup then Opened
+ 
+  state Opened
+   do
+
+   if cclose then cmd = Close else cmd = Nothing end;
+   shutterlum = outdoorlum;
+   shutterstate = Opened;
+  until cclose then Closing
+
+  state Closing
+  do
+   cmd = Nothing;
+   if outdoorlum = Null then shutterlum = Null else shutterlum = Low end;
+   shutterstate = Closing;
+  until stopdown then Closed   
+
+ end
+
+tel
+
+
+node lamp(c1,c2:bool) returns (cmd:command;lumlamp:lumValue;lampstate:lampState)
+
+let
+
+ automaton
+
+   state Off
+  
+   do
+
+    if c1 then cmd = SwitchOn else cmd = Nothing end;
+    lumlamp = Null;
+    lampstate = Off;
+
+   until c1 then On   
+
+  state On
+
+   do
+
+    if c2 then cmd = SwitchOff else cmd = Nothing end;
+    lumlamp = Normal;
+    lampstate = On;
+
+   until c2 then Off
+ 
+ end
+tel
+
+
+node room(presence:bool) returns (occupied:bool)
+
+let
+
+ automaton
+
+  state Nobody
+  do
+    occupied = false;
+
+  until presence then Somebody
+  
+ state Somebody
+ do
+   occupied = true;
+
+ until not presence then Nobody
+
+ end
+
+tel
+
+
+
+node lum(presence,stopdown,stopup:bool;outdoorlum:lumValue) returns (cmdShutter,cmdLamp:command;shutterstate:shutterState;lampstate:lampState;property:bool)
+
+contract
+ assume true
+ enforce property
+ with (copen,con,coff,cclose:bool)
+
+var
+    occupied:bool;
+    shutterlum,lamplum,outlumbefore:lumValue;
+    shutter_state:shutterState;lamp_state:lampState;
+    prop1, prop2,prop3,prop4, prop5:bool;
+
+let
+
+   outlumbefore = Null fby outdoorlum;
+   
+   (cmdShutter,shutterlum,shutter_state) = inlined shutter(copen,cclose,stopdown,stopup,outlumbefore);
+   shutterstate = shutter_state;
+ 
+
+   (cmdLamp,lamplum,lamp_state) = inlined lamp(con,coff);
+   lampstate = lamp_state;
+  
+   occupied = inlined room(presence);
+  
+   prop1 = not occupied or (shutterlum = Normal or lamplum = Normal);
+
+   prop2 = not (occupied & outlumbefore = Normal) or (shutter_state <> Closed);
+
+   prop3 = not (shutterlum = Normal) or (lamp_state = Off);
+
+   prop4 = occupied or (lamp_state = Off);
+  
+   prop5 = not (occupied & shutterlum = High) or (shutter_state = Closing);
+
+   property = prop1 & prop2 & prop3 & prop4 & prop5;
+  
+tel

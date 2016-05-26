@@ -1,0 +1,268 @@
+type position = Avant|Arriere|Null
+type porte = Ouvert|Fermer
+type lum = Rouge|Vert|Jaune
+type stat = Arret|EnMouvement
+node presence(presence:bool) returns (occuper:bool)
+let
+ automaton
+  	state Nothing
+ 	do
+    		occuper = false;
+  	unless presence then Presence
+  
+ 	state Presence
+ 	do
+   		occuper = true;
+ 	unless not presence then Nothing
+ end
+
+tel
+
+node sens(presence,entree,sortie:bool) returns (pos:position)
+let
+ automaton
+	state NoPresence
+	do
+		pos = Null;
+	unless entree then Avant
+	|not entree & sortie then Arriere
+  	state Avant
+ 	do
+    		pos = Avant;
+  	unless sortie & not entree then Arriere
+	|not not presence then NoPresence
+ 	state Arriere
+ 	do
+   		pos = Arriere;
+ 	unless entree then Avant
+	|not presence then NoPresence
+ end
+
+tel
+
+node presenceSens(entree,sortie:bool) returns (pos:position)
+let
+ automaton
+	state Idle
+	do
+		pos = Null;
+	unless entree then Avant
+	|not entree & sortie then Arriere
+  	state Avant
+ 	do
+    		pos = Avant;
+  	unless not entree & not sortie then Idle
+	| sortie & not entree then Arriere
+ 	state Arriere
+ 	do
+   		pos = Arriere;
+ 	unless entree then Avant
+	|not entree & not sortie then Idle
+ end
+
+tel
+
+
+node lampe(interrupteur:bool) returns (lumiere:bool)
+let
+ automaton
+   	state Off  
+	do
+		lumiere = false;
+	unless interrupteur then On   
+
+	state On
+	do
+		lumiere = true;
+	unless not interrupteur then Off
+ 
+ end
+tel
+
+node poubelle (con,coff:bool) returns (ouvrir: bool)
+let
+	 automaton
+		state Fermer
+ 		do
+    			ouvrir = false;
+  		unless con then Ouvrir
+  
+ 		state Ouvrir
+ 		do
+   			ouvrir = true;
+ 		unless coff then Fermer
+	end
+tel
+
+node porte (copen:bool) returns (ouvrir: porte)
+let
+	 automaton
+		state Fermer
+ 		do
+    			ouvrir = Ouvert;
+  		unless copen then Ouvrir
+  
+ 		state Ouvrir
+ 		do
+   			ouvrir = Fermer;
+ 		unless not copen then Fermer
+	end
+tel
+
+
+node stores (copen,close: bool) returns (store: bool)
+let
+	 automaton
+		state Fermer
+ 		do
+    			store = false;
+  		unless copen then Ouvrir
+	
+ 		state Ouvrir
+ 		do
+			store = true;
+ 		unless close then Fermer
+	end
+tel
+
+node alarme (marcheArret,code,pbGar,pbHab:bool;dReprise,dVigilence,dAlarme:int) returns (sonnerAlarme:bool; enMarche:lum)
+var 
+last temps:int = 0;
+last vigilence:int = 0;
+last reprise:int = 0;
+let
+	automaton
+		state Arret
+			do 
+				sonnerAlarme = false;
+				enMarche = Rouge;
+			unless marcheArret then Allume
+		state Allume
+			do 
+				enMarche = Vert;
+				sonnerAlarme = false;
+				temps = 0 fby (temps +1);
+			until code then Vigilence
+			| pbHab then Sonner
+			| pbGar & (dVigilence <= temps) then Sonner
+		state Sonner
+			do 
+				enMarche = Vert;
+				sonnerAlarme = true;
+				reprise = 0 fby (reprise +1);
+			until code then Arret
+			|dReprise <= reprise then Allume
+		state Vigilence
+			do 
+				enMarche = Jaune;
+				sonnerAlarme = false;
+				vigilence = 0 fby (vigilence +1);
+			until pbHab then Sonner
+			| dVigilence <= vigilence then Arret
+	end;
+tel
+
+node ascenseur(demandeEtage,arriveEtage:bool) returns (etat: bool)
+let
+	automaton
+		state Stop
+		do
+			etat = false;	
+		unless demandeEtage then Mouvement
+
+		state Mouvement
+		do
+			etat = true;
+		unless not demandeEtage or arriveEtage then Stop
+	end
+tel
+
+node smartHome (presenceMaison,presenceAscenseur,presenceGarage,presenceDevantPoubelle,vent,luminosite,codeAlarme,codePorte,codeBarriere,presenceEntreePorte,presenceSortiePorte,presenceEntreeBarriere,presenceSortieBarriere:bool; dReprise,dVigilence,dAlarme:int) returns (etatMaison,lumiere,poubelleOuvert,ouvertureStore,alarmeSonne,property: bool;porteStatus,barriere:porte;etatAlarme:lum;capteurPositionPorte,capteurPositionBarriere:position;ascenseur:bool)
+contract
+assume true
+enforce property
+with (interrupteur,copen,close,openPorte,openBarriere,con, coff,marcheArret,demandeEtage,arriveEtage:bool)
+
+var
+loccuperMaison,loccuperGarage,loccuperAscenseur,lpresencePoubelle,lLumiere,louvrirPoubelle,lstores,lsonnerAlarme,lascenseur,prop1,prop2,prop3, prop4,prop5,prop6,prop7,prop8,prop8a,prop9,prop10,prop11,prop12,prop13,prop14,prop15,prop16,prop12a,prop12b,prop17,prop18,prop19,prop20, prop21,prop22,prop23,prop24:bool;
+louvrirPorte,louvrirBarriere:porte;
+lenMarche:lum;
+lpositionDevantPorte, lpositionDevantBarriere: position;
+
+let
+	loccuperMaison = inlined presence(presenceMaison);
+	loccuperGarage = inlined presence(presenceGarage);
+	loccuperAscenseur = inlined presence(presenceAscenseur);
+
+	lLumiere = inlined lampe(interrupteur) ;
+	lpresencePoubelle = inlined presence(presenceDevantPoubelle) ;
+	louvrirPoubelle = inlined poubelle(con, coff);
+
+	louvrirPorte = inlined porte (openPorte);
+	lpositionDevantPorte = inlined presenceSens(presenceEntreePorte,presenceSortiePorte);
+
+	louvrirBarriere = inlined porte (openBarriere);
+	lpositionDevantBarriere = inlined presenceSens(presenceEntreeBarriere,presenceSortieBarriere);
+
+	lstores = inlined stores (copen,close);
+	(lsonnerAlarme, lenMarche) = inlined alarme(marcheArret, codeAlarme,loccuperGarage,loccuperMaison,dReprise,dVigilence,dAlarme);
+	lascenseur  = inlined ascenseur(demandeEtage,arriveEtage);
+	
+	prop1 = loccuperMaison or not lLumiere;
+	prop2 = loccuperMaison or not lstores;
+	prop3 = not loccuperMaison or (lstores or lLumiere);
+	
+	prop4 = vent or lstores;
+	prop5 = not luminosite or lstores;
+	prop6 = not vent or not lstores;	
+	prop7 = luminosite or not lstores;
+	
+	prop8 = lstores or lLumiere;
+	prop8a = not (not lstores & loccuperMaison) or lLumiere;
+	prop9 = not lstores or not lLumiere;
+
+	prop10 = lpresencePoubelle or not louvrirPoubelle;
+	prop11 = not lpresencePoubelle or louvrirPoubelle;
+	
+	prop12 = not (not vent & luminosite) or lstores;
+	prop12a = not (not vent & luminosite & loccuperMaison) or lstores;
+	prop12b = not (not vent & luminosite & not loccuperMaison) or not lstores;
+	prop13 = not (vent & not luminosite) or not lstores;
+	prop14 = not (vent & luminosite) or not lstores;	
+	prop15 = not (not vent & not luminosite) or not lstores;
+
+	prop17 = not (lpositionDevantPorte = Arriere) or (louvrirPorte = Ouvert);
+	prop23 = not (lpositionDevantPorte = Null) or (louvrirPorte <> Ouvert);
+	prop16 = not (codePorte & lpositionDevantPorte = Avant) or (louvrirPorte = Ouvert);	
+
+	prop19 = not (lpositionDevantBarriere= Arriere) or (louvrirBarriere = Ouvert);
+	prop24 = not (lpositionDevantBarriere= Null) or (louvrirBarriere <> Ouvert);
+	prop18 =  not (codeBarriere & lpositionDevantBarriere = Avant) or (louvrirBarriere = Ouvert);
+	
+	prop20 = loccuperAscenseur or  not lascenseur;
+	prop21 = not loccuperAscenseur or lascenseur;
+	prop22 = loccuperMaison or (lenMarche <> Rouge);
+	
+	property = prop1 & prop2 & prop3 & prop8a & prop9 & prop10 & prop11 & prop12a & prop12b & prop13 & prop14 & prop15 & prop17 & prop18 & prop19 & prop23 & prop24 & prop16 & prop20 & prop21 & prop22;
+
+	etatMaison = loccuperMaison;
+	lumiere = lLumiere;
+	poubelleOuvert = louvrirPoubelle;
+	porteStatus = louvrirPorte;
+	capteurPositionPorte = lpositionDevantPorte;
+	capteurPositionBarriere = lpositionDevantBarriere;
+	barriere = louvrirBarriere;
+	ouvertureStore = lstores;
+	etatAlarme = lenMarche;
+	alarmeSonne = lsonnerAlarme;
+	ascenseur = lascenseur;
+	
+tel
+
+
+
+
+
+
+
+

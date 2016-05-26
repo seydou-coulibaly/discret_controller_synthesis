@@ -1,0 +1,9 @@
+0.	ArretDispositif
+1.	DispositifMarche
+2.	DispositifVigilence
+3.	DispositifVigilence
+4.	DispositifVigilence
+5.	DispositifMarche
+6.	DispositifMarche
+7.	DispositifMarche
+8.	DispositifMarche

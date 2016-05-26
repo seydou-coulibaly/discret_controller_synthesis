@@ -1,0 +1,103 @@
+node aiguillage (demandeActionnerAig1Haut, demandeActionnerAig1Bas, demandeActionnerAig2Haut, demandeActionnerAig2Bas:bool) returns (aiguillage1Haut, aiguillage2Haut:bool)
+	automaton
+		state haut_haut do
+			aiguillage1Haut = true;
+			aiguillage2Haut = true ;
+		until demandeActionnerAig1Bas then bas_haut
+		|demandeActionnerAig2Bas then haut_bas
+		|demandeActionnerAig1Haut & demandeActionnerAig2Bas then bas_bas
+
+		state bas_haut do
+			aiguillage1Haut = false;
+			aiguillage2Haut = true ;
+		until demandeActionnerAig1Haut then haut_haut
+		|demandeActionnerAig2Bas then bas_bas
+		|demandeActionnerAig1Haut & demandeActionnerAig2Bas then haut_bas
+
+		state bas_bas do
+			aiguillage1Haut = false;
+			aiguillage2Haut = false;
+		until demandeActionnerAig1Haut then haut_bas
+		|demandeActionnerAig2Haut then bas_haut
+		|demandeActionnerAig1Haut & demandeActionnerAig2Haut then haut_haut
+
+		state haut_bas do
+			aiguillage1Haut = true;
+			aiguillage2Haut = false ;
+		until demandeActionnerAig1Bas then bas_bas
+		|demandeActionnerAig2Haut then haut_haut
+		|demandeActionnerAig1Bas & demandeActionnerAig2Haut then bas_haut
+ 
+
+	end
+tel
+
+node feu (aiguillage1Haut, aiguillage2Haut:bool) returns (feu1,feu2,feuGare1,feuGare2:bool)
+	automaton
+		state feu1_feu2 do
+			feu1 = true;
+			feu2 = true ;
+			feuGare1 = false;
+			feuGare2 = false ;
+		until not aiguillage1Haut then feuGare1_feu2
+		|aiguillage2Haut then feu1_feuGare2
+		|not aiguillage1Haut & aiguillage2Haut then feuGare1_feuGare2
+
+		state feuGare1_feuGare2 do
+			feu1 = false;
+			feu2 = false ;
+			feuGare1 = true;
+			feuGare2 = true ;
+		until not aiguillage2Haut then feuGare1_feu2
+		|aiguillage1Haut then feu1_feuGare2
+		|not aiguillage2Haut & aiguillage1Haut then feu1_feu2
+
+		state feuGare1_feu2 do
+			feu1 = false;
+			feu2 = true ;
+			feuGare1 = true;
+			feuGare2 = false ;
+		until aiguillage1Haut then feu1_feu2
+		|aiguillage2Haut then feuGare1_feuGare2
+		|aiguillage1Haut & aiguillage2Haut then feu1_feuGare2
+
+		state feu1_feuGare2 do
+			feu1 = true;
+			feu2 = false ;
+			feuGare1 = false;
+			feuGare2 = true ;
+		until not aiguillage1Haut then feuGare1_feuGare2
+		|not aiguillage2Haut then feu1_feu2
+		|not aiguillage1Haut & not aiguillage2Haut then feuGare1_feu2
+ 
+
+	end
+tel
+
+node train (demandeActionnerAig1Haut, demandeActionnerAig1Bas, demandeActionnerAig2Haut, demandeActionnerAig2Bas:bool) returns (aiguillage1Haut,aiguillage1Bas, aiguillage2Haut,aiguillage2Bas, feu1,feu2,feuGare1,feuGare2:bool)
+	
+contract
+assume true
+enforce true
+with (aiguillage1, aiguillage2,feu1,feu2,feu3,feu4:bool)
+let
+	(aiguillage1, aiguillage2) = inlined aiguillage(demandeActionnerAig1Haut,demandeActionnerAig1Bas,demandeActionnerAig2Haut,demandeActionnerAig2Bas);
+	
+	aiguillage1Haut = aiguillage1;
+	aiguillage1Bas = not aiguillage1;
+	aiguillage2Haut = aiguillage2;
+	aiguillage2Bas = not aiguillage2;
+
+	(feu1,feu2,feu3,feu4) = inlined feu(aiguillage1,aiguillage2);
+	
+	feu1 = feu1;
+	feu2 = feu2;
+	feuGare1 = feu3;
+	feuGare2 = feu4;
+
+
+
+
+tel
+
+

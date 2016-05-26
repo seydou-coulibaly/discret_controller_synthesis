@@ -1,0 +1,124 @@
+(* --- Generated the 14/4/2016 at 17:39 --- *)
+(* --- heptagon compiler, version 1.03.00 (compiled thu. feb. 11 18:24:22 CET 2016) --- *)
+(* --- Command line: /usr/local/bin/heptc -hepts -s ascenseur -target c -target ctrln ascenseur.ept --- *)
+
+!typedef
+  St = enum {St_Stop, St_Shut, St_Open, St_Mouvement};
+  Stat = enum {Arret, Ouvert, EnMouvement, Fermer};
+  
+!state
+  v_8: int;
+  v_11: int;
+  v_14: int;
+  ck: St;
+  pnr: bool;
+  compteur_1: int;
+  __init__: bool;
+  ok: bool;
+  etat: Stat;
+  
+!input
+  presence: bool;
+  presenceEtageCourant: bool;
+  demandeEtage: bool;
+  arriveEtage: bool;
+  secondo: int;
+  
+!controllable
+  c: bool;
+  
+!local
+  v_7: int;
+  v_6: bool;
+  v_5: St;
+  v_4: bool;
+  v_3: bool;
+  v_2: bool;
+  v_1: bool;
+  v: bool;
+  v_10: int;
+  v_9: bool;
+  v_13: int;
+  v_12: bool;
+  nr_St_Mouvement: bool;
+  ns_St_Mouvement: St;
+  compteur_St_Mouvement: int;
+  etat_St_Mouvement: Stat;
+  nr_St_Shut: bool;
+  ns_St_Shut: St;
+  compteur_St_Shut: int;
+  etat_St_Shut: Stat;
+  nr_St_Open: bool;
+  ns_St_Open: St;
+  compteur_St_Open: int;
+  etat_St_Open: Stat;
+  nr_St_Stop: bool;
+  ns_St_Stop: St;
+  compteur_St_Stop: int;
+  etat_St_Stop: Stat;
+  ns: St;
+  r: bool;
+  nr: bool;
+  compteur: int;
+  
+!definition
+  v_7 = (compteur + 1);
+  v_6 = v_4;
+  v_5 = (if v_4 then St_Mouvement else St_Shut);
+  v_4 = (v_1 or v_3);
+  v_3 = v_2 and demandeEtage;
+  v_2 = not presence;
+  v_1 = presence and v;
+  v = (secondo >= compteur);
+  v_10 = (compteur + 1);
+  v_9 = (secondo >= compteur);
+  v_13 = (compteur + 1);
+  v_12 = (secondo >= compteur);
+  nr_St_Mouvement = arriveEtage;
+  ns_St_Mouvement = (if arriveEtage then St_Stop else St_Mouvement);
+  compteur_St_Mouvement = compteur_1;
+  etat_St_Mouvement = EnMouvement;
+  nr_St_Shut = (presenceEtageCourant or v_6);
+  ns_St_Shut = (if presenceEtageCourant then St_Open else v_5);
+  compteur_St_Shut = (if r then 0 else v_8);
+  etat_St_Shut = Fermer;
+  nr_St_Open = v_9;
+  ns_St_Open = (if v_9 then St_Shut else St_Open);
+  compteur_St_Open = (if r then 0 else v_11);
+  etat_St_Open = Ouvert;
+  nr_St_Stop = v_12;
+  ns_St_Stop = (if v_12 then St_Open else St_Stop);
+  compteur_St_Stop = (if r then 0 else v_14);
+  etat_St_Stop = Arret;
+  ns = (if (ck = St_Stop) then ns_St_Stop else
+       (if (ck = St_Open) then ns_St_Open else
+       (if (ck = St_Shut) then ns_St_Shut else ns_St_Mouvement)));
+  r = pnr;
+  nr = (if (ck = St_Stop) then nr_St_Stop else
+       (if (ck = St_Open) then nr_St_Open else
+       (if (ck = St_Shut) then nr_St_Shut else nr_St_Mouvement)));
+  compteur = (if (ck = St_Stop) then compteur_St_Stop else
+             (if (ck = St_Open) then compteur_St_Open else
+             (if (ck = St_Shut) then compteur_St_Shut else
+             compteur_St_Mouvement)));
+  
+!transition
+  v_8'= (if (ck = St_Shut) then v_7 else v_8);
+  v_11'= (if (ck = St_Open) then v_10 else v_11);
+  v_14'= (if (ck = St_Stop) then v_13 else v_14);
+  ck'= ns;
+  pnr'= nr;
+  compteur_1'= compteur;
+  __init__'= false;
+  ok'= true;
+  etat'= (if (ck = St_Stop) then etat_St_Stop else
+         (if (ck = St_Open) then etat_St_Open else
+         (if (ck = St_Shut) then etat_St_Shut else etat_St_Mouvement)));
+  
+!initial
+  (ck = St_Stop) and not pnr and (compteur_1 = 0) and (v_8 = 0) and
+  (v_11 = 0) and (v_14 = 0) and __init__;
+!assertion
+  true;
+!invariant
+  (__init__ or ok);

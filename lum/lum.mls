@@ -1,0 +1,416 @@
+type st_5 = St_5_Opening|St_5_Opened|St_5_Closing|St_5_Closed
+type st_4 = St_4_On|St_4_Off
+type st_3 = St_3_Somebody|St_3_Nobody
+type st_2 = St_2_Somebody|St_2_Nobody
+type st_1 = St_1_On|St_1_Off
+type st = St_Opening|St_Opened|St_Closing|St_Closed
+type lumValue = Null|Low|Normal|High
+type command = Open|Close|SwitchOn|SwitchOff|Nothing
+type lampState = On|Off
+type shutterState = Closed|Opened|Closing|Opening
+node shutter(copen : bool; cclose : bool; stopdown : bool; stopup : bool;
+              outdoorlum : lumValue)
+returns (cmd : command; shutterlum : lumValue; shutterstate : shutterState)
+var shutterlum_St_Closing_false : lumValue;
+    shutterlum_St_Closing_true : lumValue; ck_4 : bool;
+    cmd_St_Opened_false : command; cmd_St_Opened_true : command; ck_3 : bool;
+    shutterlum_St_Opening_false : lumValue;
+    shutterlum_St_Opening_true : lumValue; ck_2 : bool;
+    cmd_St_Closed_false : command; cmd_St_Closed_true : command; ck_1 : bool;
+    nr_St_Closing : bool; ns_St_Closing : st;
+    shutterstate_St_Closing : shutterState; shutterlum_St_Closing : lumValue;
+    cmd_St_Closing : command; nr_St_Opened : bool; ns_St_Opened : st;
+    shutterstate_St_Opened : shutterState; shutterlum_St_Opened : lumValue;
+    cmd_St_Opened : command; nr_St_Opening : bool; ns_St_Opening : st;
+    shutterstate_St_Opening : shutterState; shutterlum_St_Opening : lumValue;
+    cmd_St_Opening : command; nr_St_Closed : bool; ns_St_Closed : st;
+    shutterstate_St_Closed : shutterState; shutterlum_St_Closed : lumValue;
+    cmd_St_Closed : command; ck : st; ns : st; r : bool; nr : bool;
+    pnr : bool;
+let
+  nr =
+    merge ck
+      (St_Closing -> nr_St_Closing)(St_Opened -> nr_St_Opened)
+      (St_Opening -> nr_St_Opening)(St_Closed -> nr_St_Closed);
+  ns =
+    merge ck
+      (St_Closing -> ns_St_Closing)(St_Opened -> ns_St_Opened)
+      (St_Opening -> ns_St_Opening)(St_Closed -> ns_St_Closed);
+  shutterstate =
+    merge ck
+      (St_Closing -> shutterstate_St_Closing)
+      (St_Opened -> shutterstate_St_Opened)
+      (St_Opening -> shutterstate_St_Opening)
+      (St_Closed -> shutterstate_St_Closed);
+  shutterlum =
+    merge ck
+      (St_Closing -> shutterlum_St_Closing)
+      (St_Opened -> shutterlum_St_Opened)
+      (St_Opening -> shutterlum_St_Opening)
+      (St_Closed -> shutterlum_St_Closed);
+  cmd =
+    merge ck
+      (St_Closing -> cmd_St_Closing)(St_Opened -> cmd_St_Opened)
+      (St_Opening -> cmd_St_Opening)(St_Closed -> cmd_St_Closed);
+  ns_St_Closing =
+    if (stopdown when St_Closing(ck)) then St_Closed else St_Closing;
+  nr_St_Closing = if (stopdown when St_Closing(ck)) then true else false;
+  shutterstate_St_Closing = Closing;
+  shutterlum_St_Closing =
+    merge ck_4
+      (false -> shutterlum_St_Closing_false)
+      (true -> shutterlum_St_Closing_true);
+  shutterlum_St_Closing_false = Low;
+  shutterlum_St_Closing_true = Null;
+  ck_4 = ((outdoorlum when St_Closing(ck)) = Null);
+  cmd_St_Closing = Nothing;
+  ns_St_Opened =
+    if (cclose when St_Opened(ck)) then St_Closing else St_Opened;
+  nr_St_Opened = if (cclose when St_Opened(ck)) then true else false;
+  shutterstate_St_Opened = Opened;
+  shutterlum_St_Opened = (outdoorlum when St_Opened(ck));
+  cmd_St_Opened =
+    merge ck_3 (false -> cmd_St_Opened_false)(true -> cmd_St_Opened_true);
+  cmd_St_Opened_false = Nothing;
+  cmd_St_Opened_true = Close;
+  ck_3 = (cclose when St_Opened(ck));
+  ns_St_Opening =
+    if (stopup when St_Opening(ck)) then St_Opened else St_Opening;
+  nr_St_Opening = if (stopup when St_Opening(ck)) then true else false;
+  shutterstate_St_Opening = Opening;
+  shutterlum_St_Opening =
+    merge ck_2
+      (false -> shutterlum_St_Opening_false)
+      (true -> shutterlum_St_Opening_true);
+  shutterlum_St_Opening_false = Low;
+  shutterlum_St_Opening_true = Null;
+  ck_2 = ((outdoorlum when St_Opening(ck)) = Null);
+  cmd_St_Opening = Nothing;
+  ns_St_Closed = if (copen when St_Closed(ck)) then St_Opening else St_Closed;
+  nr_St_Closed = if (copen when St_Closed(ck)) then true else false;
+  shutterstate_St_Closed = Closed;
+  shutterlum_St_Closed = Null;
+  cmd_St_Closed =
+    merge ck_1 (false -> cmd_St_Closed_false)(true -> cmd_St_Closed_true);
+  cmd_St_Closed_false = Nothing;
+  cmd_St_Closed_true = Open;
+  ck_1 = (copen when St_Closed(ck));
+  ck = St_Closed fby ns;
+  pnr = false fby nr;
+  r = pnr
+tel
+
+node lamp(c1 : bool; c2 : bool)
+returns (cmd : command; lumlamp : lumValue; lampstate : lampState)
+var cmd_St_1_On_false : command; cmd_St_1_On_true : command; ck_6 : bool;
+    cmd_St_1_Off_false : command; cmd_St_1_Off_true : command; ck_5 : bool;
+    nr_St_1_On : bool; ns_St_1_On : st_1; lampstate_St_1_On : lampState;
+    lumlamp_St_1_On : lumValue; cmd_St_1_On : command; nr_St_1_Off : bool;
+    ns_St_1_Off : st_1; lampstate_St_1_Off : lampState;
+    lumlamp_St_1_Off : lumValue; cmd_St_1_Off : command; ck : st_1;
+    ns : st_1; r : bool; nr : bool; pnr : bool;
+let
+  nr = merge ck (St_1_On -> nr_St_1_On)(St_1_Off -> nr_St_1_Off);
+  ns = merge ck (St_1_On -> ns_St_1_On)(St_1_Off -> ns_St_1_Off);
+  lampstate =
+    merge ck (St_1_On -> lampstate_St_1_On)(St_1_Off -> lampstate_St_1_Off);
+  lumlamp =
+    merge ck (St_1_On -> lumlamp_St_1_On)(St_1_Off -> lumlamp_St_1_Off);
+  cmd = merge ck (St_1_On -> cmd_St_1_On)(St_1_Off -> cmd_St_1_Off);
+  ns_St_1_On = if (c2 when St_1_On(ck)) then St_1_Off else St_1_On;
+  nr_St_1_On = if (c2 when St_1_On(ck)) then true else false;
+  lampstate_St_1_On = On;
+  lumlamp_St_1_On = Normal;
+  cmd_St_1_On =
+    merge ck_6 (false -> cmd_St_1_On_false)(true -> cmd_St_1_On_true);
+  cmd_St_1_On_false = Nothing;
+  cmd_St_1_On_true = SwitchOff;
+  ck_6 = (c2 when St_1_On(ck));
+  ns_St_1_Off = if (c1 when St_1_Off(ck)) then St_1_On else St_1_Off;
+  nr_St_1_Off = if (c1 when St_1_Off(ck)) then true else false;
+  lampstate_St_1_Off = Off;
+  lumlamp_St_1_Off = Null;
+  cmd_St_1_Off =
+    merge ck_5 (false -> cmd_St_1_Off_false)(true -> cmd_St_1_Off_true);
+  cmd_St_1_Off_false = Nothing;
+  cmd_St_1_Off_true = SwitchOn;
+  ck_5 = (c1 when St_1_Off(ck));
+  ck = St_1_Off fby ns;
+  pnr = false fby nr;
+  r = pnr
+tel
+
+node room(presence : bool) returns (occupied : bool)
+var v : bool; nr_St_2_Somebody : bool; ns_St_2_Somebody : st_2;
+    occupied_St_2_Somebody : bool; nr_St_2_Nobody : bool;
+    ns_St_2_Nobody : st_2; occupied_St_2_Nobody : bool; ck : st_2; ns : st_2;
+    r : bool; nr : bool; pnr : bool;
+let
+  nr =
+    merge ck
+      (St_2_Somebody -> nr_St_2_Somebody)(St_2_Nobody -> nr_St_2_Nobody);
+  ns =
+    merge ck
+      (St_2_Somebody -> ns_St_2_Somebody)(St_2_Nobody -> ns_St_2_Nobody);
+  occupied =
+    merge ck
+      (St_2_Somebody -> occupied_St_2_Somebody)
+      (St_2_Nobody -> occupied_St_2_Nobody);
+  v = not((presence when St_2_Somebody(ck)));
+  ns_St_2_Somebody = if v then St_2_Nobody else St_2_Somebody;
+  nr_St_2_Somebody = if v then true else false;
+  occupied_St_2_Somebody = true;
+  ns_St_2_Nobody =
+    if (presence when St_2_Nobody(ck)) then St_2_Somebody else St_2_Nobody;
+  nr_St_2_Nobody = if (presence when St_2_Nobody(ck)) then true else false;
+  occupied_St_2_Nobody = false;
+  ck = St_2_Nobody fby ns;
+  pnr = false fby nr;
+  r = pnr
+tel
+
+node lum(presence : bool; stopdown : bool; stopup : bool;
+          outdoorlum : lumValue)
+returns (cmdShutter : command; cmdLamp : command;
+          shutterstate : shutterState; lampstate : lampState;
+          property : bool)
+contract
+  
+  assume true@ enforce property]
+                 with (copen : bool; con : bool; coff : bool; cclose : bool)
+                 var shutterlum_1_St_5_Closing_false : lumValue;
+                     shutterlum_1_St_5_Closing_true : lumValue; ck_10 : bool;
+                     cmd_St_5_Opened_false : command;
+                     cmd_St_5_Opened_true : command; ck_9 : bool;
+                     shutterlum_1_St_5_Opening_false : lumValue;
+                     shutterlum_1_St_5_Opening_true : lumValue; ck_8 : bool;
+                     cmd_St_5_Closed_false : command;
+                     cmd_St_5_Closed_true : command; ck_7 : bool;
+                     nr_2_St_5_Closing : bool; ns_2_St_5_Closing : st_5;
+                     shutterstate_1_St_5_Closing : shutterState;
+                     shutterlum_1_St_5_Closing : lumValue;
+                     cmd_St_5_Closing : command; nr_2_St_5_Opened : bool;
+                     ns_2_St_5_Opened : st_5;
+                     shutterstate_1_St_5_Opened : shutterState;
+                     shutterlum_1_St_5_Opened : lumValue;
+                     cmd_St_5_Opened : command; nr_2_St_5_Opening : bool;
+                     ns_2_St_5_Opening : st_5;
+                     shutterstate_1_St_5_Opening : shutterState;
+                     shutterlum_1_St_5_Opening : lumValue;
+                     cmd_St_5_Opening : command; nr_2_St_5_Closed : bool;
+                     ns_2_St_5_Closed : st_5;
+                     shutterstate_1_St_5_Closed : shutterState;
+                     shutterlum_1_St_5_Closed : lumValue;
+                     cmd_St_5_Closed : command; ck : st_5;
+                     cmd_1_St_4_On_false : command;
+                     cmd_1_St_4_On_true : command; ck_13 : bool;
+                     cmd_1_St_4_Off_false : command;
+                     cmd_1_St_4_Off_true : command; ck_12 : bool;
+                     nr_1_St_4_On : bool; ns_1_St_4_On : st_4;
+                     lampstate_1_St_4_On : lampState;
+                     lumlamp_St_4_On : lumValue; cmd_1_St_4_On : command;
+                     nr_1_St_4_Off : bool; ns_1_St_4_Off : st_4;
+                     lampstate_1_St_4_Off : lampState;
+                     lumlamp_St_4_Off : lumValue; cmd_1_St_4_Off : command;
+                     ck_11 : st_4; v_19 : bool; nr_St_3_Somebody : bool;
+                     ns_St_3_Somebody : st_3;
+                     occupied_1_St_3_Somebody : bool; nr_St_3_Nobody : bool;
+                     ns_St_3_Nobody : st_3; occupied_1_St_3_Nobody : bool;
+                     ck_14 : st_3; v_18 : bool; v_17 : bool; v_16 : bool;
+                     v_15 : bool; v_14 : bool; v_13 : bool; v_12 : bool;
+                     v_11 : bool; v_10 : bool; v_9 : bool; v_8 : bool;
+                     v_7 : bool; v_6 : bool; v_5 : bool; v_4 : bool;
+                     v_3 : bool; v_2 : bool; v_1 : bool; v : bool;
+                     ns_2 : st_5; r_2 : bool; nr_2 : bool; pnr_2 : bool;
+                     ns_1 : st_4; r_1 : bool; nr_1 : bool; pnr_1 : bool;
+                     ns : st_3; r : bool; nr : bool; pnr : bool;
+                     presence_1 : bool; occupied_1 : bool; c1 : bool;
+                     c2 : bool; cmd_1 : command; lumlamp : lumValue;
+                     lampstate_1 : lampState; copen_1 : bool;
+                     cclose_1 : bool; stopdown_1 : bool; stopup_1 : bool;
+                     outdoorlum_1 : lumValue; cmd : command;
+                     shutterlum_1 : lumValue; shutterstate_1 : shutterState;
+                     occupied : bool; shutterlum : lumValue;
+                     lamplum : lumValue; outlumbefore : lumValue;
+                     shutter_state : shutterState; lamp_state : lampState;
+                     prop1 : bool; prop2 : bool; prop3 : bool; prop4 : bool;
+                     prop5 : bool;
+  let
+    v = (prop1 & prop2);
+    v_1 = (v & prop3);
+    property = (v_1 & prop4);
+    v_2 = (shutterlum = High);
+    v_3 = (occupied & v_2);
+    v_4 = not(v_3);
+    v_5 = (shutter_state = Closing);
+    prop5 = (v_4 or v_5);
+    v_6 = (lamp_state = Off);
+    prop4 = (occupied or v_6);
+    v_7 = (shutterlum = Normal);
+    v_8 = not(v_7);
+    v_9 = (lamp_state = Off);
+    prop3 = (v_8 or v_9);
+    v_10 = (outlumbefore = Normal);
+    v_11 = (occupied & v_10);
+    v_12 = not(v_11);
+    v_13 = (shutter_state = Closed);
+    v_14 = not(v_13);
+    prop2 = (v_12 or v_14);
+    v_15 = not(occupied);
+    v_16 = (shutterlum = Normal);
+    v_17 = (lamplum = Normal);
+    v_18 = (v_16 or v_17);
+    prop1 = (v_15 or v_18);
+    occupied = occupied_1;
+    lampstate = lamp_state;
+    cmdLamp = cmd_1;
+    lamplum = lumlamp;
+    lamp_state = lampstate_1;
+    shutterstate = shutter_state;
+    cmdShutter = cmd;
+    shutterlum = shutterlum_1;
+    shutter_state = shutterstate_1;
+    outlumbefore = Null fby outdoorlum;
+    nr_2 =
+      merge ck
+        (St_5_Closing -> nr_2_St_5_Closing)(St_5_Opened -> nr_2_St_5_Opened)
+        (St_5_Opening -> nr_2_St_5_Opening)(St_5_Closed -> nr_2_St_5_Closed);
+    ns_2 =
+      merge ck
+        (St_5_Closing -> ns_2_St_5_Closing)(St_5_Opened -> ns_2_St_5_Opened)
+        (St_5_Opening -> ns_2_St_5_Opening)(St_5_Closed -> ns_2_St_5_Closed);
+    shutterstate_1 =
+      merge ck
+        (St_5_Closing -> shutterstate_1_St_5_Closing)
+        (St_5_Opened -> shutterstate_1_St_5_Opened)
+        (St_5_Opening -> shutterstate_1_St_5_Opening)
+        (St_5_Closed -> shutterstate_1_St_5_Closed);
+    shutterlum_1 =
+      merge ck
+        (St_5_Closing -> shutterlum_1_St_5_Closing)
+        (St_5_Opened -> shutterlum_1_St_5_Opened)
+        (St_5_Opening -> shutterlum_1_St_5_Opening)
+        (St_5_Closed -> shutterlum_1_St_5_Closed);
+    cmd =
+      merge ck
+        (St_5_Closing -> cmd_St_5_Closing)(St_5_Opened -> cmd_St_5_Opened)
+        (St_5_Opening -> cmd_St_5_Opening)(St_5_Closed -> cmd_St_5_Closed);
+    ns_2_St_5_Closing =
+      if (stopdown_1 when St_5_Closing(ck))
+      then St_5_Closed
+      else St_5_Closing;
+    nr_2_St_5_Closing =
+      if (stopdown_1 when St_5_Closing(ck)) then true else false;
+    shutterstate_1_St_5_Closing = Closing;
+    shutterlum_1_St_5_Closing =
+      merge ck_10
+        (false -> shutterlum_1_St_5_Closing_false)
+        (true -> shutterlum_1_St_5_Closing_true);
+    shutterlum_1_St_5_Closing_false = Low;
+    shutterlum_1_St_5_Closing_true = Null;
+    ck_10 = ((outdoorlum_1 when St_5_Closing(ck)) = Null);
+    cmd_St_5_Closing = Nothing;
+    ns_2_St_5_Opened =
+      if (cclose_1 when St_5_Opened(ck)) then St_5_Closing else St_5_Opened;
+    nr_2_St_5_Opened =
+      if (cclose_1 when St_5_Opened(ck)) then true else false;
+    shutterstate_1_St_5_Opened = Opened;
+    shutterlum_1_St_5_Opened = (outdoorlum_1 when St_5_Opened(ck));
+    cmd_St_5_Opened =
+      merge ck_9
+        (false -> cmd_St_5_Opened_false)(true -> cmd_St_5_Opened_true);
+    cmd_St_5_Opened_false = Nothing;
+    cmd_St_5_Opened_true = Close;
+    ck_9 = (cclose_1 when St_5_Opened(ck));
+    ns_2_St_5_Opening =
+      if (stopup_1 when St_5_Opening(ck)) then St_5_Opened else St_5_Opening;
+    nr_2_St_5_Opening =
+      if (stopup_1 when St_5_Opening(ck)) then true else false;
+    shutterstate_1_St_5_Opening = Opening;
+    shutterlum_1_St_5_Opening =
+      merge ck_8
+        (false -> shutterlum_1_St_5_Opening_false)
+        (true -> shutterlum_1_St_5_Opening_true);
+    shutterlum_1_St_5_Opening_false = Low;
+    shutterlum_1_St_5_Opening_true = Null;
+    ck_8 = ((outdoorlum_1 when St_5_Opening(ck)) = Null);
+    cmd_St_5_Opening = Nothing;
+    ns_2_St_5_Closed =
+      if (copen_1 when St_5_Closed(ck)) then St_5_Opening else St_5_Closed;
+    nr_2_St_5_Closed = if (copen_1 when St_5_Closed(ck)) then true else false;
+    shutterstate_1_St_5_Closed = Closed;
+    shutterlum_1_St_5_Closed = Null;
+    cmd_St_5_Closed =
+      merge ck_7
+        (false -> cmd_St_5_Closed_false)(true -> cmd_St_5_Closed_true);
+    cmd_St_5_Closed_false = Nothing;
+    cmd_St_5_Closed_true = Open;
+    ck_7 = (copen_1 when St_5_Closed(ck));
+    ck = St_5_Closed fby ns_2;
+    pnr_2 = false fby nr_2;
+    r_2 = pnr_2;
+    outdoorlum_1 = outlumbefore;
+    stopup_1 = stopup;
+    stopdown_1 = stopdown;
+    cclose_1 = cclose;
+    copen_1 = copen;
+    nr_1 = merge ck_11 (St_4_On -> nr_1_St_4_On)(St_4_Off -> nr_1_St_4_Off);
+    ns_1 = merge ck_11 (St_4_On -> ns_1_St_4_On)(St_4_Off -> ns_1_St_4_Off);
+    lampstate_1 =
+      merge ck_11
+        (St_4_On -> lampstate_1_St_4_On)(St_4_Off -> lampstate_1_St_4_Off);
+    lumlamp =
+      merge ck_11 (St_4_On -> lumlamp_St_4_On)(St_4_Off -> lumlamp_St_4_Off);
+    cmd_1 =
+      merge ck_11 (St_4_On -> cmd_1_St_4_On)(St_4_Off -> cmd_1_St_4_Off);
+    ns_1_St_4_On = if (c2 when St_4_On(ck_11)) then St_4_Off else St_4_On;
+    nr_1_St_4_On = if (c2 when St_4_On(ck_11)) then true else false;
+    lampstate_1_St_4_On = On;
+    lumlamp_St_4_On = Normal;
+    cmd_1_St_4_On =
+      merge ck_13 (false -> cmd_1_St_4_On_false)(true -> cmd_1_St_4_On_true);
+    cmd_1_St_4_On_false = Nothing;
+    cmd_1_St_4_On_true = SwitchOff;
+    ck_13 = (c2 when St_4_On(ck_11));
+    ns_1_St_4_Off = if (c1 when St_4_Off(ck_11)) then St_4_On else St_4_Off;
+    nr_1_St_4_Off = if (c1 when St_4_Off(ck_11)) then true else false;
+    lampstate_1_St_4_Off = Off;
+    lumlamp_St_4_Off = Null;
+    cmd_1_St_4_Off =
+      merge ck_12
+        (false -> cmd_1_St_4_Off_false)(true -> cmd_1_St_4_Off_true);
+    cmd_1_St_4_Off_false = Nothing;
+    cmd_1_St_4_Off_true = SwitchOn;
+    ck_12 = (c1 when St_4_Off(ck_11));
+    ck_11 = St_4_Off fby ns_1;
+    pnr_1 = false fby nr_1;
+    r_1 = pnr_1;
+    c2 = coff;
+    c1 = con;
+    nr =
+      merge ck_14
+        (St_3_Somebody -> nr_St_3_Somebody)(St_3_Nobody -> nr_St_3_Nobody);
+    ns =
+      merge ck_14
+        (St_3_Somebody -> ns_St_3_Somebody)(St_3_Nobody -> ns_St_3_Nobody);
+    occupied_1 =
+      merge ck_14
+        (St_3_Somebody -> occupied_1_St_3_Somebody)
+        (St_3_Nobody -> occupied_1_St_3_Nobody);
+    v_19 = not((presence_1 when St_3_Somebody(ck_14)));
+    ns_St_3_Somebody = if v_19 then St_3_Nobody else St_3_Somebody;
+    nr_St_3_Somebody = if v_19 then true else false;
+    occupied_1_St_3_Somebody = true;
+    ns_St_3_Nobody =
+      if (presence_1 when St_3_Nobody(ck_14))
+      then St_3_Somebody
+      else St_3_Nobody;
+    nr_St_3_Nobody =
+      if (presence_1 when St_3_Nobody(ck_14)) then true else false;
+    occupied_1_St_3_Nobody = false;
+    ck_14 = St_3_Nobody fby ns;
+    pnr = false fby nr;
+    r = pnr;
+    presence_1 = presence
+  tel
+

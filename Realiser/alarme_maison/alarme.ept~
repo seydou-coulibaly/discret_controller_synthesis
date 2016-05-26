@@ -1,0 +1,40 @@
+type etat = DispositifMarche|ArretDispositif|DispositifVigilence
+node alarme (ma,code,pbGar,pbHab:bool;dReprise,dVigilence,dAlarme:int) returns (al:bool; enMarche:etat)
+contract
+	enforce not al or (enMarche <> DispositifVigilence & enMarche <> ArretDispositif )
+        
+var last temps:int = 0;last vigilence:int = 0;last reprise:int = 0;
+
+let
+	automaton
+		state Arret
+			do 
+				temps = 0; 
+				al = false;
+				enMarche = ArretDispositif;
+			until ma then Allume
+		state Allume
+			do 
+				enMarche = DispositifMarche;
+				al = false;
+				temps = 0 fby (temps +1);
+				reprise = 0;
+				vigilence = 0; 
+			until code then Vigilence
+			| pbHab then Sonner
+			| pbGar & (dVigilence < temps) then Sonner
+		state Sonner
+			do 
+				enMarche = DispositifMarche;
+				al = true;
+				reprise = 0 fby (reprise +1);
+			until dReprise < reprise then Allume
+		state Vigilence
+			do 
+				enMarche = DispositifVigilence;
+				al = false;
+				vigilence = 0 fby (vigilence +1);
+			until pbHab then Sonner
+			| dVigilence < vigilence then Arret
+	end;
+tel

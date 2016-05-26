@@ -1,0 +1,102 @@
+node aiguillage (demandeActionnerAigHaut, demandeActionnerAigBas:bool) returns (aiguillageHaut,aiguillageBas:bool)
+let
+	automaton
+		state Haut do
+			aiguillageHaut= true;
+			aiguillageBas= false;
+		unless demandeActionnerAigBas then Bas
+
+ 		state Bas do
+			aiguillageHaut= false;
+			aiguillageBas= true;
+		unless demandeActionnerAigHaut then Haut
+
+	end
+tel
+
+node feu (aiguillageHaut, aiguillageBas:bool) returns (feuEtat:bool)
+let
+	automaton
+		state Rouge do
+			feuEtat = false;
+		unless aiguillageBas then Vert 
+
+		state Vert do
+			feuEtat = true;
+		unless aiguillageHaut then Rouge
+
+
+	end
+tel
+
+node presence(presenceNiveau:bool) returns (presenceResult:bool)
+let
+	automaton
+		state PresenceNiveau do
+			presenceResult = true;
+		unless not presenceNiveau then NiveauVide
+
+		state NiveauVide do
+			presenceResult = false;
+		unless not presenceNiveau then PresenceNiveau 
+
+	end
+tel
+node train (presenceSection1,presenceAiguillage1,presenceAiguillage2,presenceGare1, presenceGare2,presenceSection2:bool) returns ( aiguillage1Haut,aiguillage1Bas,aiguillage2Haut,aiguillage2Bas,feu1,feu2,feuGare1,feuGare2,property:bool)
+	
+contract
+assume true
+enforce property
+with (demandeActionnerAig1Haut, demandeActionnerAig1Bas,demandeActionnerAig2Haut, demandeActionnerAig2Bas : bool)
+
+var
+lpresenceSection1,lpresenceAiguillage1,lpresenceAiguillage2,lpresenceGare1, lpresenceGare2,lpresenceSection2,laiguillage1Haut,laiguillage1Bas,laiguillage2Haut,laiguillage2Bas,feu01,feu02,feu3,feu4,prop1,prop2,prop3,prop4,prop5,prop6,prop7,prop8, prop9, prop10:bool;
+
+let
+		
+	(laiguillage1Haut,laiguillage1Bas) = inlined aiguillage (demandeActionnerAig1Haut, demandeActionnerAig1Bas);
+
+	(laiguillage2Haut,laiguillage2Bas)  = inlined aiguillage (demandeActionnerAig2Haut, demandeActionnerAig2Bas);
+	
+
+	feu01 = inlined feu (laiguillage1Haut,laiguillage1Bas);
+	feu02 = inlined feu (laiguillage2Haut,laiguillage2Bas);
+	feu3 = inlined feu (laiguillage1Bas, laiguillage1Haut);
+	feu4 = inlined feu (laiguillage2Bas, laiguillage2Haut);
+
+	lpresenceSection1 = inlined presence (presenceSection1);
+	lpresenceAiguillage1 = inlined presence (presenceAiguillage1);
+	lpresenceAiguillage2 = inlined presence (presenceAiguillage2);
+	lpresenceGare1 = inlined presence (presenceGare1);
+	lpresenceGare2 = inlined presence (presenceGare2);
+	lpresenceSection2 = inlined presence (presenceSection2);
+
+	
+
+	prop1 = not laiguillage1Haut or not laiguillage1Bas;
+	prop2 = not laiguillage2Haut or not laiguillage2Bas;
+	prop3 = not lpresenceGare1 or not feu02;
+	(* prop4 = not lpresenceGare1 or laiguillage2Bas; *)
+	prop4 = true;
+	prop5 =  not lpresenceGare2 or not feu01;
+	prop6 = not lpresenceGare2 or laiguillage1Haut;
+	prop7 = not (lpresenceAiguillage1 & laiguillage1Bas ) or not feu01;
+	prop8 = not (lpresenceAiguillage2 & laiguillage2Haut ) or not feu02;
+	prop9 = not (lpresenceAiguillage1 & laiguillage1Bas ) or not feu3;
+	prop10 = not (lpresenceAiguillage2 & laiguillage2Haut ) or not feu4;
+	property = prop1& prop2 & prop5 & prop6& prop7 & prop8 & prop9 & prop10 ;
+
+        aiguillage1Haut = laiguillage1Haut;
+	aiguillage1Bas = laiguillage1Bas;
+	aiguillage2Haut = laiguillage2Haut;
+	aiguillage2Bas = laiguillage2Bas;
+	
+	feu1 = feu01;
+	feu2 = feu02;
+	feuGare1 = feu3;
+	feuGare2 = feu4;
+	
+
+tel
+
+

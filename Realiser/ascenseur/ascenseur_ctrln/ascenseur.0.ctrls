@@ -1,0 +1,28 @@
+!typedef
+  St = enum {St_Stop, St_Shut, St_Open, St_Mouvement};
+  Stat = enum {Arret, Ouvert, EnMouvement, Fermer};
+  
+!input
+  v_8: int;
+  v_11: int;
+  v_14: int;
+  ck: St;
+  pnr: bool;
+  compteur_1: int;
+  __init__: bool;
+  ok: bool;
+  etat: Stat;
+  presence: bool;
+  presenceEtageCourant: bool;
+  demandeEtage: bool;
+  arriveEtage: bool;
+  secondo: int;
+  
+!output
+  c: bool;
+  
+!definition
+  c = true;
+  
+!assertion
+  true;

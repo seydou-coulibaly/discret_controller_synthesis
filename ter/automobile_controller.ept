@@ -1,0 +1,72 @@
+type cause = PresencePieton|Presencevehicule|Feu|None
+type couleur = Vert|Jaune|Rouge
+type etatPhares = Idle|Veilleuses|Codes|Phares
+type lum = Null|Low|Normal|High
+type numero = Un|Deux|Trois|Quatre|Cinq|Six|PointMort
+type position = Ville|Autoroute
+type retro = Desactive|PositionJour|PositionNuit|PositionNormale
+type st = St_Eteint|St_Allumer
+type st_1 = St_1_Zero|St_1_Troisieme|St_1_Quatrieme|St_1_Premier|
+  St_1_Deuxieme|St_1_Cinquieme|St_1_Arriere
+type st_10 = St_10_Veilleuses|St_10_Phares|St_10_Idle|St_10_Codes
+type st_11 = St_11_Desactive|St_11_Active
+type st_12 = St_12_Vehicule|St_12_Pieton|St_12_Feu|St_12_Acceleration
+type st_13 = St_13_Idle|St_13_Detection
+type st_14 = St_14_Desactive|St_14_Active
+type st_15 = St_15_Desactive|St_15_BalayageUnique|St_15_BalayageIntermittent|
+  St_15_BalayageContiu
+type st_16 = St_16_PositionNuit|St_16_PositionNormale|St_16_PositionJour|
+  St_16_Desacitve
+type st_17 = St_17_Stop|St_17_Move
+type st_18 = St_18_Zero|St_18_Troisieme|St_18_Quatrieme|St_18_Premier|
+  St_18_Deuxieme|St_18_Cinquieme|St_18_Arriere
+type st_19 = St_19_Eteint|St_19_Allumer
+type st_2 = St_2_Stop|St_2_Move
+type st_3 = St_3_PositionNuit|St_3_PositionNormale|St_3_PositionJour|
+  St_3_Desacitve
+type st_4 = St_4_Desactive|St_4_BalayageUnique|St_4_BalayageIntermittent|
+  St_4_BalayageContiu
+type st_5 = St_5_Desactive|St_5_Active
+type st_6 = St_6_Idle|St_6_Detection
+type st_7 = St_7_Vehicule|St_7_Pieton|St_7_Feu|St_7_Acceleration
+type st_8 = St_8_Desactive|St_8_Active
+type st_9 = St_9_Veilleuses|St_9_Phares|St_9_Idle|St_9_Codes
+type typeBalayage = Deactivated|Intermittent|Contiu|Unique
+node automobile_ctrlr0(capteurDectecteurFeu : couleur; capteurPluie : bool;
+                        capteurTemperature : float; ck : st_19;
+                        ck_12 : st_18; ck_14 : st_17; ck_16 : st_16;
+                        ck_18 : st_15; ck_20 : st_14; ck_22 : st_13;
+                        ck_24 : st_12; ck_26 : st_11; ck_28 : st_10;
+                        cleVoiture : bool; commandeVoiture : bool;
+                        densitePluie : lum;
+                        desactiveRegulateurTemperature : bool;
+                        detectionAccident : bool; detectionAngleMort : bool;
+                        detectionDefaillanceTechnique : bool;
+                        detectionLigne : bool;
+                        detectionPresencePieton : bool;
+                        detectionPresencevehicule : bool;
+                        detectionVolantLibre : bool; lumiere : lum;
+                        ok : bool; pnr : bool; pnr_1 : bool; pnr_2 : bool;
+                        pnr_3 : bool; pnr_4 : bool; pnr_5 : bool;
+                        pnr_6 : bool; pnr_7 : bool; pnr_8 : bool;
+                        pnr_9 : bool)
+returns (accelerateur : bool; boiteDeVitesse : numero; cclose : bool;
+          con : bool; cp : bool; frein : bool; jour : bool; normal : bool;
+          nuit : bool; td : bool; ti : bool)
+var l1 : bool; l0 : bool;
+let
+  con = true;
+  cclose = true;
+  td = (cleVoiture or l1);
+  ti = true;
+  cp = true;
+  frein = true;
+  accelerateur = true;
+  normal = true;
+  jour = true;
+  nuit = true;
+  boiteDeVitesse = Un;
+  l0 = ((ck_28 = St_10_Phares) or (ck_28 = St_10_Veilleuses));
+  l1 = (commandeVoiture or l0)
+tel
+

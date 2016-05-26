@@ -1,0 +1,11 @@
+node fibonacci (n:int ) returns (y:int )
+let
+	y = (n-1)+(n-2)
+tel
+node compteur (n:bool ) returns (y:int )
+var last x:int = 0;
+
+let
+	y = x
+	x = if (n )then (last x+1) else (last x)
+tel

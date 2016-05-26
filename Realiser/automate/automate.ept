@@ -1,0 +1,13 @@
+node updown() returns (y:int)
+var last x:int = 0;
+let
+	y = x;
+	automaton
+	state Up
+		do x = last x + 1
+		until x >= 10 then Down 
+	state Down
+		do x = last x - 1
+		until x <= 0 then Up
+	end
+tel

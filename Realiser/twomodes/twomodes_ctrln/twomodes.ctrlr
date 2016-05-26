@@ -1,0 +1,30 @@
+!typedef
+  St = enum {St_Up, St_Down};
+  
+!input
+  ck: St;
+  pnr: bool;
+  x_1: int;
+  __init__: bool;
+  ok: bool;
+  b: bool;
+  y: int;
+  v: int;
+  
+!controllable
+  c ? true : bool;
+  
+!local
+  l0: bool;
+  l1: bool;
+  l2: bool;
+  l3: bool;
+  
+!definition
+  l0 = not c;
+  l1 = (v >= 0) and (v <= 1);
+  l2 = not ((ck = St_Down)) and l1;
+  l3 = l0 and l2;
+  
+!value
+  l3;

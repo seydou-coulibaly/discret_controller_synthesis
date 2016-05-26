@@ -1,0 +1,33 @@
+!typedef
+  St = enum {St_Vigilence, St_Sonner, St_Arret, St_Allume};
+  Etat = enum {DispositifMarche, ArretDispositif, DispositifVigilence};
+  
+!input
+  v_11: int;
+  v_14: int;
+  v_22: int;
+  ck: St;
+  pnr: bool;
+  reprise_1: int;
+  vigilence_1: int;
+  temps_1: int;
+  __init__: bool;
+  enMarche: Etat;
+  al: bool;
+  ok: bool;
+  ma: bool;
+  code: bool;
+  pbGar: bool;
+  pbHab: bool;
+  dReprise: int;
+  dVigilence: int;
+  dAlarme: int;
+  
+!output
+  c: bool;
+  
+!definition
+  c = true;
+  
+!assertion
+  true;

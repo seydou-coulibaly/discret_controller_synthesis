@@ -1,0 +1,872 @@
+type st_14 = St_14_Haut|St_14_Bas
+type st_13 = St_13_Haut|St_13_Bas
+type st_12 = St_12_Vert|St_12_Rouge
+type st_11 = St_11_Vert|St_11_Rouge
+type st_10 = St_10_Vert|St_10_Rouge
+type st_9 = St_9_Vert|St_9_Rouge
+type st_8 = St_8_PresenceNiveau|St_8_NiveauVide
+type st_7 = St_7_PresenceNiveau|St_7_NiveauVide
+type st_6 = St_6_PresenceNiveau|St_6_NiveauVide
+type st_5 = St_5_PresenceNiveau|St_5_NiveauVide
+type st_4 = St_4_PresenceNiveau|St_4_NiveauVide
+type st_3 = St_3_PresenceNiveau|St_3_NiveauVide
+type st_2 = St_2_PresenceNiveau|St_2_NiveauVide
+type st_1 = St_1_Vert|St_1_Rouge
+type st = St_Haut|St_Bas
+node aiguillage(demandeActionnerAigHaut : bool;
+                 demandeActionnerAigBas : bool)
+returns (aiguillageHaut : bool; aiguillageBas : bool)
+var r_St_Bas : bool; s_St_Bas : st; r_St_Haut : bool; s_St_Haut : st;
+    ck : st; nr_St_Bas : bool; ns_St_Bas : st; aiguillageBas_St_Bas : bool;
+    aiguillageHaut_St_Bas : bool; nr_St_Haut : bool; ns_St_Haut : st;
+    aiguillageBas_St_Haut : bool; aiguillageHaut_St_Haut : bool; ck_1 : st;
+    s : st; ns : st; r : bool; nr : bool; pnr : bool;
+let
+  r = merge ck (St_Bas -> r_St_Bas)(St_Haut -> r_St_Haut);
+  s = merge ck (St_Bas -> s_St_Bas)(St_Haut -> s_St_Haut);
+  s_St_Bas =
+    if (demandeActionnerAigHaut when St_Bas(ck)) then St_Haut else St_Bas;
+  r_St_Bas =
+    if (demandeActionnerAigHaut when St_Bas(ck))
+    then true
+    else (pnr when St_Bas(ck));
+  s_St_Haut =
+    if (demandeActionnerAigBas when St_Haut(ck)) then St_Bas else St_Haut;
+  r_St_Haut =
+    if (demandeActionnerAigBas when St_Haut(ck))
+    then true
+    else (pnr when St_Haut(ck));
+  ck = St_Haut fby ns;
+  nr = merge ck_1 (St_Bas -> nr_St_Bas)(St_Haut -> nr_St_Haut);
+  ns = merge ck_1 (St_Bas -> ns_St_Bas)(St_Haut -> ns_St_Haut);
+  aiguillageBas =
+    merge ck_1
+      (St_Bas -> aiguillageBas_St_Bas)(St_Haut -> aiguillageBas_St_Haut);
+  aiguillageHaut =
+    merge ck_1
+      (St_Bas -> aiguillageHaut_St_Bas)(St_Haut -> aiguillageHaut_St_Haut);
+  ns_St_Bas = St_Bas;
+  nr_St_Bas = false;
+  aiguillageBas_St_Bas = true;
+  aiguillageHaut_St_Bas = false;
+  ns_St_Haut = St_Haut;
+  nr_St_Haut = false;
+  aiguillageBas_St_Haut = false;
+  aiguillageHaut_St_Haut = true;
+  ck_1 = s;
+  pnr = false fby nr
+tel
+
+node feu(aiguillageHaut : bool; aiguillageBas : bool)
+returns (feuEtat : bool)
+var r_St_1_Vert : bool; s_St_1_Vert : st_1; r_St_1_Rouge : bool;
+    s_St_1_Rouge : st_1; ck : st_1; nr_St_1_Vert : bool; ns_St_1_Vert : st_1;
+    feuEtat_St_1_Vert : bool; nr_St_1_Rouge : bool; ns_St_1_Rouge : st_1;
+    feuEtat_St_1_Rouge : bool; ck_2 : st_1; s : st_1; ns : st_1; r : bool;
+    nr : bool; pnr : bool;
+let
+  r = merge ck (St_1_Vert -> r_St_1_Vert)(St_1_Rouge -> r_St_1_Rouge);
+  s = merge ck (St_1_Vert -> s_St_1_Vert)(St_1_Rouge -> s_St_1_Rouge);
+  s_St_1_Vert =
+    if (aiguillageHaut when St_1_Vert(ck)) then St_1_Rouge else St_1_Vert;
+  r_St_1_Vert =
+    if (aiguillageHaut when St_1_Vert(ck))
+    then true
+    else (pnr when St_1_Vert(ck));
+  s_St_1_Rouge =
+    if (aiguillageBas when St_1_Rouge(ck)) then St_1_Vert else St_1_Rouge;
+  r_St_1_Rouge =
+    if (aiguillageBas when St_1_Rouge(ck))
+    then true
+    else (pnr when St_1_Rouge(ck));
+  ck = St_1_Rouge fby ns;
+  nr = merge ck_2 (St_1_Vert -> nr_St_1_Vert)(St_1_Rouge -> nr_St_1_Rouge);
+  ns = merge ck_2 (St_1_Vert -> ns_St_1_Vert)(St_1_Rouge -> ns_St_1_Rouge);
+  feuEtat =
+    merge ck_2
+      (St_1_Vert -> feuEtat_St_1_Vert)(St_1_Rouge -> feuEtat_St_1_Rouge);
+  ns_St_1_Vert = St_1_Vert;
+  nr_St_1_Vert = false;
+  feuEtat_St_1_Vert = true;
+  ns_St_1_Rouge = St_1_Rouge;
+  nr_St_1_Rouge = false;
+  feuEtat_St_1_Rouge = false;
+  ck_2 = s;
+  pnr = false fby nr
+tel
+
+node presence(presenceNiveau : bool) returns (presenceResult : bool)
+var v : bool; v_1 : bool; r_St_2_NiveauVide : bool; s_St_2_NiveauVide : st_2;
+    r_St_2_PresenceNiveau : bool; s_St_2_PresenceNiveau : st_2; ck : st_2;
+    nr_St_2_NiveauVide : bool; ns_St_2_NiveauVide : st_2;
+    presenceResult_St_2_NiveauVide : bool; nr_St_2_PresenceNiveau : bool;
+    ns_St_2_PresenceNiveau : st_2; presenceResult_St_2_PresenceNiveau : bool;
+    ck_3 : st_2; s : st_2; ns : st_2; r : bool; nr : bool; pnr : bool;
+let
+  r =
+    merge ck
+      (St_2_NiveauVide -> r_St_2_NiveauVide)
+      (St_2_PresenceNiveau -> r_St_2_PresenceNiveau);
+  s =
+    merge ck
+      (St_2_NiveauVide -> s_St_2_NiveauVide)
+      (St_2_PresenceNiveau -> s_St_2_PresenceNiveau);
+  v = not((presenceNiveau when St_2_NiveauVide(ck)));
+  s_St_2_NiveauVide = if v then St_2_PresenceNiveau else St_2_NiveauVide;
+  r_St_2_NiveauVide = if v then true else (pnr when St_2_NiveauVide(ck));
+  v_1 = not((presenceNiveau when St_2_PresenceNiveau(ck)));
+  s_St_2_PresenceNiveau =
+    if v_1 then St_2_NiveauVide else St_2_PresenceNiveau;
+  r_St_2_PresenceNiveau =
+    if v_1 then true else (pnr when St_2_PresenceNiveau(ck));
+  ck = St_2_PresenceNiveau fby ns;
+  nr =
+    merge ck_3
+      (St_2_NiveauVide -> nr_St_2_NiveauVide)
+      (St_2_PresenceNiveau -> nr_St_2_PresenceNiveau);
+  ns =
+    merge ck_3
+      (St_2_NiveauVide -> ns_St_2_NiveauVide)
+      (St_2_PresenceNiveau -> ns_St_2_PresenceNiveau);
+  presenceResult =
+    merge ck_3
+      (St_2_NiveauVide -> presenceResult_St_2_NiveauVide)
+      (St_2_PresenceNiveau -> presenceResult_St_2_PresenceNiveau);
+  ns_St_2_NiveauVide = St_2_NiveauVide;
+  nr_St_2_NiveauVide = false;
+  presenceResult_St_2_NiveauVide = false;
+  ns_St_2_PresenceNiveau = St_2_PresenceNiveau;
+  nr_St_2_PresenceNiveau = false;
+  presenceResult_St_2_PresenceNiveau = true;
+  ck_3 = s;
+  pnr = false fby nr
+tel
+
+node train(presenceSection1 : bool; presenceAiguillage1 : bool;
+            presenceAiguillage2 : bool; presenceGare1 : bool;
+            presenceGare2 : bool; presenceSection2 : bool)
+returns (aiguillage1Haut : bool; aiguillage1Bas : bool;
+          aiguillage2Haut : bool; aiguillage2Bas : bool; feu1 : bool;
+          feu2 : bool; feuGare1 : bool; feuGare2 : bool; property : bool)
+contract
+  
+  assume true@ enforce property]
+                 with (demandeActionnerAig1Haut : bool;
+                        demandeActionnerAig1Bas : bool;
+                        demandeActionnerAig2Haut : bool;
+                        demandeActionnerAig2Bas : bool)
+                 var r_11_St_14_Bas : bool; s_11_St_14_Bas : st_14;
+                     r_11_St_14_Haut : bool; s_11_St_14_Haut : st_14;
+                     ck : st_14; nr_11_St_14_Bas : bool;
+                     ns_11_St_14_Bas : st_14; aiguillageBas_St_14_Bas : bool;
+                     aiguillageHaut_St_14_Bas : bool;
+                     nr_11_St_14_Haut : bool; ns_11_St_14_Haut : st_14;
+                     aiguillageBas_St_14_Haut : bool;
+                     aiguillageHaut_St_14_Haut : bool; ck_4 : st_14;
+                     r_10_St_13_Bas : bool; s_10_St_13_Bas : st_13;
+                     r_10_St_13_Haut : bool; s_10_St_13_Haut : st_13;
+                     ck_5 : st_13; nr_10_St_13_Bas : bool;
+                     ns_10_St_13_Bas : st_13;
+                     aiguillageBas_1_St_13_Bas : bool;
+                     aiguillageHaut_1_St_13_Bas : bool;
+                     nr_10_St_13_Haut : bool; ns_10_St_13_Haut : st_13;
+                     aiguillageBas_1_St_13_Haut : bool;
+                     aiguillageHaut_1_St_13_Haut : bool; ck_6 : st_13;
+                     r_9_St_12_Vert : bool; s_9_St_12_Vert : st_12;
+                     r_9_St_12_Rouge : bool; s_9_St_12_Rouge : st_12;
+                     ck_7 : st_12; nr_9_St_12_Vert : bool;
+                     ns_9_St_12_Vert : st_12; feuEtat_St_12_Vert : bool;
+                     nr_9_St_12_Rouge : bool; ns_9_St_12_Rouge : st_12;
+                     feuEtat_St_12_Rouge : bool; ck_8 : st_12;
+                     r_8_St_11_Vert : bool; s_8_St_11_Vert : st_11;
+                     r_8_St_11_Rouge : bool; s_8_St_11_Rouge : st_11;
+                     ck_9 : st_11; nr_8_St_11_Vert : bool;
+                     ns_8_St_11_Vert : st_11; feuEtat_1_St_11_Vert : bool;
+                     nr_8_St_11_Rouge : bool; ns_8_St_11_Rouge : st_11;
+                     feuEtat_1_St_11_Rouge : bool; ck_10 : st_11;
+                     r_7_St_10_Vert : bool; s_7_St_10_Vert : st_10;
+                     r_7_St_10_Rouge : bool; s_7_St_10_Rouge : st_10;
+                     ck_11 : st_10; nr_7_St_10_Vert : bool;
+                     ns_7_St_10_Vert : st_10; feuEtat_2_St_10_Vert : bool;
+                     nr_7_St_10_Rouge : bool; ns_7_St_10_Rouge : st_10;
+                     feuEtat_2_St_10_Rouge : bool; ck_12 : st_10;
+                     r_6_St_9_Vert : bool; s_6_St_9_Vert : st_9;
+                     r_6_St_9_Rouge : bool; s_6_St_9_Rouge : st_9;
+                     ck_13 : st_9; nr_6_St_9_Vert : bool;
+                     ns_6_St_9_Vert : st_9; feuEtat_3_St_9_Vert : bool;
+                     nr_6_St_9_Rouge : bool; ns_6_St_9_Rouge : st_9;
+                     feuEtat_3_St_9_Rouge : bool; ck_14 : st_9; v_28 : bool;
+                     v_29 : bool; r_5_St_8_NiveauVide : bool;
+                     s_5_St_8_NiveauVide : st_8;
+                     r_5_St_8_PresenceNiveau : bool;
+                     s_5_St_8_PresenceNiveau : st_8; ck_15 : st_8;
+                     nr_5_St_8_NiveauVide : bool;
+                     ns_5_St_8_NiveauVide : st_8;
+                     presenceResult_St_8_NiveauVide : bool;
+                     nr_5_St_8_PresenceNiveau : bool;
+                     ns_5_St_8_PresenceNiveau : st_8;
+                     presenceResult_St_8_PresenceNiveau : bool; ck_16 : st_8;
+                     v_30 : bool; v_31 : bool; r_4_St_7_NiveauVide : bool;
+                     s_4_St_7_NiveauVide : st_7;
+                     r_4_St_7_PresenceNiveau : bool;
+                     s_4_St_7_PresenceNiveau : st_7; ck_17 : st_7;
+                     nr_4_St_7_NiveauVide : bool;
+                     ns_4_St_7_NiveauVide : st_7;
+                     presenceResult_1_St_7_NiveauVide : bool;
+                     nr_4_St_7_PresenceNiveau : bool;
+                     ns_4_St_7_PresenceNiveau : st_7;
+                     presenceResult_1_St_7_PresenceNiveau : bool;
+                     ck_18 : st_7; v_32 : bool; v_33 : bool;
+                     r_3_St_6_NiveauVide : bool; s_3_St_6_NiveauVide : st_6;
+                     r_3_St_6_PresenceNiveau : bool;
+                     s_3_St_6_PresenceNiveau : st_6; ck_19 : st_6;
+                     nr_3_St_6_NiveauVide : bool;
+                     ns_3_St_6_NiveauVide : st_6;
+                     presenceResult_2_St_6_NiveauVide : bool;
+                     nr_3_St_6_PresenceNiveau : bool;
+                     ns_3_St_6_PresenceNiveau : st_6;
+                     presenceResult_2_St_6_PresenceNiveau : bool;
+                     ck_20 : st_6; v_34 : bool; v_35 : bool;
+                     r_2_St_5_NiveauVide : bool; s_2_St_5_NiveauVide : st_5;
+                     r_2_St_5_PresenceNiveau : bool;
+                     s_2_St_5_PresenceNiveau : st_5; ck_21 : st_5;
+                     nr_2_St_5_NiveauVide : bool;
+                     ns_2_St_5_NiveauVide : st_5;
+                     presenceResult_3_St_5_NiveauVide : bool;
+                     nr_2_St_5_PresenceNiveau : bool;
+                     ns_2_St_5_PresenceNiveau : st_5;
+                     presenceResult_3_St_5_PresenceNiveau : bool;
+                     ck_22 : st_5; v_36 : bool; v_37 : bool;
+                     r_1_St_4_NiveauVide : bool; s_1_St_4_NiveauVide : st_4;
+                     r_1_St_4_PresenceNiveau : bool;
+                     s_1_St_4_PresenceNiveau : st_4; ck_23 : st_4;
+                     nr_1_St_4_NiveauVide : bool;
+                     ns_1_St_4_NiveauVide : st_4;
+                     presenceResult_4_St_4_NiveauVide : bool;
+                     nr_1_St_4_PresenceNiveau : bool;
+                     ns_1_St_4_PresenceNiveau : st_4;
+                     presenceResult_4_St_4_PresenceNiveau : bool;
+                     ck_24 : st_4; v_38 : bool; v_39 : bool;
+                     r_St_3_NiveauVide : bool; s_St_3_NiveauVide : st_3;
+                     r_St_3_PresenceNiveau : bool;
+                     s_St_3_PresenceNiveau : st_3; ck_25 : st_3;
+                     nr_St_3_NiveauVide : bool; ns_St_3_NiveauVide : st_3;
+                     presenceResult_5_St_3_NiveauVide : bool;
+                     nr_St_3_PresenceNiveau : bool;
+                     ns_St_3_PresenceNiveau : st_3;
+                     presenceResult_5_St_3_PresenceNiveau : bool;
+                     ck_26 : st_3; v_27 : bool; v_26 : bool; v_25 : bool;
+                     v_24 : bool; v_23 : bool; v_22 : bool; v_21 : bool;
+                     v_20 : bool; v_19 : bool; v_18 : bool; v_17 : bool;
+                     v_16 : bool; v_15 : bool; v_14 : bool; v_13 : bool;
+                     v_12 : bool; v_11 : bool; v_10 : bool; v_9 : bool;
+                     v_8 : bool; v_7 : bool; v_6 : bool; v_5 : bool;
+                     v_4 : bool; v_3 : bool; v_2 : bool; v : bool;
+                     s_11 : st_14; ns_11 : st_14; r_11 : bool; nr_11 : bool;
+                     pnr_11 : bool; s_10 : st_13; ns_10 : st_13; r_10 : bool;
+                     nr_10 : bool; pnr_10 : bool; s_9 : st_12; ns_9 : st_12;
+                     r_9 : bool; nr_9 : bool; pnr_9 : bool; s_8 : st_11;
+                     ns_8 : st_11; r_8 : bool; nr_8 : bool; pnr_8 : bool;
+                     s_7 : st_10; ns_7 : st_10; r_7 : bool; nr_7 : bool;
+                     pnr_7 : bool; s_6 : st_9; ns_6 : st_9; r_6 : bool;
+                     nr_6 : bool; pnr_6 : bool; s_5 : st_8; ns_5 : st_8;
+                     r_5 : bool; nr_5 : bool; pnr_5 : bool; s_4 : st_7;
+                     ns_4 : st_7; r_4 : bool; nr_4 : bool; pnr_4 : bool;
+                     s_3 : st_6; ns_3 : st_6; r_3 : bool; nr_3 : bool;
+                     pnr_3 : bool; s_2 : st_5; ns_2 : st_5; r_2 : bool;
+                     nr_2 : bool; pnr_2 : bool; s_1 : st_4; ns_1 : st_4;
+                     r_1 : bool; nr_1 : bool; pnr_1 : bool; s : st_3;
+                     ns : st_3; r : bool; nr : bool; pnr : bool;
+                     presenceNiveau_5 : bool; presenceResult_5 : bool;
+                     presenceNiveau_4 : bool; presenceResult_4 : bool;
+                     presenceNiveau_3 : bool; presenceResult_3 : bool;
+                     presenceNiveau_2 : bool; presenceResult_2 : bool;
+                     presenceNiveau_1 : bool; presenceResult_1 : bool;
+                     presenceNiveau : bool; presenceResult : bool;
+                     aiguillageHaut_5 : bool; aiguillageBas_5 : bool;
+                     feuEtat_3 : bool; aiguillageHaut_4 : bool;
+                     aiguillageBas_4 : bool; feuEtat_2 : bool;
+                     aiguillageHaut_3 : bool; aiguillageBas_3 : bool;
+                     feuEtat_1 : bool; aiguillageHaut_2 : bool;
+                     aiguillageBas_2 : bool; feuEtat : bool;
+                     demandeActionnerAigHaut_1 : bool;
+                     demandeActionnerAigBas_1 : bool;
+                     aiguillageHaut_1 : bool; aiguillageBas_1 : bool;
+                     demandeActionnerAigHaut : bool;
+                     demandeActionnerAigBas : bool; aiguillageHaut : bool;
+                     aiguillageBas : bool; lpresenceSection1 : bool;
+                     lpresenceAiguillage1 : bool;
+                     lpresenceAiguillage2 : bool; lpresenceGare1 : bool;
+                     lpresenceGare2 : bool; lpresenceSection2 : bool;
+                     laiguillage1Haut : bool; laiguillage1Bas : bool;
+                     laiguillage2Haut : bool; laiguillage2Bas : bool;
+                     feu01 : bool; feu02 : bool; feu3 : bool; feu4 : bool;
+                     prop1 : bool; prop2 : bool; prop3 : bool; prop4 : bool;
+                     prop5 : bool; prop6 : bool; prop7 : bool; prop8 : bool;
+                     prop9 : bool; prop10 : bool;
+  let
+    feuGare2 = feu4;
+    feuGare1 = feu3;
+    feu2 = feu02;
+    feu1 = feu01;
+    aiguillage2Bas = laiguillage2Bas;
+    aiguillage2Haut = laiguillage2Haut;
+    aiguillage1Bas = laiguillage1Bas;
+    aiguillage1Haut = laiguillage1Haut;
+    v = (prop1 & prop2);
+    v_2 = (v & prop5);
+    v_3 = (v_2 & prop6);
+    v_4 = (v_3 & prop7);
+    v_5 = (v_4 & prop8);
+    v_6 = (v_5 & prop9);
+    property = (v_6 & prop10);
+    v_7 = (lpresenceAiguillage2 & laiguillage2Haut);
+    v_8 = not(v_7);
+    v_9 = not(feu4);
+    prop10 = (v_8 or v_9);
+    v_10 = (lpresenceAiguillage1 & laiguillage1Bas);
+    v_11 = not(v_10);
+    v_12 = not(feu3);
+    prop9 = (v_11 or v_12);
+    v_13 = (lpresenceAiguillage2 & laiguillage2Haut);
+    v_14 = not(v_13);
+    v_15 = not(feu02);
+    prop8 = (v_14 or v_15);
+    v_16 = (lpresenceAiguillage1 & laiguillage1Bas);
+    v_17 = not(v_16);
+    v_18 = not(feu01);
+    prop7 = (v_17 or v_18);
+    v_19 = not(lpresenceGare2);
+    prop6 = (v_19 or laiguillage1Haut);
+    v_20 = not(lpresenceGare2);
+    v_21 = not(feu01);
+    prop5 = (v_20 or v_21);
+    prop4 = true;
+    v_22 = not(lpresenceGare1);
+    v_23 = not(feu02);
+    prop3 = (v_22 or v_23);
+    v_24 = not(laiguillage2Haut);
+    v_25 = not(laiguillage2Bas);
+    prop2 = (v_24 or v_25);
+    v_26 = not(laiguillage1Haut);
+    v_27 = not(laiguillage1Bas);
+    prop1 = (v_26 or v_27);
+    lpresenceSection2 = presenceResult_5;
+    lpresenceGare2 = presenceResult_4;
+    lpresenceGare1 = presenceResult_3;
+    lpresenceAiguillage2 = presenceResult_2;
+    lpresenceAiguillage1 = presenceResult_1;
+    lpresenceSection1 = presenceResult;
+    feu4 = feuEtat_3;
+    feu3 = feuEtat_2;
+    feu02 = feuEtat_1;
+    feu01 = feuEtat;
+    laiguillage2Haut = aiguillageHaut_1;
+    laiguillage2Bas = aiguillageBas_1;
+    laiguillage1Haut = aiguillageHaut;
+    laiguillage1Bas = aiguillageBas;
+    r_11 =
+      merge ck (St_14_Bas -> r_11_St_14_Bas)(St_14_Haut -> r_11_St_14_Haut);
+    s_11 =
+      merge ck (St_14_Bas -> s_11_St_14_Bas)(St_14_Haut -> s_11_St_14_Haut);
+    s_11_St_14_Bas =
+      if (demandeActionnerAigHaut when St_14_Bas(ck))
+      then St_14_Haut
+      else St_14_Bas;
+    r_11_St_14_Bas =
+      if (demandeActionnerAigHaut when St_14_Bas(ck))
+      then true
+      else (pnr_11 when St_14_Bas(ck));
+    s_11_St_14_Haut =
+      if (demandeActionnerAigBas when St_14_Haut(ck))
+      then St_14_Bas
+      else St_14_Haut;
+    r_11_St_14_Haut =
+      if (demandeActionnerAigBas when St_14_Haut(ck))
+      then true
+      else (pnr_11 when St_14_Haut(ck));
+    ck = St_14_Haut fby ns_11;
+    nr_11 =
+      merge ck_4
+        (St_14_Bas -> nr_11_St_14_Bas)(St_14_Haut -> nr_11_St_14_Haut);
+    ns_11 =
+      merge ck_4
+        (St_14_Bas -> ns_11_St_14_Bas)(St_14_Haut -> ns_11_St_14_Haut);
+    aiguillageBas =
+      merge ck_4
+        (St_14_Bas -> aiguillageBas_St_14_Bas)
+        (St_14_Haut -> aiguillageBas_St_14_Haut);
+    aiguillageHaut =
+      merge ck_4
+        (St_14_Bas -> aiguillageHaut_St_14_Bas)
+        (St_14_Haut -> aiguillageHaut_St_14_Haut);
+    ns_11_St_14_Bas = St_14_Bas;
+    nr_11_St_14_Bas = false;
+    aiguillageBas_St_14_Bas = true;
+    aiguillageHaut_St_14_Bas = false;
+    ns_11_St_14_Haut = St_14_Haut;
+    nr_11_St_14_Haut = false;
+    aiguillageBas_St_14_Haut = false;
+    aiguillageHaut_St_14_Haut = true;
+    ck_4 = s_11;
+    pnr_11 = false fby nr_11;
+    demandeActionnerAigBas = demandeActionnerAig1Bas;
+    demandeActionnerAigHaut = demandeActionnerAig1Haut;
+    r_10 =
+      merge ck_5 (St_13_Bas -> r_10_St_13_Bas)(St_13_Haut -> r_10_St_13_Haut);
+    s_10 =
+      merge ck_5 (St_13_Bas -> s_10_St_13_Bas)(St_13_Haut -> s_10_St_13_Haut);
+    s_10_St_13_Bas =
+      if (demandeActionnerAigHaut_1 when St_13_Bas(ck_5))
+      then St_13_Haut
+      else St_13_Bas;
+    r_10_St_13_Bas =
+      if (demandeActionnerAigHaut_1 when St_13_Bas(ck_5))
+      then true
+      else (pnr_10 when St_13_Bas(ck_5));
+    s_10_St_13_Haut =
+      if (demandeActionnerAigBas_1 when St_13_Haut(ck_5))
+      then St_13_Bas
+      else St_13_Haut;
+    r_10_St_13_Haut =
+      if (demandeActionnerAigBas_1 when St_13_Haut(ck_5))
+      then true
+      else (pnr_10 when St_13_Haut(ck_5));
+    ck_5 = St_13_Haut fby ns_10;
+    nr_10 =
+      merge ck_6
+        (St_13_Bas -> nr_10_St_13_Bas)(St_13_Haut -> nr_10_St_13_Haut);
+    ns_10 =
+      merge ck_6
+        (St_13_Bas -> ns_10_St_13_Bas)(St_13_Haut -> ns_10_St_13_Haut);
+    aiguillageBas_1 =
+      merge ck_6
+        (St_13_Bas -> aiguillageBas_1_St_13_Bas)
+        (St_13_Haut -> aiguillageBas_1_St_13_Haut);
+    aiguillageHaut_1 =
+      merge ck_6
+        (St_13_Bas -> aiguillageHaut_1_St_13_Bas)
+        (St_13_Haut -> aiguillageHaut_1_St_13_Haut);
+    ns_10_St_13_Bas = St_13_Bas;
+    nr_10_St_13_Bas = false;
+    aiguillageBas_1_St_13_Bas = true;
+    aiguillageHaut_1_St_13_Bas = false;
+    ns_10_St_13_Haut = St_13_Haut;
+    nr_10_St_13_Haut = false;
+    aiguillageBas_1_St_13_Haut = false;
+    aiguillageHaut_1_St_13_Haut = true;
+    ck_6 = s_10;
+    pnr_10 = false fby nr_10;
+    demandeActionnerAigBas_1 = demandeActionnerAig2Bas;
+    demandeActionnerAigHaut_1 = demandeActionnerAig2Haut;
+    r_9 =
+      merge ck_7
+        (St_12_Vert -> r_9_St_12_Vert)(St_12_Rouge -> r_9_St_12_Rouge);
+    s_9 =
+      merge ck_7
+        (St_12_Vert -> s_9_St_12_Vert)(St_12_Rouge -> s_9_St_12_Rouge);
+    s_9_St_12_Vert =
+      if (aiguillageHaut_2 when St_12_Vert(ck_7))
+      then St_12_Rouge
+      else St_12_Vert;
+    r_9_St_12_Vert =
+      if (aiguillageHaut_2 when St_12_Vert(ck_7))
+      then true
+      else (pnr_9 when St_12_Vert(ck_7));
+    s_9_St_12_Rouge =
+      if (aiguillageBas_2 when St_12_Rouge(ck_7))
+      then St_12_Vert
+      else St_12_Rouge;
+    r_9_St_12_Rouge =
+      if (aiguillageBas_2 when St_12_Rouge(ck_7))
+      then true
+      else (pnr_9 when St_12_Rouge(ck_7));
+    ck_7 = St_12_Rouge fby ns_9;
+    nr_9 =
+      merge ck_8
+        (St_12_Vert -> nr_9_St_12_Vert)(St_12_Rouge -> nr_9_St_12_Rouge);
+    ns_9 =
+      merge ck_8
+        (St_12_Vert -> ns_9_St_12_Vert)(St_12_Rouge -> ns_9_St_12_Rouge);
+    feuEtat =
+      merge ck_8
+        (St_12_Vert -> feuEtat_St_12_Vert)
+        (St_12_Rouge -> feuEtat_St_12_Rouge);
+    ns_9_St_12_Vert = St_12_Vert;
+    nr_9_St_12_Vert = false;
+    feuEtat_St_12_Vert = true;
+    ns_9_St_12_Rouge = St_12_Rouge;
+    nr_9_St_12_Rouge = false;
+    feuEtat_St_12_Rouge = false;
+    ck_8 = s_9;
+    pnr_9 = false fby nr_9;
+    aiguillageBas_2 = laiguillage1Bas;
+    aiguillageHaut_2 = laiguillage1Haut;
+    r_8 =
+      merge ck_9
+        (St_11_Vert -> r_8_St_11_Vert)(St_11_Rouge -> r_8_St_11_Rouge);
+    s_8 =
+      merge ck_9
+        (St_11_Vert -> s_8_St_11_Vert)(St_11_Rouge -> s_8_St_11_Rouge);
+    s_8_St_11_Vert =
+      if (aiguillageHaut_3 when St_11_Vert(ck_9))
+      then St_11_Rouge
+      else St_11_Vert;
+    r_8_St_11_Vert =
+      if (aiguillageHaut_3 when St_11_Vert(ck_9))
+      then true
+      else (pnr_8 when St_11_Vert(ck_9));
+    s_8_St_11_Rouge =
+      if (aiguillageBas_3 when St_11_Rouge(ck_9))
+      then St_11_Vert
+      else St_11_Rouge;
+    r_8_St_11_Rouge =
+      if (aiguillageBas_3 when St_11_Rouge(ck_9))
+      then true
+      else (pnr_8 when St_11_Rouge(ck_9));
+    ck_9 = St_11_Rouge fby ns_8;
+    nr_8 =
+      merge ck_10
+        (St_11_Vert -> nr_8_St_11_Vert)(St_11_Rouge -> nr_8_St_11_Rouge);
+    ns_8 =
+      merge ck_10
+        (St_11_Vert -> ns_8_St_11_Vert)(St_11_Rouge -> ns_8_St_11_Rouge);
+    feuEtat_1 =
+      merge ck_10
+        (St_11_Vert -> feuEtat_1_St_11_Vert)
+        (St_11_Rouge -> feuEtat_1_St_11_Rouge);
+    ns_8_St_11_Vert = St_11_Vert;
+    nr_8_St_11_Vert = false;
+    feuEtat_1_St_11_Vert = true;
+    ns_8_St_11_Rouge = St_11_Rouge;
+    nr_8_St_11_Rouge = false;
+    feuEtat_1_St_11_Rouge = false;
+    ck_10 = s_8;
+    pnr_8 = false fby nr_8;
+    aiguillageBas_3 = laiguillage2Bas;
+    aiguillageHaut_3 = laiguillage2Haut;
+    r_7 =
+      merge ck_11
+        (St_10_Vert -> r_7_St_10_Vert)(St_10_Rouge -> r_7_St_10_Rouge);
+    s_7 =
+      merge ck_11
+        (St_10_Vert -> s_7_St_10_Vert)(St_10_Rouge -> s_7_St_10_Rouge);
+    s_7_St_10_Vert =
+      if (aiguillageHaut_4 when St_10_Vert(ck_11))
+      then St_10_Rouge
+      else St_10_Vert;
+    r_7_St_10_Vert =
+      if (aiguillageHaut_4 when St_10_Vert(ck_11))
+      then true
+      else (pnr_7 when St_10_Vert(ck_11));
+    s_7_St_10_Rouge =
+      if (aiguillageBas_4 when St_10_Rouge(ck_11))
+      then St_10_Vert
+      else St_10_Rouge;
+    r_7_St_10_Rouge =
+      if (aiguillageBas_4 when St_10_Rouge(ck_11))
+      then true
+      else (pnr_7 when St_10_Rouge(ck_11));
+    ck_11 = St_10_Rouge fby ns_7;
+    nr_7 =
+      merge ck_12
+        (St_10_Vert -> nr_7_St_10_Vert)(St_10_Rouge -> nr_7_St_10_Rouge);
+    ns_7 =
+      merge ck_12
+        (St_10_Vert -> ns_7_St_10_Vert)(St_10_Rouge -> ns_7_St_10_Rouge);
+    feuEtat_2 =
+      merge ck_12
+        (St_10_Vert -> feuEtat_2_St_10_Vert)
+        (St_10_Rouge -> feuEtat_2_St_10_Rouge);
+    ns_7_St_10_Vert = St_10_Vert;
+    nr_7_St_10_Vert = false;
+    feuEtat_2_St_10_Vert = true;
+    ns_7_St_10_Rouge = St_10_Rouge;
+    nr_7_St_10_Rouge = false;
+    feuEtat_2_St_10_Rouge = false;
+    ck_12 = s_7;
+    pnr_7 = false fby nr_7;
+    aiguillageBas_4 = laiguillage1Haut;
+    aiguillageHaut_4 = laiguillage1Bas;
+    r_6 =
+      merge ck_13 (St_9_Vert -> r_6_St_9_Vert)(St_9_Rouge -> r_6_St_9_Rouge);
+    s_6 =
+      merge ck_13 (St_9_Vert -> s_6_St_9_Vert)(St_9_Rouge -> s_6_St_9_Rouge);
+    s_6_St_9_Vert =
+      if (aiguillageHaut_5 when St_9_Vert(ck_13))
+      then St_9_Rouge
+      else St_9_Vert;
+    r_6_St_9_Vert =
+      if (aiguillageHaut_5 when St_9_Vert(ck_13))
+      then true
+      else (pnr_6 when St_9_Vert(ck_13));
+    s_6_St_9_Rouge =
+      if (aiguillageBas_5 when St_9_Rouge(ck_13))
+      then St_9_Vert
+      else St_9_Rouge;
+    r_6_St_9_Rouge =
+      if (aiguillageBas_5 when St_9_Rouge(ck_13))
+      then true
+      else (pnr_6 when St_9_Rouge(ck_13));
+    ck_13 = St_9_Rouge fby ns_6;
+    nr_6 =
+      merge ck_14
+        (St_9_Vert -> nr_6_St_9_Vert)(St_9_Rouge -> nr_6_St_9_Rouge);
+    ns_6 =
+      merge ck_14
+        (St_9_Vert -> ns_6_St_9_Vert)(St_9_Rouge -> ns_6_St_9_Rouge);
+    feuEtat_3 =
+      merge ck_14
+        (St_9_Vert -> feuEtat_3_St_9_Vert)
+        (St_9_Rouge -> feuEtat_3_St_9_Rouge);
+    ns_6_St_9_Vert = St_9_Vert;
+    nr_6_St_9_Vert = false;
+    feuEtat_3_St_9_Vert = true;
+    ns_6_St_9_Rouge = St_9_Rouge;
+    nr_6_St_9_Rouge = false;
+    feuEtat_3_St_9_Rouge = false;
+    ck_14 = s_6;
+    pnr_6 = false fby nr_6;
+    aiguillageBas_5 = laiguillage2Haut;
+    aiguillageHaut_5 = laiguillage2Bas;
+    r_5 =
+      merge ck_15
+        (St_8_NiveauVide -> r_5_St_8_NiveauVide)
+        (St_8_PresenceNiveau -> r_5_St_8_PresenceNiveau);
+    s_5 =
+      merge ck_15
+        (St_8_NiveauVide -> s_5_St_8_NiveauVide)
+        (St_8_PresenceNiveau -> s_5_St_8_PresenceNiveau);
+    v_28 = not((presenceNiveau when St_8_NiveauVide(ck_15)));
+    s_5_St_8_NiveauVide =
+      if v_28 then St_8_PresenceNiveau else St_8_NiveauVide;
+    r_5_St_8_NiveauVide =
+      if v_28 then true else (pnr_5 when St_8_NiveauVide(ck_15));
+    v_29 = not((presenceNiveau when St_8_PresenceNiveau(ck_15)));
+    s_5_St_8_PresenceNiveau =
+      if v_29 then St_8_NiveauVide else St_8_PresenceNiveau;
+    r_5_St_8_PresenceNiveau =
+      if v_29 then true else (pnr_5 when St_8_PresenceNiveau(ck_15));
+    ck_15 = St_8_PresenceNiveau fby ns_5;
+    nr_5 =
+      merge ck_16
+        (St_8_NiveauVide -> nr_5_St_8_NiveauVide)
+        (St_8_PresenceNiveau -> nr_5_St_8_PresenceNiveau);
+    ns_5 =
+      merge ck_16
+        (St_8_NiveauVide -> ns_5_St_8_NiveauVide)
+        (St_8_PresenceNiveau -> ns_5_St_8_PresenceNiveau);
+    presenceResult =
+      merge ck_16
+        (St_8_NiveauVide -> presenceResult_St_8_NiveauVide)
+        (St_8_PresenceNiveau -> presenceResult_St_8_PresenceNiveau);
+    ns_5_St_8_NiveauVide = St_8_NiveauVide;
+    nr_5_St_8_NiveauVide = false;
+    presenceResult_St_8_NiveauVide = false;
+    ns_5_St_8_PresenceNiveau = St_8_PresenceNiveau;
+    nr_5_St_8_PresenceNiveau = false;
+    presenceResult_St_8_PresenceNiveau = true;
+    ck_16 = s_5;
+    pnr_5 = false fby nr_5;
+    presenceNiveau = presenceSection1;
+    r_4 =
+      merge ck_17
+        (St_7_NiveauVide -> r_4_St_7_NiveauVide)
+        (St_7_PresenceNiveau -> r_4_St_7_PresenceNiveau);
+    s_4 =
+      merge ck_17
+        (St_7_NiveauVide -> s_4_St_7_NiveauVide)
+        (St_7_PresenceNiveau -> s_4_St_7_PresenceNiveau);
+    v_30 = not((presenceNiveau_1 when St_7_NiveauVide(ck_17)));
+    s_4_St_7_NiveauVide =
+      if v_30 then St_7_PresenceNiveau else St_7_NiveauVide;
+    r_4_St_7_NiveauVide =
+      if v_30 then true else (pnr_4 when St_7_NiveauVide(ck_17));
+    v_31 = not((presenceNiveau_1 when St_7_PresenceNiveau(ck_17)));
+    s_4_St_7_PresenceNiveau =
+      if v_31 then St_7_NiveauVide else St_7_PresenceNiveau;
+    r_4_St_7_PresenceNiveau =
+      if v_31 then true else (pnr_4 when St_7_PresenceNiveau(ck_17));
+    ck_17 = St_7_PresenceNiveau fby ns_4;
+    nr_4 =
+      merge ck_18
+        (St_7_NiveauVide -> nr_4_St_7_NiveauVide)
+        (St_7_PresenceNiveau -> nr_4_St_7_PresenceNiveau);
+    ns_4 =
+      merge ck_18
+        (St_7_NiveauVide -> ns_4_St_7_NiveauVide)
+        (St_7_PresenceNiveau -> ns_4_St_7_PresenceNiveau);
+    presenceResult_1 =
+      merge ck_18
+        (St_7_NiveauVide -> presenceResult_1_St_7_NiveauVide)
+        (St_7_PresenceNiveau -> presenceResult_1_St_7_PresenceNiveau);
+    ns_4_St_7_NiveauVide = St_7_NiveauVide;
+    nr_4_St_7_NiveauVide = false;
+    presenceResult_1_St_7_NiveauVide = false;
+    ns_4_St_7_PresenceNiveau = St_7_PresenceNiveau;
+    nr_4_St_7_PresenceNiveau = false;
+    presenceResult_1_St_7_PresenceNiveau = true;
+    ck_18 = s_4;
+    pnr_4 = false fby nr_4;
+    presenceNiveau_1 = presenceAiguillage1;
+    r_3 =
+      merge ck_19
+        (St_6_NiveauVide -> r_3_St_6_NiveauVide)
+        (St_6_PresenceNiveau -> r_3_St_6_PresenceNiveau);
+    s_3 =
+      merge ck_19
+        (St_6_NiveauVide -> s_3_St_6_NiveauVide)
+        (St_6_PresenceNiveau -> s_3_St_6_PresenceNiveau);
+    v_32 = not((presenceNiveau_2 when St_6_NiveauVide(ck_19)));
+    s_3_St_6_NiveauVide =
+      if v_32 then St_6_PresenceNiveau else St_6_NiveauVide;
+    r_3_St_6_NiveauVide =
+      if v_32 then true else (pnr_3 when St_6_NiveauVide(ck_19));
+    v_33 = not((presenceNiveau_2 when St_6_PresenceNiveau(ck_19)));
+    s_3_St_6_PresenceNiveau =
+      if v_33 then St_6_NiveauVide else St_6_PresenceNiveau;
+    r_3_St_6_PresenceNiveau =
+      if v_33 then true else (pnr_3 when St_6_PresenceNiveau(ck_19));
+    ck_19 = St_6_PresenceNiveau fby ns_3;
+    nr_3 =
+      merge ck_20
+        (St_6_NiveauVide -> nr_3_St_6_NiveauVide)
+        (St_6_PresenceNiveau -> nr_3_St_6_PresenceNiveau);
+    ns_3 =
+      merge ck_20
+        (St_6_NiveauVide -> ns_3_St_6_NiveauVide)
+        (St_6_PresenceNiveau -> ns_3_St_6_PresenceNiveau);
+    presenceResult_2 =
+      merge ck_20
+        (St_6_NiveauVide -> presenceResult_2_St_6_NiveauVide)
+        (St_6_PresenceNiveau -> presenceResult_2_St_6_PresenceNiveau);
+    ns_3_St_6_NiveauVide = St_6_NiveauVide;
+    nr_3_St_6_NiveauVide = false;
+    presenceResult_2_St_6_NiveauVide = false;
+    ns_3_St_6_PresenceNiveau = St_6_PresenceNiveau;
+    nr_3_St_6_PresenceNiveau = false;
+    presenceResult_2_St_6_PresenceNiveau = true;
+    ck_20 = s_3;
+    pnr_3 = false fby nr_3;
+    presenceNiveau_2 = presenceAiguillage2;
+    r_2 =
+      merge ck_21
+        (St_5_NiveauVide -> r_2_St_5_NiveauVide)
+        (St_5_PresenceNiveau -> r_2_St_5_PresenceNiveau);
+    s_2 =
+      merge ck_21
+        (St_5_NiveauVide -> s_2_St_5_NiveauVide)
+        (St_5_PresenceNiveau -> s_2_St_5_PresenceNiveau);
+    v_34 = not((presenceNiveau_3 when St_5_NiveauVide(ck_21)));
+    s_2_St_5_NiveauVide =
+      if v_34 then St_5_PresenceNiveau else St_5_NiveauVide;
+    r_2_St_5_NiveauVide =
+      if v_34 then true else (pnr_2 when St_5_NiveauVide(ck_21));
+    v_35 = not((presenceNiveau_3 when St_5_PresenceNiveau(ck_21)));
+    s_2_St_5_PresenceNiveau =
+      if v_35 then St_5_NiveauVide else St_5_PresenceNiveau;
+    r_2_St_5_PresenceNiveau =
+      if v_35 then true else (pnr_2 when St_5_PresenceNiveau(ck_21));
+    ck_21 = St_5_PresenceNiveau fby ns_2;
+    nr_2 =
+      merge ck_22
+        (St_5_NiveauVide -> nr_2_St_5_NiveauVide)
+        (St_5_PresenceNiveau -> nr_2_St_5_PresenceNiveau);
+    ns_2 =
+      merge ck_22
+        (St_5_NiveauVide -> ns_2_St_5_NiveauVide)
+        (St_5_PresenceNiveau -> ns_2_St_5_PresenceNiveau);
+    presenceResult_3 =
+      merge ck_22
+        (St_5_NiveauVide -> presenceResult_3_St_5_NiveauVide)
+        (St_5_PresenceNiveau -> presenceResult_3_St_5_PresenceNiveau);
+    ns_2_St_5_NiveauVide = St_5_NiveauVide;
+    nr_2_St_5_NiveauVide = false;
+    presenceResult_3_St_5_NiveauVide = false;
+    ns_2_St_5_PresenceNiveau = St_5_PresenceNiveau;
+    nr_2_St_5_PresenceNiveau = false;
+    presenceResult_3_St_5_PresenceNiveau = true;
+    ck_22 = s_2;
+    pnr_2 = false fby nr_2;
+    presenceNiveau_3 = presenceGare1;
+    r_1 =
+      merge ck_23
+        (St_4_NiveauVide -> r_1_St_4_NiveauVide)
+        (St_4_PresenceNiveau -> r_1_St_4_PresenceNiveau);
+    s_1 =
+      merge ck_23
+        (St_4_NiveauVide -> s_1_St_4_NiveauVide)
+        (St_4_PresenceNiveau -> s_1_St_4_PresenceNiveau);
+    v_36 = not((presenceNiveau_4 when St_4_NiveauVide(ck_23)));
+    s_1_St_4_NiveauVide =
+      if v_36 then St_4_PresenceNiveau else St_4_NiveauVide;
+    r_1_St_4_NiveauVide =
+      if v_36 then true else (pnr_1 when St_4_NiveauVide(ck_23));
+    v_37 = not((presenceNiveau_4 when St_4_PresenceNiveau(ck_23)));
+    s_1_St_4_PresenceNiveau =
+      if v_37 then St_4_NiveauVide else St_4_PresenceNiveau;
+    r_1_St_4_PresenceNiveau =
+      if v_37 then true else (pnr_1 when St_4_PresenceNiveau(ck_23));
+    ck_23 = St_4_PresenceNiveau fby ns_1;
+    nr_1 =
+      merge ck_24
+        (St_4_NiveauVide -> nr_1_St_4_NiveauVide)
+        (St_4_PresenceNiveau -> nr_1_St_4_PresenceNiveau);
+    ns_1 =
+      merge ck_24
+        (St_4_NiveauVide -> ns_1_St_4_NiveauVide)
+        (St_4_PresenceNiveau -> ns_1_St_4_PresenceNiveau);
+    presenceResult_4 =
+      merge ck_24
+        (St_4_NiveauVide -> presenceResult_4_St_4_NiveauVide)
+        (St_4_PresenceNiveau -> presenceResult_4_St_4_PresenceNiveau);
+    ns_1_St_4_NiveauVide = St_4_NiveauVide;
+    nr_1_St_4_NiveauVide = false;
+    presenceResult_4_St_4_NiveauVide = false;
+    ns_1_St_4_PresenceNiveau = St_4_PresenceNiveau;
+    nr_1_St_4_PresenceNiveau = false;
+    presenceResult_4_St_4_PresenceNiveau = true;
+    ck_24 = s_1;
+    pnr_1 = false fby nr_1;
+    presenceNiveau_4 = presenceGare2;
+    r =
+      merge ck_25
+        (St_3_NiveauVide -> r_St_3_NiveauVide)
+        (St_3_PresenceNiveau -> r_St_3_PresenceNiveau);
+    s =
+      merge ck_25
+        (St_3_NiveauVide -> s_St_3_NiveauVide)
+        (St_3_PresenceNiveau -> s_St_3_PresenceNiveau);
+    v_38 = not((presenceNiveau_5 when St_3_NiveauVide(ck_25)));
+    s_St_3_NiveauVide = if v_38 then St_3_PresenceNiveau else St_3_NiveauVide;
+    r_St_3_NiveauVide =
+      if v_38 then true else (pnr when St_3_NiveauVide(ck_25));
+    v_39 = not((presenceNiveau_5 when St_3_PresenceNiveau(ck_25)));
+    s_St_3_PresenceNiveau =
+      if v_39 then St_3_NiveauVide else St_3_PresenceNiveau;
+    r_St_3_PresenceNiveau =
+      if v_39 then true else (pnr when St_3_PresenceNiveau(ck_25));
+    ck_25 = St_3_PresenceNiveau fby ns;
+    nr =
+      merge ck_26
+        (St_3_NiveauVide -> nr_St_3_NiveauVide)
+        (St_3_PresenceNiveau -> nr_St_3_PresenceNiveau);
+    ns =
+      merge ck_26
+        (St_3_NiveauVide -> ns_St_3_NiveauVide)
+        (St_3_PresenceNiveau -> ns_St_3_PresenceNiveau);
+    presenceResult_5 =
+      merge ck_26
+        (St_3_NiveauVide -> presenceResult_5_St_3_NiveauVide)
+        (St_3_PresenceNiveau -> presenceResult_5_St_3_PresenceNiveau);
+    ns_St_3_NiveauVide = St_3_NiveauVide;
+    nr_St_3_NiveauVide = false;
+    presenceResult_5_St_3_NiveauVide = false;
+    ns_St_3_PresenceNiveau = St_3_PresenceNiveau;
+    nr_St_3_PresenceNiveau = false;
+    presenceResult_5_St_3_PresenceNiveau = true;
+    ck_26 = s;
+    pnr = false fby nr;
+    presenceNiveau_5 = presenceSection2
+  tel
+

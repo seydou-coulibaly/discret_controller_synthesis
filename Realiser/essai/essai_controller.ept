@@ -1,0 +1,14 @@
+type st = St_Presence|St_Nothing
+type st_1 = St_1_Stop|St_1_Mouvement
+type st_2 = St_2_Stop|St_2_Mouvement
+type st_3 = St_3_Presence|St_3_Nothing
+node essai_ctrlr0(ck : st_3; ck_4 : st_2; ok : bool; pnr : bool;
+                   pnr_1 : bool; presenceMaison : bool)
+returns (entree : bool; sortie : bool)
+var l0 : bool;
+let
+  entree = (presenceMaison or l0);
+  sortie = true;
+  l0 = not((ck_4 = St_2_Stop))
+tel
+

@@ -1,0 +1,188 @@
+type st_3 = St_3_Presence|St_3_Nothing
+type st_2 = St_2_Stop|St_2_Mouvement
+type st_1 = St_1_Stop|St_1_Mouvement
+type st = St_Presence|St_Nothing
+node presence(presence : bool) returns (occuper : bool)
+var v : bool; r_St_Presence : bool; s_St_Presence : st; r_St_Nothing : bool;
+    s_St_Nothing : st; ck : st; nr_St_Presence : bool; ns_St_Presence : st;
+    occuper_St_Presence : bool; nr_St_Nothing : bool; ns_St_Nothing : st;
+    occuper_St_Nothing : bool; ck_1 : st; s : st; ns : st; r : bool;
+    nr : bool; pnr : bool;
+let
+  r = merge ck (St_Presence -> r_St_Presence)(St_Nothing -> r_St_Nothing);
+  s = merge ck (St_Presence -> s_St_Presence)(St_Nothing -> s_St_Nothing);
+  v = not((presence when St_Presence(ck)));
+  s_St_Presence = if v then St_Nothing else St_Presence;
+  r_St_Presence = if v then true else (pnr when St_Presence(ck));
+  s_St_Nothing =
+    if (presence when St_Nothing(ck)) then St_Presence else St_Nothing;
+  r_St_Nothing =
+    if (presence when St_Nothing(ck))
+    then true
+    else (pnr when St_Nothing(ck));
+  ck = St_Nothing fby ns;
+  nr =
+    merge ck_1 (St_Presence -> nr_St_Presence)(St_Nothing -> nr_St_Nothing);
+  ns =
+    merge ck_1 (St_Presence -> ns_St_Presence)(St_Nothing -> ns_St_Nothing);
+  occuper =
+    merge ck_1
+      (St_Presence -> occuper_St_Presence)(St_Nothing -> occuper_St_Nothing);
+  ns_St_Presence = St_Presence;
+  nr_St_Presence = false;
+  occuper_St_Presence = true;
+  ns_St_Nothing = St_Nothing;
+  nr_St_Nothing = false;
+  occuper_St_Nothing = false;
+  ck_1 = s;
+  pnr = false fby nr
+tel
+
+node ascenseur(demandeEtage : bool; arriveEtage : bool) returns (etat : bool)
+var v_1 : bool; v : bool; r_St_1_Mouvement : bool; s_St_1_Mouvement : st_1;
+    r_St_1_Stop : bool; s_St_1_Stop : st_1; ck : st_1;
+    nr_St_1_Mouvement : bool; ns_St_1_Mouvement : st_1;
+    etat_St_1_Mouvement : bool; nr_St_1_Stop : bool; ns_St_1_Stop : st_1;
+    etat_St_1_Stop : bool; ck_2 : st_1; s : st_1; ns : st_1; r : bool;
+    nr : bool; pnr : bool;
+let
+  r = merge ck (St_1_Mouvement -> r_St_1_Mouvement)(St_1_Stop -> r_St_1_Stop);
+  s = merge ck (St_1_Mouvement -> s_St_1_Mouvement)(St_1_Stop -> s_St_1_Stop);
+  v = not((demandeEtage when St_1_Mouvement(ck)));
+  v_1 = (v or (arriveEtage when St_1_Mouvement(ck)));
+  s_St_1_Mouvement = if v_1 then St_1_Stop else St_1_Mouvement;
+  r_St_1_Mouvement = if v_1 then true else (pnr when St_1_Mouvement(ck));
+  s_St_1_Stop =
+    if (demandeEtage when St_1_Stop(ck)) then St_1_Mouvement else St_1_Stop;
+  r_St_1_Stop =
+    if (demandeEtage when St_1_Stop(ck))
+    then true
+    else (pnr when St_1_Stop(ck));
+  ck = St_1_Stop fby ns;
+  nr =
+    merge ck_2
+      (St_1_Mouvement -> nr_St_1_Mouvement)(St_1_Stop -> nr_St_1_Stop);
+  ns =
+    merge ck_2
+      (St_1_Mouvement -> ns_St_1_Mouvement)(St_1_Stop -> ns_St_1_Stop);
+  etat =
+    merge ck_2
+      (St_1_Mouvement -> etat_St_1_Mouvement)(St_1_Stop -> etat_St_1_Stop);
+  ns_St_1_Mouvement = St_1_Mouvement;
+  nr_St_1_Mouvement = false;
+  etat_St_1_Mouvement = true;
+  ns_St_1_Stop = St_1_Stop;
+  nr_St_1_Stop = false;
+  etat_St_1_Stop = false;
+  ck_2 = s;
+  pnr = false fby nr
+tel
+
+node essai(presenceMaison : bool) returns (y : bool; property : bool)
+contract
+  
+  assume true@ enforce property] with (entree : bool; sortie : bool)
+                 var v_2 : bool; r_1_St_3_Presence : bool;
+                     s_1_St_3_Presence : st_3; r_1_St_3_Nothing : bool;
+                     s_1_St_3_Nothing : st_3; ck : st_3;
+                     nr_1_St_3_Presence : bool; ns_1_St_3_Presence : st_3;
+                     occuper_St_3_Presence : bool; nr_1_St_3_Nothing : bool;
+                     ns_1_St_3_Nothing : st_3; occuper_St_3_Nothing : bool;
+                     ck_3 : st_3; v_4 : bool; v_3 : bool;
+                     r_St_2_Mouvement : bool; s_St_2_Mouvement : st_2;
+                     r_St_2_Stop : bool; s_St_2_Stop : st_2; ck_4 : st_2;
+                     nr_St_2_Mouvement : bool; ns_St_2_Mouvement : st_2;
+                     etat_St_2_Mouvement : bool; nr_St_2_Stop : bool;
+                     ns_St_2_Stop : st_2; etat_St_2_Stop : bool; ck_5 : st_2;
+                     v : bool; s_1 : st_3; ns_1 : st_3; r_1 : bool;
+                     nr_1 : bool; pnr_1 : bool; s : st_2; ns : st_2;
+                     r : bool; nr : bool; pnr : bool; demandeEtage : bool;
+                     arriveEtage : bool; etat : bool; presence : bool;
+                     occuper : bool; m : bool; l : bool;
+  let
+    y = m;
+    v = not(l);
+    property = (m or v);
+    l = etat;
+    m = occuper;
+    r_1 =
+      merge ck
+        (St_3_Presence -> r_1_St_3_Presence)
+        (St_3_Nothing -> r_1_St_3_Nothing);
+    s_1 =
+      merge ck
+        (St_3_Presence -> s_1_St_3_Presence)
+        (St_3_Nothing -> s_1_St_3_Nothing);
+    v_2 = not((presence when St_3_Presence(ck)));
+    s_1_St_3_Presence = if v_2 then St_3_Nothing else St_3_Presence;
+    r_1_St_3_Presence = if v_2 then true else (pnr_1 when St_3_Presence(ck));
+    s_1_St_3_Nothing =
+      if (presence when St_3_Nothing(ck))
+      then St_3_Presence
+      else St_3_Nothing;
+    r_1_St_3_Nothing =
+      if (presence when St_3_Nothing(ck))
+      then true
+      else (pnr_1 when St_3_Nothing(ck));
+    ck = St_3_Nothing fby ns_1;
+    nr_1 =
+      merge ck_3
+        (St_3_Presence -> nr_1_St_3_Presence)
+        (St_3_Nothing -> nr_1_St_3_Nothing);
+    ns_1 =
+      merge ck_3
+        (St_3_Presence -> ns_1_St_3_Presence)
+        (St_3_Nothing -> ns_1_St_3_Nothing);
+    occuper =
+      merge ck_3
+        (St_3_Presence -> occuper_St_3_Presence)
+        (St_3_Nothing -> occuper_St_3_Nothing);
+    ns_1_St_3_Presence = St_3_Presence;
+    nr_1_St_3_Presence = false;
+    occuper_St_3_Presence = true;
+    ns_1_St_3_Nothing = St_3_Nothing;
+    nr_1_St_3_Nothing = false;
+    occuper_St_3_Nothing = false;
+    ck_3 = s_1;
+    pnr_1 = false fby nr_1;
+    presence = presenceMaison;
+    r =
+      merge ck_4
+        (St_2_Mouvement -> r_St_2_Mouvement)(St_2_Stop -> r_St_2_Stop);
+    s =
+      merge ck_4
+        (St_2_Mouvement -> s_St_2_Mouvement)(St_2_Stop -> s_St_2_Stop);
+    v_3 = not((demandeEtage when St_2_Mouvement(ck_4)));
+    v_4 = (v_3 or (arriveEtage when St_2_Mouvement(ck_4)));
+    s_St_2_Mouvement = if v_4 then St_2_Stop else St_2_Mouvement;
+    r_St_2_Mouvement = if v_4 then true else (pnr when St_2_Mouvement(ck_4));
+    s_St_2_Stop =
+      if (demandeEtage when St_2_Stop(ck_4))
+      then St_2_Mouvement
+      else St_2_Stop;
+    r_St_2_Stop =
+      if (demandeEtage when St_2_Stop(ck_4))
+      then true
+      else (pnr when St_2_Stop(ck_4));
+    ck_4 = St_2_Stop fby ns;
+    nr =
+      merge ck_5
+        (St_2_Mouvement -> nr_St_2_Mouvement)(St_2_Stop -> nr_St_2_Stop);
+    ns =
+      merge ck_5
+        (St_2_Mouvement -> ns_St_2_Mouvement)(St_2_Stop -> ns_St_2_Stop);
+    etat =
+      merge ck_5
+        (St_2_Mouvement -> etat_St_2_Mouvement)(St_2_Stop -> etat_St_2_Stop);
+    ns_St_2_Mouvement = St_2_Mouvement;
+    nr_St_2_Mouvement = false;
+    etat_St_2_Mouvement = true;
+    ns_St_2_Stop = St_2_Stop;
+    nr_St_2_Stop = false;
+    etat_St_2_Stop = false;
+    ck_5 = s;
+    pnr = false fby nr;
+    arriveEtage = sortie;
+    demandeEtage = entree
+  tel
+

@@ -1,0 +1,78 @@
+(* --- Generated the 11/2/2016 at 15:28 --- *)
+(* --- heptagon compiler, version 1.00.06 (compiled tue. feb. 10 16:39:51 CET 2015) --- *)
+(* --- Command line: heptc -target ctrln -target c twomodes.ept --- *)
+
+!typedef
+  St = enum {St_Up, St_Down};
+  
+!state
+  ck: St;
+  pnr: bool;
+  x_1: int;
+  __init__: bool;
+  y: int;
+  ok: bool;
+  b: bool;
+  
+!input
+  v: int;
+  d: bool;
+  
+!controllable
+  c: bool;
+  
+!local
+  v_5: bool;
+  v_6: bool;
+  nr_St_Down: bool;
+  ns_St_Down: St;
+  x_St_Down: int;
+  b_St_Down: bool;
+  nr_St_Up: bool;
+  ns_St_Up: St;
+  x_St_Up: int;
+  b_St_Up: bool;
+  ns: St;
+  r: bool;
+  nr: bool;
+  x: int;
+  c_v_4: bool;
+  c_v_3: bool;
+  c_v_2: bool;
+  c_v_1: bool;
+  
+!definition
+  v_5 = not c;
+  v_6 = c and d;
+  nr_St_Down = v_5;
+  ns_St_Down = (if v_5 then St_Up else St_Down);
+  x_St_Down = (x_1 - v);
+  b_St_Down = false;
+  nr_St_Up = v_6;
+  ns_St_Up = (if v_6 then St_Down else St_Up);
+  x_St_Up = (x_1 + v);
+  b_St_Up = true;
+  ns = (if (ck = St_Up) then ns_St_Up else ns_St_Down);
+  r = pnr;
+  nr = (if (ck = St_Up) then nr_St_Up else nr_St_Down);
+  x = (if (ck = St_Up) then x_St_Up else x_St_Down);
+  c_v_4 = (y >= 0);
+  c_v_3 = c_v_1 and c_v_2;
+  c_v_2 = (v >= 0);
+  c_v_1 = (v <= 1);
+  
+!transition
+  ck'= ns;
+  pnr'= nr;
+  x_1'= x;
+  __init__'= false;
+  y'= x;
+  ok'= true;
+  b'= (if (ck = St_Up) then b_St_Up else b_St_Down);
+  
+!initial
+  (ck = St_Up) and not pnr and (x_1 = 0) and __init__;
+!assertion
+  c_v_3;
+!invariant
+  (__init__ or ok and c_v_4);

@@ -1,0 +1,34 @@
+type stat = Arret|Ouvert|EnMouvement|Fermer
+node ascenseur(presence,presenceEtageCourant,demandeEtage,arriveEtage:bool;secondo: int) returns (etat: stat)
+contract
+assume true
+enforce true
+with (c:bool)
+var 
+last compteur : int = 0;
+let
+	automaton
+		state Stop
+		do
+			etat = Arret;
+			compteur = 0 fby (compteur +1);		until secondo >= compteur then Open
+
+		state Open
+		do 
+			etat = Ouvert;
+			compteur = 0 fby (compteur +1);
+		until (secondo >= compteur) then Shut
+
+		state Shut
+		do 
+			etat = Fermer;
+			compteur = 0 fby (compteur +1);
+		until presenceEtageCourant then Open 
+		|(presence & (secondo >= compteur)) or (not presence & demandeEtage) then Mouvement
+
+		state Mouvement
+		do
+			etat = EnMouvement
+		until arriveEtage then Stop
+	end
+tel

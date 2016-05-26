@@ -1,0 +1,38 @@
+type st = St_Up|St_Down
+node twomodes(v : int; d : bool) returns (y : int; b : bool)
+contract
+  var v_4 : bool; v_3 : bool; v_2 : bool; v_1 : bool;
+  let
+    v_1 = (v <= 1);
+    v_2 = (v >= 0);
+    v_3 = (v_1 & v_2);
+    v_4 = (y >= 0)
+  tel
+  assume v_3@ enforce v_4] with (c : bool)
+                var v_5 : bool; v_6 : bool; nr_St_Down : bool;
+                    ns_St_Down : st; x_St_Down : int; b_St_Down : bool;
+                    nr_St_Up : bool; ns_St_Up : st; x_St_Up : int;
+                    b_St_Up : bool; ck : st; ns : st; r : bool; nr : bool;
+                    pnr : bool; x : int; x_1 : int;
+  let
+    nr = merge ck (St_Down -> nr_St_Down)(St_Up -> nr_St_Up);
+    ns = merge ck (St_Down -> ns_St_Down)(St_Up -> ns_St_Up);
+    x = merge ck (St_Down -> x_St_Down)(St_Up -> x_St_Up);
+    b = merge ck (St_Down -> b_St_Down)(St_Up -> b_St_Up);
+    v_5 = not((c when St_Down(ck)));
+    ns_St_Down = if v_5 then St_Up else St_Down;
+    nr_St_Down = if v_5 then true else false;
+    b_St_Down = false;
+    x_St_Down = ((x_1 when St_Down(ck)) - (v when St_Down(ck)));
+    v_6 = ((c when St_Up(ck)) & (d when St_Up(ck)));
+    ns_St_Up = if v_6 then St_Down else St_Up;
+    nr_St_Up = if v_6 then true else false;
+    b_St_Up = true;
+    x_St_Up = ((x_1 when St_Up(ck)) + (v when St_Up(ck)));
+    ck = St_Up fby ns;
+    pnr = false fby nr;
+    r = pnr;
+    y = x;
+    x_1 = 0 fby x
+  tel
+

@@ -1,0 +1,127 @@
+type st = St_Vigilence|St_Sonner|St_Arret|St_Allume
+type etat = DispositifMarche|ArretDispositif|DispositifVigilence
+node alarme(ma : bool; code : bool; pbGar : bool; pbHab : bool;
+             dReprise : int; dVigilence : int; dAlarme : int)
+returns (al : bool; enMarche : etat)
+contract
+  var v_6 : bool; v_5 : bool; v_4 : bool; v_3 : bool; v_2 : bool; v_1 : bool;
+      v : bool;
+  let
+    v = not(al);
+    v_1 = (enMarche = DispositifVigilence);
+    v_2 = not(v_1);
+    v_3 = (enMarche = ArretDispositif);
+    v_4 = not(v_3);
+    v_5 = (v_2 & v_4);
+    v_6 = (v or v_5)
+  tel
+  assume true@ enforce v_6] with (c : bool)
+                 var v_11 : int; v_10 : int; v_9 : bool; v_8 : st;
+                     v_7 : bool; v_14 : int; v_13 : int; v_12 : bool;
+                     v_22 : int; v_21 : int; v_20 : bool; v_19 : st;
+                     v_18 : bool; v_17 : st; v_16 : bool; v_15 : bool;
+                     nr_St_Vigilence : bool; ns_St_Vigilence : st;
+                     reprise_St_Vigilence : int;
+                     vigilence_St_Vigilence : int; temps_St_Vigilence : int;
+                     enMarche_St_Vigilence : etat; al_St_Vigilence : bool;
+                     nr_St_Sonner : bool; ns_St_Sonner : st;
+                     reprise_St_Sonner : int; vigilence_St_Sonner : int;
+                     temps_St_Sonner : int; enMarche_St_Sonner : etat;
+                     al_St_Sonner : bool; nr_St_Allume : bool;
+                     ns_St_Allume : st; reprise_St_Allume : int;
+                     vigilence_St_Allume : int; temps_St_Allume : int;
+                     enMarche_St_Allume : etat; al_St_Allume : bool;
+                     nr_St_Arret : bool; ns_St_Arret : st;
+                     reprise_St_Arret : int; vigilence_St_Arret : int;
+                     temps_St_Arret : int; enMarche_St_Arret : etat;
+                     al_St_Arret : bool; ck : st; ns : st; r : bool;
+                     nr : bool; pnr : bool; temps : int; vigilence : int;
+                     reprise : int; reprise_1 : int; vigilence_1 : int;
+                     temps_1 : int;
+  let
+    nr =
+      merge ck
+        (St_Vigilence -> nr_St_Vigilence)(St_Sonner -> nr_St_Sonner)
+        (St_Allume -> nr_St_Allume)(St_Arret -> nr_St_Arret);
+    ns =
+      merge ck
+        (St_Vigilence -> ns_St_Vigilence)(St_Sonner -> ns_St_Sonner)
+        (St_Allume -> ns_St_Allume)(St_Arret -> ns_St_Arret);
+    reprise =
+      merge ck
+        (St_Vigilence -> reprise_St_Vigilence)
+        (St_Sonner -> reprise_St_Sonner)(St_Allume -> reprise_St_Allume)
+        (St_Arret -> reprise_St_Arret);
+    vigilence =
+      merge ck
+        (St_Vigilence -> vigilence_St_Vigilence)
+        (St_Sonner -> vigilence_St_Sonner)(St_Allume -> vigilence_St_Allume)
+        (St_Arret -> vigilence_St_Arret);
+    temps =
+      merge ck
+        (St_Vigilence -> temps_St_Vigilence)(St_Sonner -> temps_St_Sonner)
+        (St_Allume -> temps_St_Allume)(St_Arret -> temps_St_Arret);
+    enMarche =
+      merge ck
+        (St_Vigilence -> enMarche_St_Vigilence)
+        (St_Sonner -> enMarche_St_Sonner)(St_Allume -> enMarche_St_Allume)
+        (St_Arret -> enMarche_St_Arret);
+    al =
+      merge ck
+        (St_Vigilence -> al_St_Vigilence)(St_Sonner -> al_St_Sonner)
+        (St_Allume -> al_St_Allume)(St_Arret -> al_St_Arret);
+    v_7 =
+      ((dVigilence when St_Vigilence(ck)) <
+       (vigilence when St_Vigilence(ck)));
+    v_8 = if v_7 then St_Arret else St_Vigilence;
+    v_9 = if v_7 then true else false;
+    ns_St_Vigilence =
+      if (pbHab when St_Vigilence(ck)) then St_Sonner else v_8;
+    nr_St_Vigilence = if (pbHab when St_Vigilence(ck)) then true else v_9;
+    temps_St_Vigilence = (temps_1 when St_Vigilence(ck));
+    reprise_St_Vigilence = (reprise_1 when St_Vigilence(ck));
+    v_10 = ((vigilence when St_Vigilence(ck)) + 1);
+    v_11 = 0 fby v_10;
+    vigilence_St_Vigilence = if (r when St_Vigilence(ck)) then 0 else v_11;
+    al_St_Vigilence = false;
+    enMarche_St_Vigilence = DispositifVigilence;
+    v_12 = ((dReprise when St_Sonner(ck)) < (reprise when St_Sonner(ck)));
+    ns_St_Sonner = if v_12 then St_Allume else St_Sonner;
+    nr_St_Sonner = if v_12 then true else false;
+    temps_St_Sonner = (temps_1 when St_Sonner(ck));
+    vigilence_St_Sonner = (vigilence_1 when St_Sonner(ck));
+    v_13 = ((reprise when St_Sonner(ck)) + 1);
+    v_14 = 0 fby v_13;
+    reprise_St_Sonner = if (r when St_Sonner(ck)) then 0 else v_14;
+    al_St_Sonner = true;
+    enMarche_St_Sonner = DispositifMarche;
+    v_15 = ((dVigilence when St_Allume(ck)) < (temps when St_Allume(ck)));
+    v_16 = ((pbGar when St_Allume(ck)) & v_15);
+    v_17 = if v_16 then St_Sonner else St_Allume;
+    v_18 = if v_16 then true else false;
+    v_19 = if (pbHab when St_Allume(ck)) then St_Sonner else v_17;
+    v_20 = if (pbHab when St_Allume(ck)) then true else v_18;
+    ns_St_Allume = if (code when St_Allume(ck)) then St_Vigilence else v_19;
+    nr_St_Allume = if (code when St_Allume(ck)) then true else v_20;
+    vigilence_St_Allume = 0;
+    reprise_St_Allume = 0;
+    v_21 = ((temps when St_Allume(ck)) + 1);
+    v_22 = 0 fby v_21;
+    temps_St_Allume = if (r when St_Allume(ck)) then 0 else v_22;
+    al_St_Allume = false;
+    enMarche_St_Allume = DispositifMarche;
+    ns_St_Arret = if (ma when St_Arret(ck)) then St_Allume else St_Arret;
+    nr_St_Arret = if (ma when St_Arret(ck)) then true else false;
+    vigilence_St_Arret = (vigilence_1 when St_Arret(ck));
+    reprise_St_Arret = (reprise_1 when St_Arret(ck));
+    enMarche_St_Arret = ArretDispositif;
+    al_St_Arret = false;
+    temps_St_Arret = 0;
+    ck = St_Arret fby ns;
+    pnr = false fby nr;
+    r = pnr;
+    temps_1 = 0 fby temps;
+    vigilence_1 = 0 fby vigilence;
+    reprise_1 = 0 fby reprise
+  tel
+

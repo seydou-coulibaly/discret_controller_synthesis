@@ -1,0 +1,54 @@
+type st = St_Haut|St_Bas
+type st_1 = St_1_Vert|St_1_Rouge
+type st_10 = St_10_Vert|St_10_Rouge
+type st_11 = St_11_Vert|St_11_Rouge
+type st_12 = St_12_Vert|St_12_Rouge
+type st_13 = St_13_Haut|St_13_Bas
+type st_14 = St_14_Haut|St_14_Bas
+type st_2 = St_2_PresenceNiveau|St_2_NiveauVide
+type st_3 = St_3_PresenceNiveau|St_3_NiveauVide
+type st_4 = St_4_PresenceNiveau|St_4_NiveauVide
+type st_5 = St_5_PresenceNiveau|St_5_NiveauVide
+type st_6 = St_6_PresenceNiveau|St_6_NiveauVide
+type st_7 = St_7_PresenceNiveau|St_7_NiveauVide
+type st_8 = St_8_PresenceNiveau|St_8_NiveauVide
+type st_9 = St_9_Vert|St_9_Rouge
+node train_ctrlr0(ck : st_14; ck_11 : st_10; ck_13 : st_9; ck_15 : st_8;
+                   ck_17 : st_7; ck_19 : st_6; ck_21 : st_5; ck_23 : st_4;
+                   ck_25 : st_3; ck_5 : st_13; ck_7 : st_12; ck_9 : st_11;
+                   ok : bool; pnr : bool; pnr_1 : bool; pnr_10 : bool;
+                   pnr_11 : bool; pnr_2 : bool; pnr_3 : bool; pnr_4 : bool;
+                   pnr_5 : bool; pnr_6 : bool; pnr_7 : bool; pnr_8 : bool;
+                   pnr_9 : bool; presenceAiguillage1 : bool;
+                   presenceAiguillage2 : bool; presenceGare1 : bool;
+                   presenceGare2 : bool; presenceSection1 : bool;
+                   presenceSection2 : bool)
+returns (demandeActionnerAig1Bas : bool; demandeActionnerAig1Haut : bool;
+          demandeActionnerAig2Bas : bool; demandeActionnerAig2Haut : bool)
+var v_5 : bool; v_4 : bool; v_3 : bool; v_2 : bool; v_1 : bool; v : bool;
+    l10 : bool; l9 : bool; l8 : bool; l7 : bool; l6 : bool; l5 : bool;
+    l4 : bool; l3 : bool; l2 : bool; l1 : bool; l0 : bool;
+let
+  v = (ck_5 = St_13_Bas);
+  v_1 = not(v);
+  l10 = (v_1 or l9);
+  l9 = if presenceAiguillage2 then l8 else l7;
+  l8 = (ck_19 = St_6_NiveauVide);
+  l7 = (ck_19 = St_6_PresenceNiveau);
+  v_2 = (ck = St_14_Haut);
+  v_3 = not(v_2);
+  l6 = (v_3 or l5);
+  l5 = if presenceAiguillage1 then l4 else l3;
+  v_4 = (ck_17 = St_7_NiveauVide);
+  l4 = (v_4 & l2);
+  v_5 = (ck_17 = St_7_PresenceNiveau);
+  l3 = (v_5 & l2);
+  l2 = if presenceGare2 then l1 else l0;
+  l1 = (ck_23 = St_4_NiveauVide);
+  l0 = (ck_23 = St_4_PresenceNiveau);
+  demandeActionnerAig2Bas = true;
+  demandeActionnerAig2Haut = l10;
+  demandeActionnerAig1Bas = l6;
+  demandeActionnerAig1Haut = true
+tel
+

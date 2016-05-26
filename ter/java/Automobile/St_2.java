@@ -1,0 +1,6 @@
+package Automobile;
+
+
+public enum St_2 {
+    ST_2_TROISIEME, ST_2_QUATRIEME, ST_2_PREMIER, ST_2_DEUXIEME, ST_2_CINQUIEME, ST_2_ARRIERE
+}

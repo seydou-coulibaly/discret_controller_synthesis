@@ -1,0 +1,24 @@
+type st = St_Up|St_Down
+node updown returns (y : int)
+var v : bool; v_1 : bool; nr_St_Down : bool; ns_St_Down : st;
+    x_St_Down : int; nr_St_Up : bool; ns_St_Up : st; x_St_Up : int; ck : st;
+    ns : st; r : bool; nr : bool; pnr : bool; x : int; x_1 : int;
+let
+  nr = merge ck (St_Down -> nr_St_Down)(St_Up -> nr_St_Up);
+  ns = merge ck (St_Down -> ns_St_Down)(St_Up -> ns_St_Up);
+  x = merge ck (St_Down -> x_St_Down)(St_Up -> x_St_Up);
+  v = ((x when St_Down(ck)) <= 0);
+  ns_St_Down = if v then St_Up else St_Down;
+  nr_St_Down = if v then true else false;
+  x_St_Down = ((x_1 when St_Down(ck)) - 1);
+  v_1 = ((x when St_Up(ck)) >= 10);
+  ns_St_Up = if v_1 then St_Down else St_Up;
+  nr_St_Up = if v_1 then true else false;
+  x_St_Up = ((x_1 when St_Up(ck)) + 1);
+  ck = St_Up fby ns;
+  pnr = false fby nr;
+  r = pnr;
+  y = x;
+  x_1 = 0 fby x
+tel
+

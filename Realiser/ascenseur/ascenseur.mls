@@ -1,0 +1,79 @@
+type st = St_Stop|St_Shut|St_Open|St_Mouvement
+type stat = Arret|Ouvert|EnMouvement|Fermer
+node ascenseur(presence : bool; presenceEtageCourant : bool;
+                demandeEtage : bool; arriveEtage : bool; secondo : int)
+returns (etat : stat)
+contract
+  
+  assume true@ enforce true] with (c : bool)
+                 var v_8 : int; v_7 : int; v_6 : bool; v_5 : st; v_4 : bool;
+                     v_3 : bool; v_2 : bool; v_1 : bool; v : bool;
+                     v_11 : int; v_10 : int; v_9 : bool; v_14 : int;
+                     v_13 : int; v_12 : bool; nr_St_Mouvement : bool;
+                     ns_St_Mouvement : st; compteur_St_Mouvement : int;
+                     etat_St_Mouvement : stat; nr_St_Shut : bool;
+                     ns_St_Shut : st; compteur_St_Shut : int;
+                     etat_St_Shut : stat; nr_St_Open : bool; ns_St_Open : st;
+                     compteur_St_Open : int; etat_St_Open : stat;
+                     nr_St_Stop : bool; ns_St_Stop : st;
+                     compteur_St_Stop : int; etat_St_Stop : stat; ck : st;
+                     ns : st; r : bool; nr : bool; pnr : bool;
+                     compteur : int; compteur_1 : int;
+  let
+    nr =
+      merge ck
+        (St_Mouvement -> nr_St_Mouvement)(St_Shut -> nr_St_Shut)
+        (St_Open -> nr_St_Open)(St_Stop -> nr_St_Stop);
+    ns =
+      merge ck
+        (St_Mouvement -> ns_St_Mouvement)(St_Shut -> ns_St_Shut)
+        (St_Open -> ns_St_Open)(St_Stop -> ns_St_Stop);
+    compteur =
+      merge ck
+        (St_Mouvement -> compteur_St_Mouvement)(St_Shut -> compteur_St_Shut)
+        (St_Open -> compteur_St_Open)(St_Stop -> compteur_St_Stop);
+    etat =
+      merge ck
+        (St_Mouvement -> etat_St_Mouvement)(St_Shut -> etat_St_Shut)
+        (St_Open -> etat_St_Open)(St_Stop -> etat_St_Stop);
+    ns_St_Mouvement =
+      if (arriveEtage when St_Mouvement(ck)) then St_Stop else St_Mouvement;
+    nr_St_Mouvement =
+      if (arriveEtage when St_Mouvement(ck)) then true else false;
+    compteur_St_Mouvement = (compteur_1 when St_Mouvement(ck));
+    etat_St_Mouvement = EnMouvement;
+    v = ((secondo when St_Shut(ck)) >= (compteur when St_Shut(ck)));
+    v_1 = ((presence when St_Shut(ck)) & v);
+    v_2 = not((presence when St_Shut(ck)));
+    v_3 = (v_2 & (demandeEtage when St_Shut(ck)));
+    v_4 = (v_1 or v_3);
+    v_5 = if v_4 then St_Mouvement else St_Shut;
+    v_6 = if v_4 then true else false;
+    ns_St_Shut =
+      if (presenceEtageCourant when St_Shut(ck)) then St_Open else v_5;
+    nr_St_Shut =
+      if (presenceEtageCourant when St_Shut(ck)) then true else v_6;
+    v_7 = ((compteur when St_Shut(ck)) + 1);
+    v_8 = 0 fby v_7;
+    compteur_St_Shut = if (r when St_Shut(ck)) then 0 else v_8;
+    etat_St_Shut = Fermer;
+    v_9 = ((secondo when St_Open(ck)) >= (compteur when St_Open(ck)));
+    ns_St_Open = if v_9 then St_Shut else St_Open;
+    nr_St_Open = if v_9 then true else false;
+    v_10 = ((compteur when St_Open(ck)) + 1);
+    v_11 = 0 fby v_10;
+    compteur_St_Open = if (r when St_Open(ck)) then 0 else v_11;
+    etat_St_Open = Ouvert;
+    v_12 = ((secondo when St_Stop(ck)) >= (compteur when St_Stop(ck)));
+    ns_St_Stop = if v_12 then St_Open else St_Stop;
+    nr_St_Stop = if v_12 then true else false;
+    v_13 = ((compteur when St_Stop(ck)) + 1);
+    v_14 = 0 fby v_13;
+    compteur_St_Stop = if (r when St_Stop(ck)) then 0 else v_14;
+    etat_St_Stop = Arret;
+    ck = St_Stop fby ns;
+    pnr = false fby nr;
+    r = pnr;
+    compteur_1 = 0 fby compteur
+  tel
+

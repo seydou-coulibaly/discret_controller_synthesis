@@ -1,0 +1,17 @@
+node fibonacci(n : int) returns (y : int)
+var v_1 : int; v : int;
+let
+  v = (n - 1);
+  v_1 = (n - 2);
+  y = (v + v_1)
+tel
+
+node compteur(n : bool) returns (y : int)
+var v : int; x : int; x_1 : int;
+let
+  v = (x_1 + 1);
+  x = if n then v else x_1;
+  y = x;
+  x_1 = 0 fby x
+tel
+

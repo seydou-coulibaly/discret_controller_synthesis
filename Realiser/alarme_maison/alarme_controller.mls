@@ -1,0 +1,11 @@
+type etat = DispositifMarche|ArretDispositif|DispositifVigilence
+type st = St_Vigilence|St_Sonner|St_Arret|St_Allume
+node alarme_ctrlr0(ck : st; code : bool; dAlarme : int; dReprise : int;
+                    dVigilence : int; ma : bool; ok : bool; pbGar : bool;
+                    pbHab : bool; pnr : bool; reprise_1 : int; temps_1 : int;
+                    v_11 : int; v_14 : int; v_22 : int; vigilence_1 : int)
+returns (c : bool)
+let
+  c = true
+tel
+

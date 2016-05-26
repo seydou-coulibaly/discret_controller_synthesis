@@ -1,0 +1,8 @@
+node sum(i:int) returns (o:int)
+let
+	o = 0 fby (o + i)
+tel
+node minus(x:int; z:int) returns (y:int)
+let 
+	y = x-z
+tel

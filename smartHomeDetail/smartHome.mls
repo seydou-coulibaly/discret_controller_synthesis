@@ -1,0 +1,1531 @@
+type st_21 = St_21_Presence|St_21_Nothing
+type st_20 = St_20_Presence|St_20_Nothing
+type st_19 = St_19_Presence|St_19_Nothing
+type st_18 = St_18_On|St_18_Off
+type st_17 = St_17_Presence|St_17_Nothing
+type st_16 = St_16_Ouvrir|St_16_Fermer
+type st_15 = St_15_Ouvrir|St_15_Fermer
+type st_14 = St_14_Idle|St_14_Avant|St_14_Arriere
+type st_13 = St_13_Ouvrir|St_13_Fermer
+type st_12 = St_12_Idle|St_12_Avant|St_12_Arriere
+type st_11 = St_11_Ouvrir|St_11_Fermer
+type st_10 = St_10_Vigilence|St_10_Sonner|St_10_Arret|St_10_Allume
+type st_9 = St_9_Stop|St_9_Mouvement
+type st_8 = St_8_Stop|St_8_Mouvement
+type st_7 = St_7_Vigilence|St_7_Sonner|St_7_Arret|St_7_Allume
+type st_6 = St_6_Ouvrir|St_6_Fermer
+type st_5 = St_5_Ouvrir|St_5_Fermer
+type st_4 = St_4_Ouvrir|St_4_Fermer
+type st_3 = St_3_On|St_3_Off
+type st_2 = St_2_Idle|St_2_Avant|St_2_Arriere
+type st_1 = St_1_NoPresence|St_1_Avant|St_1_Arriere
+type st = St_Presence|St_Nothing
+type position = Avant|Arriere|Null
+type porte = Ouvert|Fermer
+type lum = Rouge|Vert|Jaune
+type stat = Arret|EnMouvement
+node presence(presence : bool) returns (occuper : bool)
+var v : bool; r_St_Presence : bool; s_St_Presence : st; r_St_Nothing : bool;
+    s_St_Nothing : st; ck : st; nr_St_Presence : bool; ns_St_Presence : st;
+    occuper_St_Presence : bool; nr_St_Nothing : bool; ns_St_Nothing : st;
+    occuper_St_Nothing : bool; ck_1 : st; s : st; ns : st; r : bool;
+    nr : bool; pnr : bool;
+let
+  r = merge ck (St_Presence -> r_St_Presence)(St_Nothing -> r_St_Nothing);
+  s = merge ck (St_Presence -> s_St_Presence)(St_Nothing -> s_St_Nothing);
+  v = not((presence when St_Presence(ck)));
+  s_St_Presence = if v then St_Nothing else St_Presence;
+  r_St_Presence = if v then true else (pnr when St_Presence(ck));
+  s_St_Nothing =
+    if (presence when St_Nothing(ck)) then St_Presence else St_Nothing;
+  r_St_Nothing =
+    if (presence when St_Nothing(ck))
+    then true
+    else (pnr when St_Nothing(ck));
+  ck = St_Nothing fby ns;
+  nr =
+    merge ck_1 (St_Presence -> nr_St_Presence)(St_Nothing -> nr_St_Nothing);
+  ns =
+    merge ck_1 (St_Presence -> ns_St_Presence)(St_Nothing -> ns_St_Nothing);
+  occuper =
+    merge ck_1
+      (St_Presence -> occuper_St_Presence)(St_Nothing -> occuper_St_Nothing);
+  ns_St_Presence = St_Presence;
+  nr_St_Presence = false;
+  occuper_St_Presence = true;
+  ns_St_Nothing = St_Nothing;
+  nr_St_Nothing = false;
+  occuper_St_Nothing = false;
+  ck_1 = s;
+  pnr = false fby nr
+tel
+
+node sens(presence : bool; entree : bool; sortie : bool)
+returns (pos : position)
+var v_2 : bool; v_1 : st_1; v : bool; v_8 : bool; v_7 : st_1; v_6 : bool;
+    v_5 : bool; v_4 : bool; v_3 : bool; v_12 : bool; v_11 : st_1;
+    v_10 : bool; v_9 : bool; r_St_1_Arriere : bool; s_St_1_Arriere : st_1;
+    r_St_1_Avant : bool; s_St_1_Avant : st_1; r_St_1_NoPresence : bool;
+    s_St_1_NoPresence : st_1; ck : st_1; nr_St_1_Arriere : bool;
+    ns_St_1_Arriere : st_1; pos_St_1_Arriere : position;
+    nr_St_1_Avant : bool; ns_St_1_Avant : st_1; pos_St_1_Avant : position;
+    nr_St_1_NoPresence : bool; ns_St_1_NoPresence : st_1;
+    pos_St_1_NoPresence : position; ck_2 : st_1; s : st_1; ns : st_1;
+    r : bool; nr : bool; pnr : bool;
+let
+  r =
+    merge ck
+      (St_1_Arriere -> r_St_1_Arriere)(St_1_Avant -> r_St_1_Avant)
+      (St_1_NoPresence -> r_St_1_NoPresence);
+  s =
+    merge ck
+      (St_1_Arriere -> s_St_1_Arriere)(St_1_Avant -> s_St_1_Avant)
+      (St_1_NoPresence -> s_St_1_NoPresence);
+  v = not((presence when St_1_Arriere(ck)));
+  v_1 = if v then St_1_NoPresence else St_1_Arriere;
+  v_2 = if v then true else (pnr when St_1_Arriere(ck));
+  s_St_1_Arriere = if (entree when St_1_Arriere(ck)) then St_1_Avant else v_1;
+  r_St_1_Arriere = if (entree when St_1_Arriere(ck)) then true else v_2;
+  v_3 = not((entree when St_1_Avant(ck)));
+  v_4 = ((sortie when St_1_Avant(ck)) & v_3);
+  v_5 = not((presence when St_1_Avant(ck)));
+  v_6 = not(v_5);
+  v_7 = if v_6 then St_1_NoPresence else St_1_Avant;
+  v_8 = if v_6 then true else (pnr when St_1_Avant(ck));
+  s_St_1_Avant = if v_4 then St_1_Arriere else v_7;
+  r_St_1_Avant = if v_4 then true else v_8;
+  v_9 = not((entree when St_1_NoPresence(ck)));
+  v_10 = (v_9 & (sortie when St_1_NoPresence(ck)));
+  v_11 = if v_10 then St_1_Arriere else St_1_NoPresence;
+  v_12 = if v_10 then true else (pnr when St_1_NoPresence(ck));
+  s_St_1_NoPresence =
+    if (entree when St_1_NoPresence(ck)) then St_1_Avant else v_11;
+  r_St_1_NoPresence =
+    if (entree when St_1_NoPresence(ck)) then true else v_12;
+  ck = St_1_NoPresence fby ns;
+  nr =
+    merge ck_2
+      (St_1_Arriere -> nr_St_1_Arriere)(St_1_Avant -> nr_St_1_Avant)
+      (St_1_NoPresence -> nr_St_1_NoPresence);
+  ns =
+    merge ck_2
+      (St_1_Arriere -> ns_St_1_Arriere)(St_1_Avant -> ns_St_1_Avant)
+      (St_1_NoPresence -> ns_St_1_NoPresence);
+  pos =
+    merge ck_2
+      (St_1_Arriere -> pos_St_1_Arriere)(St_1_Avant -> pos_St_1_Avant)
+      (St_1_NoPresence -> pos_St_1_NoPresence);
+  ns_St_1_Arriere = St_1_Arriere;
+  nr_St_1_Arriere = false;
+  pos_St_1_Arriere = Arriere;
+  ns_St_1_Avant = St_1_Avant;
+  nr_St_1_Avant = false;
+  pos_St_1_Avant = Avant;
+  ns_St_1_NoPresence = St_1_NoPresence;
+  nr_St_1_NoPresence = false;
+  pos_St_1_NoPresence = Null;
+  ck_2 = s;
+  pnr = false fby nr
+tel
+
+node presenceSens(entree : bool; sortie : bool) returns (pos : position)
+var v_16 : bool; v_15 : st_2; v_14 : bool; v_13 : bool; v : bool;
+    v_23 : bool; v_22 : st_2; v_21 : bool; v_20 : bool; v_19 : bool;
+    v_18 : bool; v_17 : bool; v_27 : bool; v_26 : st_2; v_25 : bool;
+    v_24 : bool; r_St_2_Arriere : bool; s_St_2_Arriere : st_2;
+    r_St_2_Avant : bool; s_St_2_Avant : st_2; r_St_2_Idle : bool;
+    s_St_2_Idle : st_2; ck : st_2; nr_St_2_Arriere : bool;
+    ns_St_2_Arriere : st_2; pos_St_2_Arriere : position;
+    nr_St_2_Avant : bool; ns_St_2_Avant : st_2; pos_St_2_Avant : position;
+    nr_St_2_Idle : bool; ns_St_2_Idle : st_2; pos_St_2_Idle : position;
+    ck_3 : st_2; s : st_2; ns : st_2; r : bool; nr : bool; pnr : bool;
+let
+  r =
+    merge ck
+      (St_2_Arriere -> r_St_2_Arriere)(St_2_Avant -> r_St_2_Avant)
+      (St_2_Idle -> r_St_2_Idle);
+  s =
+    merge ck
+      (St_2_Arriere -> s_St_2_Arriere)(St_2_Avant -> s_St_2_Avant)
+      (St_2_Idle -> s_St_2_Idle);
+  v = not((entree when St_2_Arriere(ck)));
+  v_13 = not((sortie when St_2_Arriere(ck)));
+  v_14 = (v & v_13);
+  v_15 = if v_14 then St_2_Idle else St_2_Arriere;
+  v_16 = if v_14 then true else (pnr when St_2_Arriere(ck));
+  s_St_2_Arriere =
+    if (entree when St_2_Arriere(ck)) then St_2_Avant else v_15;
+  r_St_2_Arriere = if (entree when St_2_Arriere(ck)) then true else v_16;
+  v_17 = not((entree when St_2_Avant(ck)));
+  v_18 = not((sortie when St_2_Avant(ck)));
+  v_19 = (v_17 & v_18);
+  v_20 = not((entree when St_2_Avant(ck)));
+  v_21 = ((sortie when St_2_Avant(ck)) & v_20);
+  v_22 = if v_21 then St_2_Arriere else St_2_Avant;
+  v_23 = if v_21 then true else (pnr when St_2_Avant(ck));
+  s_St_2_Avant = if v_19 then St_2_Idle else v_22;
+  r_St_2_Avant = if v_19 then true else v_23;
+  v_24 = not((entree when St_2_Idle(ck)));
+  v_25 = (v_24 & (sortie when St_2_Idle(ck)));
+  v_26 = if v_25 then St_2_Arriere else St_2_Idle;
+  v_27 = if v_25 then true else (pnr when St_2_Idle(ck));
+  s_St_2_Idle = if (entree when St_2_Idle(ck)) then St_2_Avant else v_26;
+  r_St_2_Idle = if (entree when St_2_Idle(ck)) then true else v_27;
+  ck = St_2_Idle fby ns;
+  nr =
+    merge ck_3
+      (St_2_Arriere -> nr_St_2_Arriere)(St_2_Avant -> nr_St_2_Avant)
+      (St_2_Idle -> nr_St_2_Idle);
+  ns =
+    merge ck_3
+      (St_2_Arriere -> ns_St_2_Arriere)(St_2_Avant -> ns_St_2_Avant)
+      (St_2_Idle -> ns_St_2_Idle);
+  pos =
+    merge ck_3
+      (St_2_Arriere -> pos_St_2_Arriere)(St_2_Avant -> pos_St_2_Avant)
+      (St_2_Idle -> pos_St_2_Idle);
+  ns_St_2_Arriere = St_2_Arriere;
+  nr_St_2_Arriere = false;
+  pos_St_2_Arriere = Arriere;
+  ns_St_2_Avant = St_2_Avant;
+  nr_St_2_Avant = false;
+  pos_St_2_Avant = Avant;
+  ns_St_2_Idle = St_2_Idle;
+  nr_St_2_Idle = false;
+  pos_St_2_Idle = Null;
+  ck_3 = s;
+  pnr = false fby nr
+tel
+
+node lampe(interrupteur : bool) returns (lumiere : bool)
+var v : bool; r_St_3_On : bool; s_St_3_On : st_3; r_St_3_Off : bool;
+    s_St_3_Off : st_3; ck : st_3; nr_St_3_On : bool; ns_St_3_On : st_3;
+    lumiere_St_3_On : bool; nr_St_3_Off : bool; ns_St_3_Off : st_3;
+    lumiere_St_3_Off : bool; ck_4 : st_3; s : st_3; ns : st_3; r : bool;
+    nr : bool; pnr : bool;
+let
+  r = merge ck (St_3_On -> r_St_3_On)(St_3_Off -> r_St_3_Off);
+  s = merge ck (St_3_On -> s_St_3_On)(St_3_Off -> s_St_3_Off);
+  v = not((interrupteur when St_3_On(ck)));
+  s_St_3_On = if v then St_3_Off else St_3_On;
+  r_St_3_On = if v then true else (pnr when St_3_On(ck));
+  s_St_3_Off = if (interrupteur when St_3_Off(ck)) then St_3_On else St_3_Off;
+  r_St_3_Off =
+    if (interrupteur when St_3_Off(ck))
+    then true
+    else (pnr when St_3_Off(ck));
+  ck = St_3_Off fby ns;
+  nr = merge ck_4 (St_3_On -> nr_St_3_On)(St_3_Off -> nr_St_3_Off);
+  ns = merge ck_4 (St_3_On -> ns_St_3_On)(St_3_Off -> ns_St_3_Off);
+  lumiere =
+    merge ck_4 (St_3_On -> lumiere_St_3_On)(St_3_Off -> lumiere_St_3_Off);
+  ns_St_3_On = St_3_On;
+  nr_St_3_On = false;
+  lumiere_St_3_On = true;
+  ns_St_3_Off = St_3_Off;
+  nr_St_3_Off = false;
+  lumiere_St_3_Off = false;
+  ck_4 = s;
+  pnr = false fby nr
+tel
+
+node poubelle(con : bool; coff : bool) returns (ouvrir : bool)
+var r_St_4_Ouvrir : bool; s_St_4_Ouvrir : st_4; r_St_4_Fermer : bool;
+    s_St_4_Fermer : st_4; ck : st_4; nr_St_4_Ouvrir : bool;
+    ns_St_4_Ouvrir : st_4; ouvrir_St_4_Ouvrir : bool; nr_St_4_Fermer : bool;
+    ns_St_4_Fermer : st_4; ouvrir_St_4_Fermer : bool; ck_5 : st_4; s : st_4;
+    ns : st_4; r : bool; nr : bool; pnr : bool;
+let
+  r = merge ck (St_4_Ouvrir -> r_St_4_Ouvrir)(St_4_Fermer -> r_St_4_Fermer);
+  s = merge ck (St_4_Ouvrir -> s_St_4_Ouvrir)(St_4_Fermer -> s_St_4_Fermer);
+  s_St_4_Ouvrir =
+    if (coff when St_4_Ouvrir(ck)) then St_4_Fermer else St_4_Ouvrir;
+  r_St_4_Ouvrir =
+    if (coff when St_4_Ouvrir(ck)) then true else (pnr when St_4_Ouvrir(ck));
+  s_St_4_Fermer =
+    if (con when St_4_Fermer(ck)) then St_4_Ouvrir else St_4_Fermer;
+  r_St_4_Fermer =
+    if (con when St_4_Fermer(ck)) then true else (pnr when St_4_Fermer(ck));
+  ck = St_4_Fermer fby ns;
+  nr =
+    merge ck_5 (St_4_Ouvrir -> nr_St_4_Ouvrir)(St_4_Fermer -> nr_St_4_Fermer);
+  ns =
+    merge ck_5 (St_4_Ouvrir -> ns_St_4_Ouvrir)(St_4_Fermer -> ns_St_4_Fermer);
+  ouvrir =
+    merge ck_5
+      (St_4_Ouvrir -> ouvrir_St_4_Ouvrir)(St_4_Fermer -> ouvrir_St_4_Fermer);
+  ns_St_4_Ouvrir = St_4_Ouvrir;
+  nr_St_4_Ouvrir = false;
+  ouvrir_St_4_Ouvrir = true;
+  ns_St_4_Fermer = St_4_Fermer;
+  nr_St_4_Fermer = false;
+  ouvrir_St_4_Fermer = false;
+  ck_5 = s;
+  pnr = false fby nr
+tel
+
+node porte(copen : bool) returns (ouvrir : porte)
+var v : bool; r_St_5_Ouvrir : bool; s_St_5_Ouvrir : st_5;
+    r_St_5_Fermer : bool; s_St_5_Fermer : st_5; ck : st_5;
+    nr_St_5_Ouvrir : bool; ns_St_5_Ouvrir : st_5; ouvrir_St_5_Ouvrir : porte;
+    nr_St_5_Fermer : bool; ns_St_5_Fermer : st_5; ouvrir_St_5_Fermer : porte;
+    ck_6 : st_5; s : st_5; ns : st_5; r : bool; nr : bool; pnr : bool;
+let
+  r = merge ck (St_5_Ouvrir -> r_St_5_Ouvrir)(St_5_Fermer -> r_St_5_Fermer);
+  s = merge ck (St_5_Ouvrir -> s_St_5_Ouvrir)(St_5_Fermer -> s_St_5_Fermer);
+  v = not((copen when St_5_Ouvrir(ck)));
+  s_St_5_Ouvrir = if v then St_5_Fermer else St_5_Ouvrir;
+  r_St_5_Ouvrir = if v then true else (pnr when St_5_Ouvrir(ck));
+  s_St_5_Fermer =
+    if (copen when St_5_Fermer(ck)) then St_5_Ouvrir else St_5_Fermer;
+  r_St_5_Fermer =
+    if (copen when St_5_Fermer(ck)) then true else (pnr when St_5_Fermer(ck));
+  ck = St_5_Fermer fby ns;
+  nr =
+    merge ck_6 (St_5_Ouvrir -> nr_St_5_Ouvrir)(St_5_Fermer -> nr_St_5_Fermer);
+  ns =
+    merge ck_6 (St_5_Ouvrir -> ns_St_5_Ouvrir)(St_5_Fermer -> ns_St_5_Fermer);
+  ouvrir =
+    merge ck_6
+      (St_5_Ouvrir -> ouvrir_St_5_Ouvrir)(St_5_Fermer -> ouvrir_St_5_Fermer);
+  ns_St_5_Ouvrir = St_5_Ouvrir;
+  nr_St_5_Ouvrir = false;
+  ouvrir_St_5_Ouvrir = Fermer;
+  ns_St_5_Fermer = St_5_Fermer;
+  nr_St_5_Fermer = false;
+  ouvrir_St_5_Fermer = Ouvert;
+  ck_6 = s;
+  pnr = false fby nr
+tel
+
+node stores(copen : bool; close : bool) returns (store : bool)
+var r_St_6_Ouvrir : bool; s_St_6_Ouvrir : st_6; r_St_6_Fermer : bool;
+    s_St_6_Fermer : st_6; ck : st_6; nr_St_6_Ouvrir : bool;
+    ns_St_6_Ouvrir : st_6; store_St_6_Ouvrir : bool; nr_St_6_Fermer : bool;
+    ns_St_6_Fermer : st_6; store_St_6_Fermer : bool; ck_7 : st_6; s : st_6;
+    ns : st_6; r : bool; nr : bool; pnr : bool;
+let
+  r = merge ck (St_6_Ouvrir -> r_St_6_Ouvrir)(St_6_Fermer -> r_St_6_Fermer);
+  s = merge ck (St_6_Ouvrir -> s_St_6_Ouvrir)(St_6_Fermer -> s_St_6_Fermer);
+  s_St_6_Ouvrir =
+    if (close when St_6_Ouvrir(ck)) then St_6_Fermer else St_6_Ouvrir;
+  r_St_6_Ouvrir =
+    if (close when St_6_Ouvrir(ck)) then true else (pnr when St_6_Ouvrir(ck));
+  s_St_6_Fermer =
+    if (copen when St_6_Fermer(ck)) then St_6_Ouvrir else St_6_Fermer;
+  r_St_6_Fermer =
+    if (copen when St_6_Fermer(ck)) then true else (pnr when St_6_Fermer(ck));
+  ck = St_6_Fermer fby ns;
+  nr =
+    merge ck_7 (St_6_Ouvrir -> nr_St_6_Ouvrir)(St_6_Fermer -> nr_St_6_Fermer);
+  ns =
+    merge ck_7 (St_6_Ouvrir -> ns_St_6_Ouvrir)(St_6_Fermer -> ns_St_6_Fermer);
+  store =
+    merge ck_7
+      (St_6_Ouvrir -> store_St_6_Ouvrir)(St_6_Fermer -> store_St_6_Fermer);
+  ns_St_6_Ouvrir = St_6_Ouvrir;
+  nr_St_6_Ouvrir = false;
+  store_St_6_Ouvrir = true;
+  ns_St_6_Fermer = St_6_Fermer;
+  nr_St_6_Fermer = false;
+  store_St_6_Fermer = false;
+  ck_7 = s;
+  pnr = false fby nr
+tel
+
+node alarme(marcheArret : bool; code : bool; pbGar : bool; pbHab : bool;
+             dReprise : int; dVigilence : int; dAlarme : int)
+returns (sonnerAlarme : bool; enMarche : lum)
+var r_St_7_Vigilence : bool; s_St_7_Vigilence : st_7; r_St_7_Sonner : bool;
+    s_St_7_Sonner : st_7; r_St_7_Allume : bool; s_St_7_Allume : st_7;
+    r_St_7_Arret : bool; s_St_7_Arret : st_7; ck : st_7; v_31 : int;
+    v_30 : int; v_29 : bool; v_28 : st_7; v : bool; v_36 : int; v_35 : int;
+    v_34 : bool; v_33 : st_7; v_32 : bool; v_44 : int; v_43 : int;
+    v_42 : bool; v_41 : st_7; v_40 : bool; v_39 : st_7; v_38 : bool;
+    v_37 : bool; nr_St_7_Vigilence : bool; ns_St_7_Vigilence : st_7;
+    reprise_St_7_Vigilence : int; vigilence_St_7_Vigilence : int;
+    temps_St_7_Vigilence : int; enMarche_St_7_Vigilence : lum;
+    sonnerAlarme_St_7_Vigilence : bool; nr_St_7_Sonner : bool;
+    ns_St_7_Sonner : st_7; reprise_St_7_Sonner : int;
+    vigilence_St_7_Sonner : int; temps_St_7_Sonner : int;
+    enMarche_St_7_Sonner : lum; sonnerAlarme_St_7_Sonner : bool;
+    nr_St_7_Allume : bool; ns_St_7_Allume : st_7; reprise_St_7_Allume : int;
+    vigilence_St_7_Allume : int; temps_St_7_Allume : int;
+    enMarche_St_7_Allume : lum; sonnerAlarme_St_7_Allume : bool;
+    nr_St_7_Arret : bool; ns_St_7_Arret : st_7; reprise_St_7_Arret : int;
+    vigilence_St_7_Arret : int; temps_St_7_Arret : int;
+    enMarche_St_7_Arret : lum; sonnerAlarme_St_7_Arret : bool; ck_8 : st_7;
+    s : st_7; ns : st_7; r : bool; nr : bool; pnr : bool; temps : int;
+    vigilence : int; reprise : int; reprise_1 : int; vigilence_1 : int;
+    temps_1 : int;
+let
+  r =
+    merge ck
+      (St_7_Vigilence -> r_St_7_Vigilence)(St_7_Sonner -> r_St_7_Sonner)
+      (St_7_Allume -> r_St_7_Allume)(St_7_Arret -> r_St_7_Arret);
+  s =
+    merge ck
+      (St_7_Vigilence -> s_St_7_Vigilence)(St_7_Sonner -> s_St_7_Sonner)
+      (St_7_Allume -> s_St_7_Allume)(St_7_Arret -> s_St_7_Arret);
+  s_St_7_Vigilence = St_7_Vigilence;
+  r_St_7_Vigilence = (pnr when St_7_Vigilence(ck));
+  s_St_7_Sonner = St_7_Sonner;
+  r_St_7_Sonner = (pnr when St_7_Sonner(ck));
+  s_St_7_Allume = St_7_Allume;
+  r_St_7_Allume = (pnr when St_7_Allume(ck));
+  s_St_7_Arret =
+    if (marcheArret when St_7_Arret(ck)) then St_7_Allume else St_7_Arret;
+  r_St_7_Arret =
+    if (marcheArret when St_7_Arret(ck))
+    then true
+    else (pnr when St_7_Arret(ck));
+  ck = St_7_Arret fby ns;
+  nr =
+    merge ck_8
+      (St_7_Vigilence -> nr_St_7_Vigilence)(St_7_Sonner -> nr_St_7_Sonner)
+      (St_7_Allume -> nr_St_7_Allume)(St_7_Arret -> nr_St_7_Arret);
+  ns =
+    merge ck_8
+      (St_7_Vigilence -> ns_St_7_Vigilence)(St_7_Sonner -> ns_St_7_Sonner)
+      (St_7_Allume -> ns_St_7_Allume)(St_7_Arret -> ns_St_7_Arret);
+  reprise =
+    merge ck_8
+      (St_7_Vigilence -> reprise_St_7_Vigilence)
+      (St_7_Sonner -> reprise_St_7_Sonner)
+      (St_7_Allume -> reprise_St_7_Allume)(St_7_Arret -> reprise_St_7_Arret);
+  vigilence =
+    merge ck_8
+      (St_7_Vigilence -> vigilence_St_7_Vigilence)
+      (St_7_Sonner -> vigilence_St_7_Sonner)
+      (St_7_Allume -> vigilence_St_7_Allume)
+      (St_7_Arret -> vigilence_St_7_Arret);
+  temps =
+    merge ck_8
+      (St_7_Vigilence -> temps_St_7_Vigilence)
+      (St_7_Sonner -> temps_St_7_Sonner)(St_7_Allume -> temps_St_7_Allume)
+      (St_7_Arret -> temps_St_7_Arret);
+  enMarche =
+    merge ck_8
+      (St_7_Vigilence -> enMarche_St_7_Vigilence)
+      (St_7_Sonner -> enMarche_St_7_Sonner)
+      (St_7_Allume -> enMarche_St_7_Allume)
+      (St_7_Arret -> enMarche_St_7_Arret);
+  sonnerAlarme =
+    merge ck_8
+      (St_7_Vigilence -> sonnerAlarme_St_7_Vigilence)
+      (St_7_Sonner -> sonnerAlarme_St_7_Sonner)
+      (St_7_Allume -> sonnerAlarme_St_7_Allume)
+      (St_7_Arret -> sonnerAlarme_St_7_Arret);
+  v =
+    ((dVigilence when St_7_Vigilence(ck_8)) <=
+     (vigilence when St_7_Vigilence(ck_8)));
+  v_28 = if v then St_7_Arret else St_7_Vigilence;
+  v_29 = if v then true else false;
+  ns_St_7_Vigilence =
+    if (pbHab when St_7_Vigilence(ck_8)) then St_7_Sonner else v_28;
+  nr_St_7_Vigilence =
+    if (pbHab when St_7_Vigilence(ck_8)) then true else v_29;
+  temps_St_7_Vigilence = (temps_1 when St_7_Vigilence(ck_8));
+  reprise_St_7_Vigilence = (reprise_1 when St_7_Vigilence(ck_8));
+  v_30 = ((vigilence when St_7_Vigilence(ck_8)) + 1);
+  v_31 = 0 fby v_30;
+  vigilence_St_7_Vigilence =
+    if (r when St_7_Vigilence(ck_8)) then 0 else v_31;
+  sonnerAlarme_St_7_Vigilence = false;
+  enMarche_St_7_Vigilence = Jaune;
+  v_32 =
+    ((dReprise when St_7_Sonner(ck_8)) <= (reprise when St_7_Sonner(ck_8)));
+  v_33 = if v_32 then St_7_Allume else St_7_Sonner;
+  v_34 = if v_32 then true else false;
+  ns_St_7_Sonner = if (code when St_7_Sonner(ck_8)) then St_7_Arret else v_33;
+  nr_St_7_Sonner = if (code when St_7_Sonner(ck_8)) then true else v_34;
+  temps_St_7_Sonner = (temps_1 when St_7_Sonner(ck_8));
+  vigilence_St_7_Sonner = (vigilence_1 when St_7_Sonner(ck_8));
+  v_35 = ((reprise when St_7_Sonner(ck_8)) + 1);
+  v_36 = 0 fby v_35;
+  reprise_St_7_Sonner = if (r when St_7_Sonner(ck_8)) then 0 else v_36;
+  sonnerAlarme_St_7_Sonner = true;
+  enMarche_St_7_Sonner = Vert;
+  v_37 =
+    ((dVigilence when St_7_Allume(ck_8)) <= (temps when St_7_Allume(ck_8)));
+  v_38 = ((pbGar when St_7_Allume(ck_8)) & v_37);
+  v_39 = if v_38 then St_7_Sonner else St_7_Allume;
+  v_40 = if v_38 then true else false;
+  v_41 = if (pbHab when St_7_Allume(ck_8)) then St_7_Sonner else v_39;
+  v_42 = if (pbHab when St_7_Allume(ck_8)) then true else v_40;
+  ns_St_7_Allume =
+    if (code when St_7_Allume(ck_8)) then St_7_Vigilence else v_41;
+  nr_St_7_Allume = if (code when St_7_Allume(ck_8)) then true else v_42;
+  vigilence_St_7_Allume = (vigilence_1 when St_7_Allume(ck_8));
+  reprise_St_7_Allume = (reprise_1 when St_7_Allume(ck_8));
+  v_43 = ((temps when St_7_Allume(ck_8)) + 1);
+  v_44 = 0 fby v_43;
+  temps_St_7_Allume = if (r when St_7_Allume(ck_8)) then 0 else v_44;
+  sonnerAlarme_St_7_Allume = false;
+  enMarche_St_7_Allume = Vert;
+  ns_St_7_Arret = St_7_Arret;
+  nr_St_7_Arret = false;
+  temps_St_7_Arret = (temps_1 when St_7_Arret(ck_8));
+  vigilence_St_7_Arret = (vigilence_1 when St_7_Arret(ck_8));
+  reprise_St_7_Arret = (reprise_1 when St_7_Arret(ck_8));
+  enMarche_St_7_Arret = Rouge;
+  sonnerAlarme_St_7_Arret = false;
+  ck_8 = s;
+  pnr = false fby nr;
+  temps_1 = 0 fby temps;
+  vigilence_1 = 0 fby vigilence;
+  reprise_1 = 0 fby reprise
+tel
+
+node ascenseur(demandeEtage : bool; arriveEtage : bool) returns (etat : bool)
+var v_45 : bool; v : bool; r_St_8_Mouvement : bool; s_St_8_Mouvement : st_8;
+    r_St_8_Stop : bool; s_St_8_Stop : st_8; ck : st_8;
+    nr_St_8_Mouvement : bool; ns_St_8_Mouvement : st_8;
+    etat_St_8_Mouvement : bool; nr_St_8_Stop : bool; ns_St_8_Stop : st_8;
+    etat_St_8_Stop : bool; ck_9 : st_8; s : st_8; ns : st_8; r : bool;
+    nr : bool; pnr : bool;
+let
+  r = merge ck (St_8_Mouvement -> r_St_8_Mouvement)(St_8_Stop -> r_St_8_Stop);
+  s = merge ck (St_8_Mouvement -> s_St_8_Mouvement)(St_8_Stop -> s_St_8_Stop);
+  v = not((demandeEtage when St_8_Mouvement(ck)));
+  v_45 = (v or (arriveEtage when St_8_Mouvement(ck)));
+  s_St_8_Mouvement = if v_45 then St_8_Stop else St_8_Mouvement;
+  r_St_8_Mouvement = if v_45 then true else (pnr when St_8_Mouvement(ck));
+  s_St_8_Stop =
+    if (demandeEtage when St_8_Stop(ck)) then St_8_Mouvement else St_8_Stop;
+  r_St_8_Stop =
+    if (demandeEtage when St_8_Stop(ck))
+    then true
+    else (pnr when St_8_Stop(ck));
+  ck = St_8_Stop fby ns;
+  nr =
+    merge ck_9
+      (St_8_Mouvement -> nr_St_8_Mouvement)(St_8_Stop -> nr_St_8_Stop);
+  ns =
+    merge ck_9
+      (St_8_Mouvement -> ns_St_8_Mouvement)(St_8_Stop -> ns_St_8_Stop);
+  etat =
+    merge ck_9
+      (St_8_Mouvement -> etat_St_8_Mouvement)(St_8_Stop -> etat_St_8_Stop);
+  ns_St_8_Mouvement = St_8_Mouvement;
+  nr_St_8_Mouvement = false;
+  etat_St_8_Mouvement = true;
+  ns_St_8_Stop = St_8_Stop;
+  nr_St_8_Stop = false;
+  etat_St_8_Stop = false;
+  ck_9 = s;
+  pnr = false fby nr
+tel
+
+node smartHome(presenceMaison : bool; presenceAscenseur : bool;
+                presenceGarage : bool; presenceDevantPoubelle : bool;
+                vent : bool; luminosite : bool; codeAlarme : bool;
+                codePorte : bool; codeBarriere : bool;
+                presenceEntreePorte : bool; presenceSortiePorte : bool;
+                presenceEntreeBarriere : bool; presenceSortieBarriere : bool;
+                dReprise : int; dVigilence : int; dAlarme : int)
+returns (etatMaison : bool; lumiere : bool; poubelleOuvert : bool;
+          ouvertureStore : bool; alarmeSonne : bool; property : bool;
+          porteStatus : porte; barriere : porte; etatAlarme : lum;
+          capteurPositionPorte : position;
+          capteurPositionBarriere : position; ascenseur : bool)
+contract
+  
+  assume true@ enforce property]
+                 with (interrupteur : bool; copen : bool; close : bool;
+                        openPorte : bool; openBarriere : bool; con : bool;
+                        coff : bool; marcheArret : bool; demandeEtage : bool;
+                        arriveEtage : bool)
+                 var v_130 : bool; r_12_St_21_Presence : bool;
+                     s_12_St_21_Presence : st_21; r_12_St_21_Nothing : bool;
+                     s_12_St_21_Nothing : st_21; ck : st_21;
+                     nr_12_St_21_Presence : bool;
+                     ns_12_St_21_Presence : st_21;
+                     occuper_St_21_Presence : bool;
+                     nr_12_St_21_Nothing : bool; ns_12_St_21_Nothing : st_21;
+                     occuper_St_21_Nothing : bool; ck_10 : st_21;
+                     v_131 : bool; r_11_St_20_Presence : bool;
+                     s_11_St_20_Presence : st_20; r_11_St_20_Nothing : bool;
+                     s_11_St_20_Nothing : st_20; ck_11 : st_20;
+                     nr_11_St_20_Presence : bool;
+                     ns_11_St_20_Presence : st_20;
+                     occuper_1_St_20_Presence : bool;
+                     nr_11_St_20_Nothing : bool; ns_11_St_20_Nothing : st_20;
+                     occuper_1_St_20_Nothing : bool; ck_12 : st_20;
+                     v_132 : bool; r_10_St_19_Presence : bool;
+                     s_10_St_19_Presence : st_19; r_10_St_19_Nothing : bool;
+                     s_10_St_19_Nothing : st_19; ck_13 : st_19;
+                     nr_10_St_19_Presence : bool;
+                     ns_10_St_19_Presence : st_19;
+                     occuper_2_St_19_Presence : bool;
+                     nr_10_St_19_Nothing : bool; ns_10_St_19_Nothing : st_19;
+                     occuper_2_St_19_Nothing : bool; ck_14 : st_19;
+                     v_133 : bool; r_9_St_18_On : bool; s_9_St_18_On : st_18;
+                     r_9_St_18_Off : bool; s_9_St_18_Off : st_18;
+                     ck_15 : st_18; nr_9_St_18_On : bool;
+                     ns_9_St_18_On : st_18; lumiere_1_St_18_On : bool;
+                     nr_9_St_18_Off : bool; ns_9_St_18_Off : st_18;
+                     lumiere_1_St_18_Off : bool; ck_16 : st_18; v_134 : bool;
+                     r_8_St_17_Presence : bool; s_8_St_17_Presence : st_17;
+                     r_8_St_17_Nothing : bool; s_8_St_17_Nothing : st_17;
+                     ck_17 : st_17; nr_8_St_17_Presence : bool;
+                     ns_8_St_17_Presence : st_17;
+                     occuper_3_St_17_Presence : bool;
+                     nr_8_St_17_Nothing : bool; ns_8_St_17_Nothing : st_17;
+                     occuper_3_St_17_Nothing : bool; ck_18 : st_17;
+                     r_7_St_16_Ouvrir : bool; s_7_St_16_Ouvrir : st_16;
+                     r_7_St_16_Fermer : bool; s_7_St_16_Fermer : st_16;
+                     ck_19 : st_16; nr_7_St_16_Ouvrir : bool;
+                     ns_7_St_16_Ouvrir : st_16; ouvrir_St_16_Ouvrir : bool;
+                     nr_7_St_16_Fermer : bool; ns_7_St_16_Fermer : st_16;
+                     ouvrir_St_16_Fermer : bool; ck_20 : st_16; v_135 : bool;
+                     r_6_St_15_Ouvrir : bool; s_6_St_15_Ouvrir : st_15;
+                     r_6_St_15_Fermer : bool; s_6_St_15_Fermer : st_15;
+                     ck_21 : st_15; nr_6_St_15_Ouvrir : bool;
+                     ns_6_St_15_Ouvrir : st_15;
+                     ouvrir_1_St_15_Ouvrir : porte; nr_6_St_15_Fermer : bool;
+                     ns_6_St_15_Fermer : st_15;
+                     ouvrir_1_St_15_Fermer : porte; ck_22 : st_15;
+                     v_140 : bool; v_139 : st_14; v_138 : bool; v_137 : bool;
+                     v_136 : bool; v_147 : bool; v_146 : st_14; v_145 : bool;
+                     v_144 : bool; v_143 : bool; v_142 : bool; v_141 : bool;
+                     v_151 : bool; v_150 : st_14; v_149 : bool; v_148 : bool;
+                     r_5_St_14_Arriere : bool; s_5_St_14_Arriere : st_14;
+                     r_5_St_14_Avant : bool; s_5_St_14_Avant : st_14;
+                     r_5_St_14_Idle : bool; s_5_St_14_Idle : st_14;
+                     ck_23 : st_14; nr_5_St_14_Arriere : bool;
+                     ns_5_St_14_Arriere : st_14;
+                     pos_St_14_Arriere : position; nr_5_St_14_Avant : bool;
+                     ns_5_St_14_Avant : st_14; pos_St_14_Avant : position;
+                     nr_5_St_14_Idle : bool; ns_5_St_14_Idle : st_14;
+                     pos_St_14_Idle : position; ck_24 : st_14; v_152 : bool;
+                     r_4_St_13_Ouvrir : bool; s_4_St_13_Ouvrir : st_13;
+                     r_4_St_13_Fermer : bool; s_4_St_13_Fermer : st_13;
+                     ck_25 : st_13; nr_4_St_13_Ouvrir : bool;
+                     ns_4_St_13_Ouvrir : st_13;
+                     ouvrir_2_St_13_Ouvrir : porte; nr_4_St_13_Fermer : bool;
+                     ns_4_St_13_Fermer : st_13;
+                     ouvrir_2_St_13_Fermer : porte; ck_26 : st_13;
+                     v_157 : bool; v_156 : st_12; v_155 : bool; v_154 : bool;
+                     v_153 : bool; v_164 : bool; v_163 : st_12; v_162 : bool;
+                     v_161 : bool; v_160 : bool; v_159 : bool; v_158 : bool;
+                     v_168 : bool; v_167 : st_12; v_166 : bool; v_165 : bool;
+                     r_3_St_12_Arriere : bool; s_3_St_12_Arriere : st_12;
+                     r_3_St_12_Avant : bool; s_3_St_12_Avant : st_12;
+                     r_3_St_12_Idle : bool; s_3_St_12_Idle : st_12;
+                     ck_27 : st_12; nr_3_St_12_Arriere : bool;
+                     ns_3_St_12_Arriere : st_12;
+                     pos_1_St_12_Arriere : position; nr_3_St_12_Avant : bool;
+                     ns_3_St_12_Avant : st_12; pos_1_St_12_Avant : position;
+                     nr_3_St_12_Idle : bool; ns_3_St_12_Idle : st_12;
+                     pos_1_St_12_Idle : position; ck_28 : st_12;
+                     r_2_St_11_Ouvrir : bool; s_2_St_11_Ouvrir : st_11;
+                     r_2_St_11_Fermer : bool; s_2_St_11_Fermer : st_11;
+                     ck_29 : st_11; nr_2_St_11_Ouvrir : bool;
+                     ns_2_St_11_Ouvrir : st_11; store_St_11_Ouvrir : bool;
+                     nr_2_St_11_Fermer : bool; ns_2_St_11_Fermer : st_11;
+                     store_St_11_Fermer : bool; ck_30 : st_11;
+                     r_1_St_10_Vigilence : bool; s_1_St_10_Vigilence : st_10;
+                     r_1_St_10_Sonner : bool; s_1_St_10_Sonner : st_10;
+                     r_1_St_10_Allume : bool; s_1_St_10_Allume : st_10;
+                     r_1_St_10_Arret : bool; s_1_St_10_Arret : st_10;
+                     ck_31 : st_10; v_173 : int; v_172 : int; v_171 : bool;
+                     v_170 : st_10; v_169 : bool; v_178 : int; v_177 : int;
+                     v_176 : bool; v_175 : st_10; v_174 : bool; v_186 : int;
+                     v_185 : int; v_184 : bool; v_183 : st_10; v_182 : bool;
+                     v_181 : st_10; v_180 : bool; v_179 : bool;
+                     nr_1_St_10_Vigilence : bool;
+                     ns_1_St_10_Vigilence : st_10;
+                     reprise_St_10_Vigilence : int;
+                     vigilence_St_10_Vigilence : int;
+                     temps_St_10_Vigilence : int;
+                     enMarche_St_10_Vigilence : lum;
+                     sonnerAlarme_St_10_Vigilence : bool;
+                     nr_1_St_10_Sonner : bool; ns_1_St_10_Sonner : st_10;
+                     reprise_St_10_Sonner : int;
+                     vigilence_St_10_Sonner : int; temps_St_10_Sonner : int;
+                     enMarche_St_10_Sonner : lum;
+                     sonnerAlarme_St_10_Sonner : bool;
+                     nr_1_St_10_Allume : bool; ns_1_St_10_Allume : st_10;
+                     reprise_St_10_Allume : int;
+                     vigilence_St_10_Allume : int; temps_St_10_Allume : int;
+                     enMarche_St_10_Allume : lum;
+                     sonnerAlarme_St_10_Allume : bool;
+                     nr_1_St_10_Arret : bool; ns_1_St_10_Arret : st_10;
+                     reprise_St_10_Arret : int; vigilence_St_10_Arret : int;
+                     temps_St_10_Arret : int; enMarche_St_10_Arret : lum;
+                     sonnerAlarme_St_10_Arret : bool; ck_32 : st_10;
+                     v_188 : bool; v_187 : bool; r_St_9_Mouvement : bool;
+                     s_St_9_Mouvement : st_9; r_St_9_Stop : bool;
+                     s_St_9_Stop : st_9; ck_33 : st_9;
+                     nr_St_9_Mouvement : bool; ns_St_9_Mouvement : st_9;
+                     etat_St_9_Mouvement : bool; nr_St_9_Stop : bool;
+                     ns_St_9_Stop : st_9; etat_St_9_Stop : bool;
+                     ck_34 : st_9; v_129 : bool; v_128 : bool; v_127 : bool;
+                     v_126 : bool; v_125 : bool; v_124 : bool; v_123 : bool;
+                     v_122 : bool; v_121 : bool; v_120 : bool; v_119 : bool;
+                     v_118 : bool; v_117 : bool; v_116 : bool; v_115 : bool;
+                     v_114 : bool; v_113 : bool; v_112 : bool; v_111 : bool;
+                     v_110 : bool; v_109 : bool; v_108 : bool; v_107 : bool;
+                     v_106 : bool; v_105 : bool; v_104 : bool; v_103 : bool;
+                     v_102 : bool; v_101 : bool; v_100 : bool; v_99 : bool;
+                     v_98 : bool; v_97 : bool; v_96 : bool; v_95 : bool;
+                     v_94 : bool; v_93 : bool; v_92 : bool; v_91 : bool;
+                     v_90 : bool; v_89 : bool; v_88 : bool; v_87 : bool;
+                     v_86 : bool; v_85 : bool; v_84 : bool; v_83 : bool;
+                     v_82 : bool; v_81 : bool; v_80 : bool; v_79 : bool;
+                     v_78 : bool; v_77 : bool; v_76 : bool; v_75 : bool;
+                     v_74 : bool; v_73 : bool; v_72 : bool; v_71 : bool;
+                     v_70 : bool; v_69 : bool; v_68 : bool; v_67 : bool;
+                     v_66 : bool; v_65 : bool; v_64 : bool; v_63 : bool;
+                     v_62 : bool; v_61 : bool; v_60 : bool; v_59 : bool;
+                     v_58 : bool; v_57 : bool; v_56 : bool; v_55 : bool;
+                     v_54 : bool; v_53 : bool; v_52 : bool; v_51 : bool;
+                     v_50 : bool; v_49 : bool; v_48 : bool; v_47 : bool;
+                     v_46 : bool; v : bool; s_12 : st_21; ns_12 : st_21;
+                     r_12 : bool; nr_12 : bool; pnr_12 : bool; s_11 : st_20;
+                     ns_11 : st_20; r_11 : bool; nr_11 : bool; pnr_11 : bool;
+                     s_10 : st_19; ns_10 : st_19; r_10 : bool; nr_10 : bool;
+                     pnr_10 : bool; s_9 : st_18; ns_9 : st_18; r_9 : bool;
+                     nr_9 : bool; pnr_9 : bool; s_8 : st_17; ns_8 : st_17;
+                     r_8 : bool; nr_8 : bool; pnr_8 : bool; s_7 : st_16;
+                     ns_7 : st_16; r_7 : bool; nr_7 : bool; pnr_7 : bool;
+                     s_6 : st_15; ns_6 : st_15; r_6 : bool; nr_6 : bool;
+                     pnr_6 : bool; s_5 : st_14; ns_5 : st_14; r_5 : bool;
+                     nr_5 : bool; pnr_5 : bool; s_4 : st_13; ns_4 : st_13;
+                     r_4 : bool; nr_4 : bool; pnr_4 : bool; s_3 : st_12;
+                     ns_3 : st_12; r_3 : bool; nr_3 : bool; pnr_3 : bool;
+                     s_2 : st_11; ns_2 : st_11; r_2 : bool; nr_2 : bool;
+                     pnr_2 : bool; s_1 : st_10; ns_1 : st_10; r_1 : bool;
+                     nr_1 : bool; pnr_1 : bool; s : st_9; ns : st_9;
+                     r : bool; nr : bool; pnr : bool; demandeEtage_1 : bool;
+                     arriveEtage_1 : bool; etat : bool; marcheArret_1 : bool;
+                     code : bool; pbGar : bool; pbHab : bool;
+                     dReprise_1 : int; dVigilence_1 : int; dAlarme_1 : int;
+                     temps : int; vigilence : int; reprise : int;
+                     sonnerAlarme : bool; enMarche : lum; copen_3 : bool;
+                     close_1 : bool; store : bool; entree_1 : bool;
+                     sortie_1 : bool; pos_1 : position; copen_2 : bool;
+                     ouvrir_2 : porte; entree : bool; sortie : bool;
+                     pos : position; copen_1 : bool; ouvrir_1 : porte;
+                     con_1 : bool; coff_1 : bool; ouvrir : bool;
+                     presence_3 : bool; occuper_3 : bool;
+                     interrupteur_1 : bool; lumiere_1 : bool;
+                     presence_2 : bool; occuper_2 : bool; presence_1 : bool;
+                     occuper_1 : bool; presence : bool; occuper : bool;
+                     loccuperMaison : bool; loccuperGarage : bool;
+                     loccuperAscenseur : bool; lpresencePoubelle : bool;
+                     lLumiere : bool; louvrirPoubelle : bool; lstores : bool;
+                     lsonnerAlarme : bool; lascenseur : bool; prop1 : bool;
+                     prop2 : bool; prop3 : bool; prop4 : bool; prop5 : bool;
+                     prop6 : bool; prop7 : bool; prop8 : bool; prop8a : bool;
+                     prop9 : bool; prop10 : bool; prop11 : bool;
+                     prop12 : bool; prop13 : bool; prop14 : bool;
+                     prop15 : bool; prop16 : bool; prop12a : bool;
+                     prop12b : bool; prop17 : bool; prop18 : bool;
+                     prop19 : bool; prop20 : bool; prop21 : bool;
+                     prop22 : bool; prop23 : bool; prop24 : bool;
+                     louvrirPorte : porte; louvrirBarriere : porte;
+                     lenMarche : lum; lpositionDevantPorte : position;
+                     lpositionDevantBarriere : position; reprise_2 : int;
+                     vigilence_2 : int; temps_2 : int;
+  let
+    ascenseur = lascenseur;
+    alarmeSonne = lsonnerAlarme;
+    etatAlarme = lenMarche;
+    ouvertureStore = lstores;
+    barriere = louvrirBarriere;
+    capteurPositionBarriere = lpositionDevantBarriere;
+    capteurPositionPorte = lpositionDevantPorte;
+    porteStatus = louvrirPorte;
+    poubelleOuvert = louvrirPoubelle;
+    lumiere = lLumiere;
+    etatMaison = loccuperMaison;
+    v = (prop1 & prop2);
+    v_46 = (v & prop3);
+    v_47 = (v_46 & prop8a);
+    v_48 = (v_47 & prop9);
+    v_49 = (v_48 & prop10);
+    v_50 = (v_49 & prop11);
+    v_51 = (v_50 & prop12a);
+    v_52 = (v_51 & prop12b);
+    v_53 = (v_52 & prop13);
+    v_54 = (v_53 & prop14);
+    v_55 = (v_54 & prop15);
+    v_56 = (v_55 & prop17);
+    v_57 = (v_56 & prop18);
+    v_58 = (v_57 & prop19);
+    v_59 = (v_58 & prop23);
+    v_60 = (v_59 & prop24);
+    v_61 = (v_60 & prop16);
+    v_62 = (v_61 & prop20);
+    v_63 = (v_62 & prop21);
+    property = (v_63 & prop22);
+    v_64 = (lenMarche = Rouge);
+    v_65 = not(v_64);
+    prop22 = (loccuperMaison or v_65);
+    v_66 = not(loccuperAscenseur);
+    prop21 = (v_66 or lascenseur);
+    v_67 = not(lascenseur);
+    prop20 = (loccuperAscenseur or v_67);
+    v_68 = (lpositionDevantBarriere = Avant);
+    v_69 = (codeBarriere & v_68);
+    v_70 = not(v_69);
+    v_71 = (louvrirBarriere = Ouvert);
+    prop18 = (v_70 or v_71);
+    v_72 = (lpositionDevantBarriere = Null);
+    v_73 = not(v_72);
+    v_74 = (louvrirBarriere = Ouvert);
+    v_75 = not(v_74);
+    prop24 = (v_73 or v_75);
+    v_76 = (lpositionDevantBarriere = Arriere);
+    v_77 = not(v_76);
+    v_78 = (louvrirBarriere = Ouvert);
+    prop19 = (v_77 or v_78);
+    v_79 = (lpositionDevantPorte = Avant);
+    v_80 = (codePorte & v_79);
+    v_81 = not(v_80);
+    v_82 = (louvrirPorte = Ouvert);
+    prop16 = (v_81 or v_82);
+    v_83 = (lpositionDevantPorte = Null);
+    v_84 = not(v_83);
+    v_85 = (louvrirPorte = Ouvert);
+    v_86 = not(v_85);
+    prop23 = (v_84 or v_86);
+    v_87 = (lpositionDevantPorte = Arriere);
+    v_88 = not(v_87);
+    v_89 = (louvrirPorte = Ouvert);
+    prop17 = (v_88 or v_89);
+    v_90 = not(vent);
+    v_91 = not(luminosite);
+    v_92 = (v_90 & v_91);
+    v_93 = not(v_92);
+    v_94 = not(lstores);
+    prop15 = (v_93 or v_94);
+    v_95 = (vent & luminosite);
+    v_96 = not(v_95);
+    v_97 = not(lstores);
+    prop14 = (v_96 or v_97);
+    v_98 = not(luminosite);
+    v_99 = (vent & v_98);
+    v_100 = not(v_99);
+    v_101 = not(lstores);
+    prop13 = (v_100 or v_101);
+    v_102 = not(vent);
+    v_103 = (v_102 & luminosite);
+    v_104 = not(loccuperMaison);
+    v_105 = (v_103 & v_104);
+    v_106 = not(v_105);
+    v_107 = not(lstores);
+    prop12b = (v_106 or v_107);
+    v_108 = not(vent);
+    v_109 = (v_108 & luminosite);
+    v_110 = (v_109 & loccuperMaison);
+    v_111 = not(v_110);
+    prop12a = (v_111 or lstores);
+    v_112 = not(vent);
+    v_113 = (v_112 & luminosite);
+    v_114 = not(v_113);
+    prop12 = (v_114 or lstores);
+    v_115 = not(lpresencePoubelle);
+    prop11 = (v_115 or louvrirPoubelle);
+    v_116 = not(louvrirPoubelle);
+    prop10 = (lpresencePoubelle or v_116);
+    v_117 = not(lstores);
+    v_118 = not(lLumiere);
+    prop9 = (v_117 or v_118);
+    v_119 = not(lstores);
+    v_120 = (v_119 & loccuperMaison);
+    v_121 = not(v_120);
+    prop8a = (v_121 or lLumiere);
+    prop8 = (lstores or lLumiere);
+    v_122 = not(lstores);
+    prop7 = (luminosite or v_122);
+    v_123 = not(vent);
+    v_124 = not(lstores);
+    prop6 = (v_123 or v_124);
+    v_125 = not(luminosite);
+    prop5 = (v_125 or lstores);
+    prop4 = (vent or lstores);
+    v_126 = not(loccuperMaison);
+    v_127 = (lstores or lLumiere);
+    prop3 = (v_126 or v_127);
+    v_128 = not(lstores);
+    prop2 = (loccuperMaison or v_128);
+    v_129 = not(lLumiere);
+    prop1 = (loccuperMaison or v_129);
+    lascenseur = etat;
+    lsonnerAlarme = sonnerAlarme;
+    lenMarche = enMarche;
+    lstores = store;
+    lpositionDevantBarriere = pos_1;
+    louvrirBarriere = ouvrir_2;
+    lpositionDevantPorte = pos;
+    louvrirPorte = ouvrir_1;
+    louvrirPoubelle = ouvrir;
+    lpresencePoubelle = occuper_3;
+    lLumiere = lumiere_1;
+    loccuperAscenseur = occuper_2;
+    loccuperGarage = occuper_1;
+    loccuperMaison = occuper;
+    r_12 =
+      merge ck
+        (St_21_Presence -> r_12_St_21_Presence)
+        (St_21_Nothing -> r_12_St_21_Nothing);
+    s_12 =
+      merge ck
+        (St_21_Presence -> s_12_St_21_Presence)
+        (St_21_Nothing -> s_12_St_21_Nothing);
+    v_130 = not((presence when St_21_Presence(ck)));
+    s_12_St_21_Presence = if v_130 then St_21_Nothing else St_21_Presence;
+    r_12_St_21_Presence =
+      if v_130 then true else (pnr_12 when St_21_Presence(ck));
+    s_12_St_21_Nothing =
+      if (presence when St_21_Nothing(ck))
+      then St_21_Presence
+      else St_21_Nothing;
+    r_12_St_21_Nothing =
+      if (presence when St_21_Nothing(ck))
+      then true
+      else (pnr_12 when St_21_Nothing(ck));
+    ck = St_21_Nothing fby ns_12;
+    nr_12 =
+      merge ck_10
+        (St_21_Presence -> nr_12_St_21_Presence)
+        (St_21_Nothing -> nr_12_St_21_Nothing);
+    ns_12 =
+      merge ck_10
+        (St_21_Presence -> ns_12_St_21_Presence)
+        (St_21_Nothing -> ns_12_St_21_Nothing);
+    occuper =
+      merge ck_10
+        (St_21_Presence -> occuper_St_21_Presence)
+        (St_21_Nothing -> occuper_St_21_Nothing);
+    ns_12_St_21_Presence = St_21_Presence;
+    nr_12_St_21_Presence = false;
+    occuper_St_21_Presence = true;
+    ns_12_St_21_Nothing = St_21_Nothing;
+    nr_12_St_21_Nothing = false;
+    occuper_St_21_Nothing = false;
+    ck_10 = s_12;
+    pnr_12 = false fby nr_12;
+    presence = presenceMaison;
+    r_11 =
+      merge ck_11
+        (St_20_Presence -> r_11_St_20_Presence)
+        (St_20_Nothing -> r_11_St_20_Nothing);
+    s_11 =
+      merge ck_11
+        (St_20_Presence -> s_11_St_20_Presence)
+        (St_20_Nothing -> s_11_St_20_Nothing);
+    v_131 = not((presence_1 when St_20_Presence(ck_11)));
+    s_11_St_20_Presence = if v_131 then St_20_Nothing else St_20_Presence;
+    r_11_St_20_Presence =
+      if v_131 then true else (pnr_11 when St_20_Presence(ck_11));
+    s_11_St_20_Nothing =
+      if (presence_1 when St_20_Nothing(ck_11))
+      then St_20_Presence
+      else St_20_Nothing;
+    r_11_St_20_Nothing =
+      if (presence_1 when St_20_Nothing(ck_11))
+      then true
+      else (pnr_11 when St_20_Nothing(ck_11));
+    ck_11 = St_20_Nothing fby ns_11;
+    nr_11 =
+      merge ck_12
+        (St_20_Presence -> nr_11_St_20_Presence)
+        (St_20_Nothing -> nr_11_St_20_Nothing);
+    ns_11 =
+      merge ck_12
+        (St_20_Presence -> ns_11_St_20_Presence)
+        (St_20_Nothing -> ns_11_St_20_Nothing);
+    occuper_1 =
+      merge ck_12
+        (St_20_Presence -> occuper_1_St_20_Presence)
+        (St_20_Nothing -> occuper_1_St_20_Nothing);
+    ns_11_St_20_Presence = St_20_Presence;
+    nr_11_St_20_Presence = false;
+    occuper_1_St_20_Presence = true;
+    ns_11_St_20_Nothing = St_20_Nothing;
+    nr_11_St_20_Nothing = false;
+    occuper_1_St_20_Nothing = false;
+    ck_12 = s_11;
+    pnr_11 = false fby nr_11;
+    presence_1 = presenceGarage;
+    r_10 =
+      merge ck_13
+        (St_19_Presence -> r_10_St_19_Presence)
+        (St_19_Nothing -> r_10_St_19_Nothing);
+    s_10 =
+      merge ck_13
+        (St_19_Presence -> s_10_St_19_Presence)
+        (St_19_Nothing -> s_10_St_19_Nothing);
+    v_132 = not((presence_2 when St_19_Presence(ck_13)));
+    s_10_St_19_Presence = if v_132 then St_19_Nothing else St_19_Presence;
+    r_10_St_19_Presence =
+      if v_132 then true else (pnr_10 when St_19_Presence(ck_13));
+    s_10_St_19_Nothing =
+      if (presence_2 when St_19_Nothing(ck_13))
+      then St_19_Presence
+      else St_19_Nothing;
+    r_10_St_19_Nothing =
+      if (presence_2 when St_19_Nothing(ck_13))
+      then true
+      else (pnr_10 when St_19_Nothing(ck_13));
+    ck_13 = St_19_Nothing fby ns_10;
+    nr_10 =
+      merge ck_14
+        (St_19_Presence -> nr_10_St_19_Presence)
+        (St_19_Nothing -> nr_10_St_19_Nothing);
+    ns_10 =
+      merge ck_14
+        (St_19_Presence -> ns_10_St_19_Presence)
+        (St_19_Nothing -> ns_10_St_19_Nothing);
+    occuper_2 =
+      merge ck_14
+        (St_19_Presence -> occuper_2_St_19_Presence)
+        (St_19_Nothing -> occuper_2_St_19_Nothing);
+    ns_10_St_19_Presence = St_19_Presence;
+    nr_10_St_19_Presence = false;
+    occuper_2_St_19_Presence = true;
+    ns_10_St_19_Nothing = St_19_Nothing;
+    nr_10_St_19_Nothing = false;
+    occuper_2_St_19_Nothing = false;
+    ck_14 = s_10;
+    pnr_10 = false fby nr_10;
+    presence_2 = presenceAscenseur;
+    r_9 = merge ck_15 (St_18_On -> r_9_St_18_On)(St_18_Off -> r_9_St_18_Off);
+    s_9 = merge ck_15 (St_18_On -> s_9_St_18_On)(St_18_Off -> s_9_St_18_Off);
+    v_133 = not((interrupteur_1 when St_18_On(ck_15)));
+    s_9_St_18_On = if v_133 then St_18_Off else St_18_On;
+    r_9_St_18_On = if v_133 then true else (pnr_9 when St_18_On(ck_15));
+    s_9_St_18_Off =
+      if (interrupteur_1 when St_18_Off(ck_15)) then St_18_On else St_18_Off;
+    r_9_St_18_Off =
+      if (interrupteur_1 when St_18_Off(ck_15))
+      then true
+      else (pnr_9 when St_18_Off(ck_15));
+    ck_15 = St_18_Off fby ns_9;
+    nr_9 =
+      merge ck_16 (St_18_On -> nr_9_St_18_On)(St_18_Off -> nr_9_St_18_Off);
+    ns_9 =
+      merge ck_16 (St_18_On -> ns_9_St_18_On)(St_18_Off -> ns_9_St_18_Off);
+    lumiere_1 =
+      merge ck_16
+        (St_18_On -> lumiere_1_St_18_On)(St_18_Off -> lumiere_1_St_18_Off);
+    ns_9_St_18_On = St_18_On;
+    nr_9_St_18_On = false;
+    lumiere_1_St_18_On = true;
+    ns_9_St_18_Off = St_18_Off;
+    nr_9_St_18_Off = false;
+    lumiere_1_St_18_Off = false;
+    ck_16 = s_9;
+    pnr_9 = false fby nr_9;
+    interrupteur_1 = interrupteur;
+    r_8 =
+      merge ck_17
+        (St_17_Presence -> r_8_St_17_Presence)
+        (St_17_Nothing -> r_8_St_17_Nothing);
+    s_8 =
+      merge ck_17
+        (St_17_Presence -> s_8_St_17_Presence)
+        (St_17_Nothing -> s_8_St_17_Nothing);
+    v_134 = not((presence_3 when St_17_Presence(ck_17)));
+    s_8_St_17_Presence = if v_134 then St_17_Nothing else St_17_Presence;
+    r_8_St_17_Presence =
+      if v_134 then true else (pnr_8 when St_17_Presence(ck_17));
+    s_8_St_17_Nothing =
+      if (presence_3 when St_17_Nothing(ck_17))
+      then St_17_Presence
+      else St_17_Nothing;
+    r_8_St_17_Nothing =
+      if (presence_3 when St_17_Nothing(ck_17))
+      then true
+      else (pnr_8 when St_17_Nothing(ck_17));
+    ck_17 = St_17_Nothing fby ns_8;
+    nr_8 =
+      merge ck_18
+        (St_17_Presence -> nr_8_St_17_Presence)
+        (St_17_Nothing -> nr_8_St_17_Nothing);
+    ns_8 =
+      merge ck_18
+        (St_17_Presence -> ns_8_St_17_Presence)
+        (St_17_Nothing -> ns_8_St_17_Nothing);
+    occuper_3 =
+      merge ck_18
+        (St_17_Presence -> occuper_3_St_17_Presence)
+        (St_17_Nothing -> occuper_3_St_17_Nothing);
+    ns_8_St_17_Presence = St_17_Presence;
+    nr_8_St_17_Presence = false;
+    occuper_3_St_17_Presence = true;
+    ns_8_St_17_Nothing = St_17_Nothing;
+    nr_8_St_17_Nothing = false;
+    occuper_3_St_17_Nothing = false;
+    ck_18 = s_8;
+    pnr_8 = false fby nr_8;
+    presence_3 = presenceDevantPoubelle;
+    r_7 =
+      merge ck_19
+        (St_16_Ouvrir -> r_7_St_16_Ouvrir)(St_16_Fermer -> r_7_St_16_Fermer);
+    s_7 =
+      merge ck_19
+        (St_16_Ouvrir -> s_7_St_16_Ouvrir)(St_16_Fermer -> s_7_St_16_Fermer);
+    s_7_St_16_Ouvrir =
+      if (coff_1 when St_16_Ouvrir(ck_19))
+      then St_16_Fermer
+      else St_16_Ouvrir;
+    r_7_St_16_Ouvrir =
+      if (coff_1 when St_16_Ouvrir(ck_19))
+      then true
+      else (pnr_7 when St_16_Ouvrir(ck_19));
+    s_7_St_16_Fermer =
+      if (con_1 when St_16_Fermer(ck_19)) then St_16_Ouvrir else St_16_Fermer;
+    r_7_St_16_Fermer =
+      if (con_1 when St_16_Fermer(ck_19))
+      then true
+      else (pnr_7 when St_16_Fermer(ck_19));
+    ck_19 = St_16_Fermer fby ns_7;
+    nr_7 =
+      merge ck_20
+        (St_16_Ouvrir -> nr_7_St_16_Ouvrir)
+        (St_16_Fermer -> nr_7_St_16_Fermer);
+    ns_7 =
+      merge ck_20
+        (St_16_Ouvrir -> ns_7_St_16_Ouvrir)
+        (St_16_Fermer -> ns_7_St_16_Fermer);
+    ouvrir =
+      merge ck_20
+        (St_16_Ouvrir -> ouvrir_St_16_Ouvrir)
+        (St_16_Fermer -> ouvrir_St_16_Fermer);
+    ns_7_St_16_Ouvrir = St_16_Ouvrir;
+    nr_7_St_16_Ouvrir = false;
+    ouvrir_St_16_Ouvrir = true;
+    ns_7_St_16_Fermer = St_16_Fermer;
+    nr_7_St_16_Fermer = false;
+    ouvrir_St_16_Fermer = false;
+    ck_20 = s_7;
+    pnr_7 = false fby nr_7;
+    coff_1 = coff;
+    con_1 = con;
+    r_6 =
+      merge ck_21
+        (St_15_Ouvrir -> r_6_St_15_Ouvrir)(St_15_Fermer -> r_6_St_15_Fermer);
+    s_6 =
+      merge ck_21
+        (St_15_Ouvrir -> s_6_St_15_Ouvrir)(St_15_Fermer -> s_6_St_15_Fermer);
+    v_135 = not((copen_1 when St_15_Ouvrir(ck_21)));
+    s_6_St_15_Ouvrir = if v_135 then St_15_Fermer else St_15_Ouvrir;
+    r_6_St_15_Ouvrir =
+      if v_135 then true else (pnr_6 when St_15_Ouvrir(ck_21));
+    s_6_St_15_Fermer =
+      if (copen_1 when St_15_Fermer(ck_21))
+      then St_15_Ouvrir
+      else St_15_Fermer;
+    r_6_St_15_Fermer =
+      if (copen_1 when St_15_Fermer(ck_21))
+      then true
+      else (pnr_6 when St_15_Fermer(ck_21));
+    ck_21 = St_15_Fermer fby ns_6;
+    nr_6 =
+      merge ck_22
+        (St_15_Ouvrir -> nr_6_St_15_Ouvrir)
+        (St_15_Fermer -> nr_6_St_15_Fermer);
+    ns_6 =
+      merge ck_22
+        (St_15_Ouvrir -> ns_6_St_15_Ouvrir)
+        (St_15_Fermer -> ns_6_St_15_Fermer);
+    ouvrir_1 =
+      merge ck_22
+        (St_15_Ouvrir -> ouvrir_1_St_15_Ouvrir)
+        (St_15_Fermer -> ouvrir_1_St_15_Fermer);
+    ns_6_St_15_Ouvrir = St_15_Ouvrir;
+    nr_6_St_15_Ouvrir = false;
+    ouvrir_1_St_15_Ouvrir = Fermer;
+    ns_6_St_15_Fermer = St_15_Fermer;
+    nr_6_St_15_Fermer = false;
+    ouvrir_1_St_15_Fermer = Ouvert;
+    ck_22 = s_6;
+    pnr_6 = false fby nr_6;
+    copen_1 = openPorte;
+    r_5 =
+      merge ck_23
+        (St_14_Arriere -> r_5_St_14_Arriere)(St_14_Avant -> r_5_St_14_Avant)
+        (St_14_Idle -> r_5_St_14_Idle);
+    s_5 =
+      merge ck_23
+        (St_14_Arriere -> s_5_St_14_Arriere)(St_14_Avant -> s_5_St_14_Avant)
+        (St_14_Idle -> s_5_St_14_Idle);
+    v_136 = not((entree when St_14_Arriere(ck_23)));
+    v_137 = not((sortie when St_14_Arriere(ck_23)));
+    v_138 = (v_136 & v_137);
+    v_139 = if v_138 then St_14_Idle else St_14_Arriere;
+    v_140 = if v_138 then true else (pnr_5 when St_14_Arriere(ck_23));
+    s_5_St_14_Arriere =
+      if (entree when St_14_Arriere(ck_23)) then St_14_Avant else v_139;
+    r_5_St_14_Arriere =
+      if (entree when St_14_Arriere(ck_23)) then true else v_140;
+    v_141 = not((entree when St_14_Avant(ck_23)));
+    v_142 = not((sortie when St_14_Avant(ck_23)));
+    v_143 = (v_141 & v_142);
+    v_144 = not((entree when St_14_Avant(ck_23)));
+    v_145 = ((sortie when St_14_Avant(ck_23)) & v_144);
+    v_146 = if v_145 then St_14_Arriere else St_14_Avant;
+    v_147 = if v_145 then true else (pnr_5 when St_14_Avant(ck_23));
+    s_5_St_14_Avant = if v_143 then St_14_Idle else v_146;
+    r_5_St_14_Avant = if v_143 then true else v_147;
+    v_148 = not((entree when St_14_Idle(ck_23)));
+    v_149 = (v_148 & (sortie when St_14_Idle(ck_23)));
+    v_150 = if v_149 then St_14_Arriere else St_14_Idle;
+    v_151 = if v_149 then true else (pnr_5 when St_14_Idle(ck_23));
+    s_5_St_14_Idle =
+      if (entree when St_14_Idle(ck_23)) then St_14_Avant else v_150;
+    r_5_St_14_Idle = if (entree when St_14_Idle(ck_23)) then true else v_151;
+    ck_23 = St_14_Idle fby ns_5;
+    nr_5 =
+      merge ck_24
+        (St_14_Arriere -> nr_5_St_14_Arriere)
+        (St_14_Avant -> nr_5_St_14_Avant)(St_14_Idle -> nr_5_St_14_Idle);
+    ns_5 =
+      merge ck_24
+        (St_14_Arriere -> ns_5_St_14_Arriere)
+        (St_14_Avant -> ns_5_St_14_Avant)(St_14_Idle -> ns_5_St_14_Idle);
+    pos =
+      merge ck_24
+        (St_14_Arriere -> pos_St_14_Arriere)(St_14_Avant -> pos_St_14_Avant)
+        (St_14_Idle -> pos_St_14_Idle);
+    ns_5_St_14_Arriere = St_14_Arriere;
+    nr_5_St_14_Arriere = false;
+    pos_St_14_Arriere = Arriere;
+    ns_5_St_14_Avant = St_14_Avant;
+    nr_5_St_14_Avant = false;
+    pos_St_14_Avant = Avant;
+    ns_5_St_14_Idle = St_14_Idle;
+    nr_5_St_14_Idle = false;
+    pos_St_14_Idle = Null;
+    ck_24 = s_5;
+    pnr_5 = false fby nr_5;
+    sortie = presenceSortiePorte;
+    entree = presenceEntreePorte;
+    r_4 =
+      merge ck_25
+        (St_13_Ouvrir -> r_4_St_13_Ouvrir)(St_13_Fermer -> r_4_St_13_Fermer);
+    s_4 =
+      merge ck_25
+        (St_13_Ouvrir -> s_4_St_13_Ouvrir)(St_13_Fermer -> s_4_St_13_Fermer);
+    v_152 = not((copen_2 when St_13_Ouvrir(ck_25)));
+    s_4_St_13_Ouvrir = if v_152 then St_13_Fermer else St_13_Ouvrir;
+    r_4_St_13_Ouvrir =
+      if v_152 then true else (pnr_4 when St_13_Ouvrir(ck_25));
+    s_4_St_13_Fermer =
+      if (copen_2 when St_13_Fermer(ck_25))
+      then St_13_Ouvrir
+      else St_13_Fermer;
+    r_4_St_13_Fermer =
+      if (copen_2 when St_13_Fermer(ck_25))
+      then true
+      else (pnr_4 when St_13_Fermer(ck_25));
+    ck_25 = St_13_Fermer fby ns_4;
+    nr_4 =
+      merge ck_26
+        (St_13_Ouvrir -> nr_4_St_13_Ouvrir)
+        (St_13_Fermer -> nr_4_St_13_Fermer);
+    ns_4 =
+      merge ck_26
+        (St_13_Ouvrir -> ns_4_St_13_Ouvrir)
+        (St_13_Fermer -> ns_4_St_13_Fermer);
+    ouvrir_2 =
+      merge ck_26
+        (St_13_Ouvrir -> ouvrir_2_St_13_Ouvrir)
+        (St_13_Fermer -> ouvrir_2_St_13_Fermer);
+    ns_4_St_13_Ouvrir = St_13_Ouvrir;
+    nr_4_St_13_Ouvrir = false;
+    ouvrir_2_St_13_Ouvrir = Fermer;
+    ns_4_St_13_Fermer = St_13_Fermer;
+    nr_4_St_13_Fermer = false;
+    ouvrir_2_St_13_Fermer = Ouvert;
+    ck_26 = s_4;
+    pnr_4 = false fby nr_4;
+    copen_2 = openBarriere;
+    r_3 =
+      merge ck_27
+        (St_12_Arriere -> r_3_St_12_Arriere)(St_12_Avant -> r_3_St_12_Avant)
+        (St_12_Idle -> r_3_St_12_Idle);
+    s_3 =
+      merge ck_27
+        (St_12_Arriere -> s_3_St_12_Arriere)(St_12_Avant -> s_3_St_12_Avant)
+        (St_12_Idle -> s_3_St_12_Idle);
+    v_153 = not((entree_1 when St_12_Arriere(ck_27)));
+    v_154 = not((sortie_1 when St_12_Arriere(ck_27)));
+    v_155 = (v_153 & v_154);
+    v_156 = if v_155 then St_12_Idle else St_12_Arriere;
+    v_157 = if v_155 then true else (pnr_3 when St_12_Arriere(ck_27));
+    s_3_St_12_Arriere =
+      if (entree_1 when St_12_Arriere(ck_27)) then St_12_Avant else v_156;
+    r_3_St_12_Arriere =
+      if (entree_1 when St_12_Arriere(ck_27)) then true else v_157;
+    v_158 = not((entree_1 when St_12_Avant(ck_27)));
+    v_159 = not((sortie_1 when St_12_Avant(ck_27)));
+    v_160 = (v_158 & v_159);
+    v_161 = not((entree_1 when St_12_Avant(ck_27)));
+    v_162 = ((sortie_1 when St_12_Avant(ck_27)) & v_161);
+    v_163 = if v_162 then St_12_Arriere else St_12_Avant;
+    v_164 = if v_162 then true else (pnr_3 when St_12_Avant(ck_27));
+    s_3_St_12_Avant = if v_160 then St_12_Idle else v_163;
+    r_3_St_12_Avant = if v_160 then true else v_164;
+    v_165 = not((entree_1 when St_12_Idle(ck_27)));
+    v_166 = (v_165 & (sortie_1 when St_12_Idle(ck_27)));
+    v_167 = if v_166 then St_12_Arriere else St_12_Idle;
+    v_168 = if v_166 then true else (pnr_3 when St_12_Idle(ck_27));
+    s_3_St_12_Idle =
+      if (entree_1 when St_12_Idle(ck_27)) then St_12_Avant else v_167;
+    r_3_St_12_Idle =
+      if (entree_1 when St_12_Idle(ck_27)) then true else v_168;
+    ck_27 = St_12_Idle fby ns_3;
+    nr_3 =
+      merge ck_28
+        (St_12_Arriere -> nr_3_St_12_Arriere)
+        (St_12_Avant -> nr_3_St_12_Avant)(St_12_Idle -> nr_3_St_12_Idle);
+    ns_3 =
+      merge ck_28
+        (St_12_Arriere -> ns_3_St_12_Arriere)
+        (St_12_Avant -> ns_3_St_12_Avant)(St_12_Idle -> ns_3_St_12_Idle);
+    pos_1 =
+      merge ck_28
+        (St_12_Arriere -> pos_1_St_12_Arriere)
+        (St_12_Avant -> pos_1_St_12_Avant)(St_12_Idle -> pos_1_St_12_Idle);
+    ns_3_St_12_Arriere = St_12_Arriere;
+    nr_3_St_12_Arriere = false;
+    pos_1_St_12_Arriere = Arriere;
+    ns_3_St_12_Avant = St_12_Avant;
+    nr_3_St_12_Avant = false;
+    pos_1_St_12_Avant = Avant;
+    ns_3_St_12_Idle = St_12_Idle;
+    nr_3_St_12_Idle = false;
+    pos_1_St_12_Idle = Null;
+    ck_28 = s_3;
+    pnr_3 = false fby nr_3;
+    sortie_1 = presenceSortieBarriere;
+    entree_1 = presenceEntreeBarriere;
+    r_2 =
+      merge ck_29
+        (St_11_Ouvrir -> r_2_St_11_Ouvrir)(St_11_Fermer -> r_2_St_11_Fermer);
+    s_2 =
+      merge ck_29
+        (St_11_Ouvrir -> s_2_St_11_Ouvrir)(St_11_Fermer -> s_2_St_11_Fermer);
+    s_2_St_11_Ouvrir =
+      if (close_1 when St_11_Ouvrir(ck_29))
+      then St_11_Fermer
+      else St_11_Ouvrir;
+    r_2_St_11_Ouvrir =
+      if (close_1 when St_11_Ouvrir(ck_29))
+      then true
+      else (pnr_2 when St_11_Ouvrir(ck_29));
+    s_2_St_11_Fermer =
+      if (copen_3 when St_11_Fermer(ck_29))
+      then St_11_Ouvrir
+      else St_11_Fermer;
+    r_2_St_11_Fermer =
+      if (copen_3 when St_11_Fermer(ck_29))
+      then true
+      else (pnr_2 when St_11_Fermer(ck_29));
+    ck_29 = St_11_Fermer fby ns_2;
+    nr_2 =
+      merge ck_30
+        (St_11_Ouvrir -> nr_2_St_11_Ouvrir)
+        (St_11_Fermer -> nr_2_St_11_Fermer);
+    ns_2 =
+      merge ck_30
+        (St_11_Ouvrir -> ns_2_St_11_Ouvrir)
+        (St_11_Fermer -> ns_2_St_11_Fermer);
+    store =
+      merge ck_30
+        (St_11_Ouvrir -> store_St_11_Ouvrir)
+        (St_11_Fermer -> store_St_11_Fermer);
+    ns_2_St_11_Ouvrir = St_11_Ouvrir;
+    nr_2_St_11_Ouvrir = false;
+    store_St_11_Ouvrir = true;
+    ns_2_St_11_Fermer = St_11_Fermer;
+    nr_2_St_11_Fermer = false;
+    store_St_11_Fermer = false;
+    ck_30 = s_2;
+    pnr_2 = false fby nr_2;
+    close_1 = close;
+    copen_3 = copen;
+    r_1 =
+      merge ck_31
+        (St_10_Vigilence -> r_1_St_10_Vigilence)
+        (St_10_Sonner -> r_1_St_10_Sonner)(St_10_Allume -> r_1_St_10_Allume)
+        (St_10_Arret -> r_1_St_10_Arret);
+    s_1 =
+      merge ck_31
+        (St_10_Vigilence -> s_1_St_10_Vigilence)
+        (St_10_Sonner -> s_1_St_10_Sonner)(St_10_Allume -> s_1_St_10_Allume)
+        (St_10_Arret -> s_1_St_10_Arret);
+    s_1_St_10_Vigilence = St_10_Vigilence;
+    r_1_St_10_Vigilence = (pnr_1 when St_10_Vigilence(ck_31));
+    s_1_St_10_Sonner = St_10_Sonner;
+    r_1_St_10_Sonner = (pnr_1 when St_10_Sonner(ck_31));
+    s_1_St_10_Allume = St_10_Allume;
+    r_1_St_10_Allume = (pnr_1 when St_10_Allume(ck_31));
+    s_1_St_10_Arret =
+      if (marcheArret_1 when St_10_Arret(ck_31))
+      then St_10_Allume
+      else St_10_Arret;
+    r_1_St_10_Arret =
+      if (marcheArret_1 when St_10_Arret(ck_31))
+      then true
+      else (pnr_1 when St_10_Arret(ck_31));
+    ck_31 = St_10_Arret fby ns_1;
+    nr_1 =
+      merge ck_32
+        (St_10_Vigilence -> nr_1_St_10_Vigilence)
+        (St_10_Sonner -> nr_1_St_10_Sonner)
+        (St_10_Allume -> nr_1_St_10_Allume)(St_10_Arret -> nr_1_St_10_Arret);
+    ns_1 =
+      merge ck_32
+        (St_10_Vigilence -> ns_1_St_10_Vigilence)
+        (St_10_Sonner -> ns_1_St_10_Sonner)
+        (St_10_Allume -> ns_1_St_10_Allume)(St_10_Arret -> ns_1_St_10_Arret);
+    reprise =
+      merge ck_32
+        (St_10_Vigilence -> reprise_St_10_Vigilence)
+        (St_10_Sonner -> reprise_St_10_Sonner)
+        (St_10_Allume -> reprise_St_10_Allume)
+        (St_10_Arret -> reprise_St_10_Arret);
+    vigilence =
+      merge ck_32
+        (St_10_Vigilence -> vigilence_St_10_Vigilence)
+        (St_10_Sonner -> vigilence_St_10_Sonner)
+        (St_10_Allume -> vigilence_St_10_Allume)
+        (St_10_Arret -> vigilence_St_10_Arret);
+    temps =
+      merge ck_32
+        (St_10_Vigilence -> temps_St_10_Vigilence)
+        (St_10_Sonner -> temps_St_10_Sonner)
+        (St_10_Allume -> temps_St_10_Allume)
+        (St_10_Arret -> temps_St_10_Arret);
+    enMarche =
+      merge ck_32
+        (St_10_Vigilence -> enMarche_St_10_Vigilence)
+        (St_10_Sonner -> enMarche_St_10_Sonner)
+        (St_10_Allume -> enMarche_St_10_Allume)
+        (St_10_Arret -> enMarche_St_10_Arret);
+    sonnerAlarme =
+      merge ck_32
+        (St_10_Vigilence -> sonnerAlarme_St_10_Vigilence)
+        (St_10_Sonner -> sonnerAlarme_St_10_Sonner)
+        (St_10_Allume -> sonnerAlarme_St_10_Allume)
+        (St_10_Arret -> sonnerAlarme_St_10_Arret);
+    v_169 =
+      ((dVigilence_1 when St_10_Vigilence(ck_32)) <=
+       (vigilence when St_10_Vigilence(ck_32)));
+    v_170 = if v_169 then St_10_Arret else St_10_Vigilence;
+    v_171 = if v_169 then true else false;
+    ns_1_St_10_Vigilence =
+      if (pbHab when St_10_Vigilence(ck_32)) then St_10_Sonner else v_170;
+    nr_1_St_10_Vigilence =
+      if (pbHab when St_10_Vigilence(ck_32)) then true else v_171;
+    temps_St_10_Vigilence = (temps_2 when St_10_Vigilence(ck_32));
+    reprise_St_10_Vigilence = (reprise_2 when St_10_Vigilence(ck_32));
+    v_172 = ((vigilence when St_10_Vigilence(ck_32)) + 1);
+    v_173 = 0 fby v_172;
+    vigilence_St_10_Vigilence =
+      if (r_1 when St_10_Vigilence(ck_32)) then 0 else v_173;
+    sonnerAlarme_St_10_Vigilence = false;
+    enMarche_St_10_Vigilence = Jaune;
+    v_174 =
+      ((dReprise_1 when St_10_Sonner(ck_32)) <=
+       (reprise when St_10_Sonner(ck_32)));
+    v_175 = if v_174 then St_10_Allume else St_10_Sonner;
+    v_176 = if v_174 then true else false;
+    ns_1_St_10_Sonner =
+      if (code when St_10_Sonner(ck_32)) then St_10_Arret else v_175;
+    nr_1_St_10_Sonner =
+      if (code when St_10_Sonner(ck_32)) then true else v_176;
+    temps_St_10_Sonner = (temps_2 when St_10_Sonner(ck_32));
+    vigilence_St_10_Sonner = (vigilence_2 when St_10_Sonner(ck_32));
+    v_177 = ((reprise when St_10_Sonner(ck_32)) + 1);
+    v_178 = 0 fby v_177;
+    reprise_St_10_Sonner =
+      if (r_1 when St_10_Sonner(ck_32)) then 0 else v_178;
+    sonnerAlarme_St_10_Sonner = true;
+    enMarche_St_10_Sonner = Vert;
+    v_179 =
+      ((dVigilence_1 when St_10_Allume(ck_32)) <=
+       (temps when St_10_Allume(ck_32)));
+    v_180 = ((pbGar when St_10_Allume(ck_32)) & v_179);
+    v_181 = if v_180 then St_10_Sonner else St_10_Allume;
+    v_182 = if v_180 then true else false;
+    v_183 = if (pbHab when St_10_Allume(ck_32)) then St_10_Sonner else v_181;
+    v_184 = if (pbHab when St_10_Allume(ck_32)) then true else v_182;
+    ns_1_St_10_Allume =
+      if (code when St_10_Allume(ck_32)) then St_10_Vigilence else v_183;
+    nr_1_St_10_Allume =
+      if (code when St_10_Allume(ck_32)) then true else v_184;
+    vigilence_St_10_Allume = (vigilence_2 when St_10_Allume(ck_32));
+    reprise_St_10_Allume = (reprise_2 when St_10_Allume(ck_32));
+    v_185 = ((temps when St_10_Allume(ck_32)) + 1);
+    v_186 = 0 fby v_185;
+    temps_St_10_Allume = if (r_1 when St_10_Allume(ck_32)) then 0 else v_186;
+    sonnerAlarme_St_10_Allume = false;
+    enMarche_St_10_Allume = Vert;
+    ns_1_St_10_Arret = St_10_Arret;
+    nr_1_St_10_Arret = false;
+    temps_St_10_Arret = (temps_2 when St_10_Arret(ck_32));
+    vigilence_St_10_Arret = (vigilence_2 when St_10_Arret(ck_32));
+    reprise_St_10_Arret = (reprise_2 when St_10_Arret(ck_32));
+    enMarche_St_10_Arret = Rouge;
+    sonnerAlarme_St_10_Arret = false;
+    ck_32 = s_1;
+    pnr_1 = false fby nr_1;
+    dAlarme_1 = dAlarme;
+    dVigilence_1 = dVigilence;
+    dReprise_1 = dReprise;
+    pbHab = loccuperMaison;
+    pbGar = loccuperGarage;
+    code = codeAlarme;
+    marcheArret_1 = marcheArret;
+    r =
+      merge ck_33
+        (St_9_Mouvement -> r_St_9_Mouvement)(St_9_Stop -> r_St_9_Stop);
+    s =
+      merge ck_33
+        (St_9_Mouvement -> s_St_9_Mouvement)(St_9_Stop -> s_St_9_Stop);
+    v_187 = not((demandeEtage_1 when St_9_Mouvement(ck_33)));
+    v_188 = (v_187 or (arriveEtage_1 when St_9_Mouvement(ck_33)));
+    s_St_9_Mouvement = if v_188 then St_9_Stop else St_9_Mouvement;
+    r_St_9_Mouvement =
+      if v_188 then true else (pnr when St_9_Mouvement(ck_33));
+    s_St_9_Stop =
+      if (demandeEtage_1 when St_9_Stop(ck_33))
+      then St_9_Mouvement
+      else St_9_Stop;
+    r_St_9_Stop =
+      if (demandeEtage_1 when St_9_Stop(ck_33))
+      then true
+      else (pnr when St_9_Stop(ck_33));
+    ck_33 = St_9_Stop fby ns;
+    nr =
+      merge ck_34
+        (St_9_Mouvement -> nr_St_9_Mouvement)(St_9_Stop -> nr_St_9_Stop);
+    ns =
+      merge ck_34
+        (St_9_Mouvement -> ns_St_9_Mouvement)(St_9_Stop -> ns_St_9_Stop);
+    etat =
+      merge ck_34
+        (St_9_Mouvement -> etat_St_9_Mouvement)(St_9_Stop -> etat_St_9_Stop);
+    ns_St_9_Mouvement = St_9_Mouvement;
+    nr_St_9_Mouvement = false;
+    etat_St_9_Mouvement = true;
+    ns_St_9_Stop = St_9_Stop;
+    nr_St_9_Stop = false;
+    etat_St_9_Stop = false;
+    ck_34 = s;
+    pnr = false fby nr;
+    arriveEtage_1 = arriveEtage;
+    demandeEtage_1 = demandeEtage;
+    temps_2 = 0 fby temps;
+    vigilence_2 = 0 fby vigilence;
+    reprise_2 = 0 fby reprise
+  tel
+

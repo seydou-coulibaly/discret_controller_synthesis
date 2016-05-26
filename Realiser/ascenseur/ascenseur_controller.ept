@@ -1,0 +1,11 @@
+type st = St_Stop|St_Shut|St_Open|St_Mouvement
+type stat = Arret|Ouvert|EnMouvement|Fermer
+node ascenseur_ctrlr0(arriveEtage : bool; ck : st; compteur_1 : int;
+                       demandeEtage : bool; ok : bool; pnr : bool;
+                       presence : bool; presenceEtageCourant : bool;
+                       secondo : int; v_11 : int; v_14 : int; v_8 : int)
+returns (c : bool)
+let
+  c = true
+tel
+

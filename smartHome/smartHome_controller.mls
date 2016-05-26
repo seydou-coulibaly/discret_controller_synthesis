@@ -1,0 +1,92 @@
+type lum = Rouge|Vert|Jaune
+type porte = Ouvert|Fermer
+type position = Avant|Arriere|Null
+type st = St_Presence|St_Nothing
+type st_1 = St_1_NoPresence|St_1_Avant|St_1_Arriere
+type st_10 = St_10_Vigilence|St_10_Sonner|St_10_Arret|St_10_Allume
+type st_11 = St_11_Ouvrir|St_11_Fermer
+type st_12 = St_12_Idle|St_12_Avant|St_12_Arriere
+type st_13 = St_13_Ouvrir|St_13_Fermer
+type st_14 = St_14_Idle|St_14_Avant|St_14_Arriere
+type st_15 = St_15_Ouvrir|St_15_Fermer
+type st_16 = St_16_Ouvrir|St_16_Fermer
+type st_17 = St_17_Presence|St_17_Nothing
+type st_18 = St_18_On|St_18_Off
+type st_19 = St_19_Presence|St_19_Nothing
+type st_2 = St_2_Idle|St_2_Avant|St_2_Arriere
+type st_20 = St_20_Presence|St_20_Nothing
+type st_21 = St_21_Presence|St_21_Nothing
+type st_3 = St_3_On|St_3_Off
+type st_4 = St_4_Ouvrir|St_4_Fermer
+type st_5 = St_5_Ouvrir|St_5_Fermer
+type st_6 = St_6_Ouvrir|St_6_Fermer
+type st_7 = St_7_Vigilence|St_7_Sonner|St_7_Arret|St_7_Allume
+type st_8 = St_8_Stop|St_8_Mouvement
+type st_9 = St_9_Stop|St_9_Mouvement
+type stat = Arret|EnMouvement
+node smartHome_ctrlr0(ck : st_21; ck_11 : st_20; ck_13 : st_19;
+                       ck_15 : st_18; ck_17 : st_17; ck_19 : st_16;
+                       ck_21 : st_15; ck_23 : st_14; ck_25 : st_13;
+                       ck_27 : st_12; ck_29 : st_11; ck_31 : st_10;
+                       ck_33 : st_9; codeAlarme : bool; codeBarriere : bool;
+                       codePorte : bool; dAlarme : int; dReprise : int;
+                       dVigilence : int; luminosite : bool;
+                       marcheArretAlarme : bool; ok : bool; pnr : bool;
+                       pnr_1 : bool; pnr_10 : bool; pnr_11 : bool;
+                       pnr_12 : bool; pnr_2 : bool; pnr_3 : bool;
+                       pnr_4 : bool; pnr_5 : bool; pnr_6 : bool;
+                       pnr_7 : bool; pnr_8 : bool; pnr_9 : bool;
+                       presenceAscenseur : bool;
+                       presenceDevantPoubelle : bool;
+                       presenceEntreeBarriere : bool;
+                       presenceEntreePorte : bool; presenceGarage : bool;
+                       presenceMaison : bool; presenceSortieBarriere : bool;
+                       presenceSortiePorte : bool; reprise_2 : int;
+                       temps_2 : int; v_172 : int; v_177 : int; v_185 : int;
+                       vent : bool; vigilence_2 : int)
+returns (arriveEtage : bool; close : bool; coff : bool; con : bool;
+          copen : bool; demandeEtage : bool; interrupteur : bool;
+          openBarriere : bool; openPorte : bool)
+var v_6 : bool; v_5 : bool; v_4 : bool; v_3 : bool; v_2 : bool; v_1 : bool;
+    v : bool; l18 : bool; l17 : bool; l16 : bool; l15 : bool; l14 : bool;
+    l13 : bool; l12 : bool; l11 : bool; l10 : bool; l9 : bool; l8 : bool;
+    l7 : bool; l6 : bool; l5 : bool; l4 : bool; l3 : bool; l2 : bool;
+    l1 : bool; l0 : bool;
+let
+  v = (ck_33 = St_9_Stop);
+  l18 = (v or l17);
+  l17 = not(presenceAscenseur);
+  v_1 = (ck_33 = St_9_Stop);
+  v_2 = not(v_1);
+  l16 = (v_2 or presenceAscenseur);
+  v_3 = (ck_19 = St_16_Fermer);
+  l15 = (v_3 or l14);
+  l14 = not(presenceDevantPoubelle);
+  v_4 = (ck_19 = St_16_Ouvrir);
+  l13 = (v_4 or presenceDevantPoubelle);
+  l12 = not(codeBarriere);
+  l11 = not(presenceSortieBarriere);
+  l10 = not(codePorte);
+  l9 = not(presenceSortiePorte);
+  v_5 = (ck_29 = St_11_Fermer);
+  l8 = (v_5 or l7);
+  l7 = (l6 or l1);
+  l6 = not(presenceMaison);
+  v_6 = (ck_29 = St_11_Ouvrir);
+  l5 = (v_6 or l4);
+  l4 = (presenceMaison & l3);
+  l3 = (luminosite & l2);
+  l2 = not(vent);
+  l1 = (l0 or vent);
+  l0 = not(luminosite);
+  arriveEtage = l18;
+  demandeEtage = l16;
+  coff = l15;
+  con = l13;
+  openBarriere = if presenceEntreeBarriere then l12 else l11;
+  openPorte = if presenceEntreePorte then l10 else l9;
+  close = l8;
+  copen = l5;
+  interrupteur = (presenceMaison & l1)
+tel
+

@@ -1,0 +1,184 @@
+(* --- Generated the 24/3/2016 at 16:35 --- *)
+(* --- heptagon compiler, version 1.03.00 (compiled thu. feb. 11 18:24:22 CET 2016) --- *)
+(* --- Command line: /usr/local/bin/heptc -hepts -s alarme -target c -target ctrln alarme.ept --- *)
+
+!typedef
+  St = enum {St_Vigilence, St_Sonner, St_Arret, St_Allume};
+  Etat = enum {DispositifMarche, ArretDispositif, DispositifVigilence};
+  
+!state
+  v_11: int;
+  v_14: int;
+  v_22: int;
+  ck: St;
+  pnr: bool;
+  reprise_1: int;
+  vigilence_1: int;
+  temps_1: int;
+  __init__: bool;
+  enMarche: Etat;
+  al: bool;
+  ok: bool;
+  
+!input
+  ma: bool;
+  code: bool;
+  pbGar: bool;
+  pbHab: bool;
+  dReprise: int;
+  dVigilence: int;
+  dAlarme: int;
+  
+!controllable
+  c: bool;
+  
+!local
+  v_10: int;
+  v_9: bool;
+  v_8: St;
+  v_7: bool;
+  v_13: int;
+  v_12: bool;
+  v_21: int;
+  v_20: bool;
+  v_19: St;
+  v_18: bool;
+  v_17: St;
+  v_16: bool;
+  v_15: bool;
+  nr_St_Vigilence: bool;
+  ns_St_Vigilence: St;
+  reprise_St_Vigilence: int;
+  vigilence_St_Vigilence: int;
+  temps_St_Vigilence: int;
+  enMarche_St_Vigilence: Etat;
+  al_St_Vigilence: bool;
+  nr_St_Sonner: bool;
+  ns_St_Sonner: St;
+  reprise_St_Sonner: int;
+  vigilence_St_Sonner: int;
+  temps_St_Sonner: int;
+  enMarche_St_Sonner: Etat;
+  al_St_Sonner: bool;
+  nr_St_Allume: bool;
+  ns_St_Allume: St;
+  reprise_St_Allume: int;
+  vigilence_St_Allume: int;
+  temps_St_Allume: int;
+  enMarche_St_Allume: Etat;
+  al_St_Allume: bool;
+  nr_St_Arret: bool;
+  ns_St_Arret: St;
+  reprise_St_Arret: int;
+  vigilence_St_Arret: int;
+  temps_St_Arret: int;
+  enMarche_St_Arret: Etat;
+  al_St_Arret: bool;
+  ns: St;
+  r: bool;
+  nr: bool;
+  temps: int;
+  vigilence: int;
+  reprise: int;
+  c_v_6: bool;
+  c_v_5: bool;
+  c_v_4: bool;
+  c_v_3: bool;
+  c_v_2: bool;
+  c_v_1: bool;
+  c_v: bool;
+  
+!definition
+  v_10 = (vigilence + 1);
+  v_9 = v_7;
+  v_8 = (if v_7 then St_Arret else St_Vigilence);
+  v_7 = (dVigilence < vigilence);
+  v_13 = (reprise + 1);
+  v_12 = (dReprise < reprise);
+  v_21 = (temps + 1);
+  v_20 = (pbHab or v_18);
+  v_19 = (if pbHab then St_Sonner else v_17);
+  v_18 = v_16;
+  v_17 = (if v_16 then St_Sonner else St_Allume);
+  v_16 = pbGar and v_15;
+  v_15 = (dVigilence < temps);
+  nr_St_Vigilence = (pbHab or v_9);
+  ns_St_Vigilence = (if pbHab then St_Sonner else v_8);
+  reprise_St_Vigilence = reprise_1;
+  vigilence_St_Vigilence = (if r then 0 else v_11);
+  temps_St_Vigilence = temps_1;
+  enMarche_St_Vigilence = DispositifVigilence;
+  al_St_Vigilence = false;
+  nr_St_Sonner = v_12;
+  ns_St_Sonner = (if v_12 then St_Allume else St_Sonner);
+  reprise_St_Sonner = (if r then 0 else v_14);
+  vigilence_St_Sonner = vigilence_1;
+  temps_St_Sonner = temps_1;
+  enMarche_St_Sonner = DispositifMarche;
+  al_St_Sonner = true;
+  nr_St_Allume = (code or v_20);
+  ns_St_Allume = (if code then St_Vigilence else v_19);
+  reprise_St_Allume = 0;
+  vigilence_St_Allume = 0;
+  temps_St_Allume = (if r then 0 else v_22);
+  enMarche_St_Allume = DispositifMarche;
+  al_St_Allume = false;
+  nr_St_Arret = ma;
+  ns_St_Arret = (if ma then St_Allume else St_Arret);
+  reprise_St_Arret = reprise_1;
+  vigilence_St_Arret = vigilence_1;
+  temps_St_Arret = 0;
+  enMarche_St_Arret = ArretDispositif;
+  al_St_Arret = false;
+  ns = (if (ck = St_Arret) then ns_St_Arret else
+       (if (ck = St_Allume) then ns_St_Allume else
+       (if (ck = St_Sonner) then ns_St_Sonner else ns_St_Vigilence)));
+  r = pnr;
+  nr = (if (ck = St_Arret) then nr_St_Arret else
+       (if (ck = St_Allume) then nr_St_Allume else
+       (if (ck = St_Sonner) then nr_St_Sonner else nr_St_Vigilence)));
+  temps = (if (ck = St_Arret) then temps_St_Arret else
+          (if (ck = St_Allume) then temps_St_Allume else
+          (if (ck = St_Sonner) then temps_St_Sonner else temps_St_Vigilence)));
+  vigilence = (if (ck = St_Arret) then vigilence_St_Arret else
+              (if (ck = St_Allume) then vigilence_St_Allume else
+              (if (ck = St_Sonner) then vigilence_St_Sonner else
+              vigilence_St_Vigilence)));
+  reprise = (if (ck = St_Arret) then reprise_St_Arret else
+            (if (ck = St_Allume) then reprise_St_Allume else
+            (if (ck = St_Sonner) then reprise_St_Sonner else
+            reprise_St_Vigilence)));
+  c_v_6 = (c_v or c_v_5);
+  c_v_5 = c_v_2 and c_v_4;
+  c_v_4 = not c_v_3;
+  c_v_3 = (enMarche = ArretDispositif);
+  c_v_2 = not c_v_1;
+  c_v_1 = (enMarche = DispositifVigilence);
+  c_v = not al;
+  
+!transition
+  v_11'= (if (ck = St_Vigilence) then v_10 else v_11);
+  v_14'= (if (ck = St_Sonner) then v_13 else v_14);
+  v_22'= (if (ck = St_Allume) then v_21 else v_22);
+  ck'= ns;
+  pnr'= nr;
+  reprise_1'= reprise;
+  vigilence_1'= vigilence;
+  temps_1'= temps;
+  __init__'= false;
+  enMarche'= (if (ck = St_Arret) then enMarche_St_Arret else
+             (if (ck = St_Allume) then enMarche_St_Allume else
+             (if (ck = St_Sonner) then enMarche_St_Sonner else
+             enMarche_St_Vigilence)));
+  al'= (if (ck = St_Arret) then al_St_Arret else
+       (if (ck = St_Allume) then al_St_Allume else
+       (if (ck = St_Sonner) then al_St_Sonner else al_St_Vigilence)));
+  ok'= true;
+  
+!initial
+  (ck = St_Arret) and not pnr and (temps_1 = 0) and (vigilence_1 = 0) and
+  (reprise_1 = 0) and (v_11 = 0) and (v_14 = 0) and (v_22 = 0) and __init__;
+!assertion
+  true;
+!invariant
+  (__init__ or ok and c_v_6);

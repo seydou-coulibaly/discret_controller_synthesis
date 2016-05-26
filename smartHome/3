@@ -1,0 +1,31 @@
+\begin{tikztimingtable}
+presenceMaison &  3LH 19L 3H \\
+presenceAscenseur &  24L 2H \\
+presenceGarage &  24L 2H \\
+presenceDevantPoubelle &  4LH 21L \\
+vent &  21LH 3LH \\
+luminosite &  23LH 2L \\
+marcheArretAlarme &  5LH 4LH 13LHL \\
+codeAlarme &  6LH 5LH 13L \\
+codePorte &  26L \\
+codeBarriere &  26L \\
+presenceEntreePorte &  26L \\
+presenceSortiePorte &  26L \\
+presenceEntreeBarriere &  26L \\
+presenceSortieBarriere &  26L \\
+dReprise &  26D{0} \\
+dVigilence &  26D{0} \\
+dAlarme &  26D{0} \\
+etatMaison &  3LH 19L 3H \\
+lumiere &  3LH 20L 2H \\
+poubelleOuvert &  4LH 21L \\
+ouvertureStore &  23LH 2L \\
+alarmeSonne &  25LH \\
+property &  26H \\
+porteStatus &  26D{Fermer} \\
+barriere &  26D{Fermer} \\
+etatAlarme &  5D{Rouge} 2D{Vert}D{Jaune} 2D{Rouge} 3D{Vert}D{Jaune} 10D{Rouge} 2D{Vert} \\
+capteurPositionPorte &  26D{Null} \\
+capteurPositionBarriere &  26D{Null} \\
+ascenseur &  24L 2H \\
+\end{tikztimingtable}
