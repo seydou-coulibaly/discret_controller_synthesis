@@ -2,7 +2,7 @@ type numero=Un|Deux|Trois|Quatre|Cinq|Six|PointMort
 type lum = Null|Low|Normal|High
 type couleur = Vert|Jaune|Rouge
 type position = Ville|Autoroute
-type etatPhares = Idle|Veilleuses|Codes|Phares
+type etatPhares = NoLum|Veilleuses|Codes|Phares
 type cause = PresencePieton|Presencevehicule|Feu|None
 type retro = Desactive|PositionJour|PositionNuit|PositionNormale
 type typeBalayage = Deactivated|Intermittent|Contiu|Unique
@@ -200,48 +200,56 @@ let
 	end
 tel
 
-node temperature (deactivated: bool; capteur:float) returns (qt: float; etat:bool)
+node temperature (activated: bool; capteur:float) returns (qt: float; etat:bool)
 let
 	automaton
-		state Active
-			do etat = true;
-			qt = 19.0 -. capteur;
-			unless deactivated then Desactive
 		state Desactive
 			do etat = false;
 			qt = 0.0;
-			unless not deactivated then Active
+			unless activated then Active
+		state Active
+			do etat = true;
+			qt = 19.0 -. capteur;
+			unless not activated then Desactive
+		
 	end
 tel
 
-node controleurPhares(tdn,tin,cpn:bool) returns (codes,phares,veilleuses:bool; etat:etatPhares)
+node controleurPhares(tdn,tin,cpn,i,c,v,p:bool) returns (codes,phares,veilleuses:bool; etat:etatPhares)
 let 
 	automaton
 		state Idle
-			do (codes,phares,veilleuses,etat) = (false, false, false,Idle);
+			do (codes,phares,veilleuses,etat) = (false, false, false,NoLum);
 			unless tdn then Veilleuses
+			|c then Codes
+			|p then Phares
 		state Veilleuses
 			do (codes,phares,veilleuses,etat) = (false, false, true,Veilleuses);
 			unless tin then Idle
 			|tdn then Codes
+			|p then Phares
 		state Codes
 			do (codes,phares,veilleuses,etat) = (true, false, false,Codes);
 			unless tin then Veilleuses
 			|cpn then Phares
+			|c then Codes
+			|i then Idle
 		state Phares
 			do (codes,phares,veilleuses,etat) = (false, true, false,Phares);
 			unless cpn then Codes
+			|v then Veilleuses
+			|i then Idle
 	end
 tel
 
 
-node automobile (cleVoiture,commandeVoiture,capteurPluie,detectionAccident,detectionLigne, detectionVolantLibre,detectionDefaillanceTechnique, detectionAngleMort,detectionPresencePieton,detectionPresencevehicule,desactiveRegulateurTemperature:bool;lumiere,densitePluie:lum;capteurTemperature:float;capteurDectecteurFeu:couleur) returns (moteur, avance,retroviseurActive, etatRegulateurTemperature,accident,ligne,volantLibre,defaillanceTechnique,angleMort,freinage,property:bool;causeFreinage:cause; vitesses:numero; quantiteRegule: float;phares: etatPhares;retroviseurStatus:retro;essuieGlace:typeBalayage)
+node automobile (cleVoiture,commandeVoiture,capteurPluie,detectionAccident,detectionLigne, detectionVolantLibre,detectionDefaillanceTechnique, detectionAngleMort,detectionPresencePieton,detectionPresencevehicule,activeRegulateurTemperature:bool;lumiere,densitePluie:lum;capteurTemperature:float;capteurDectecteurFeu:couleur) returns (moteur, avance,retroviseurActive, etatRegulateurTemperature,accident,ligne,volantLibre,defaillanceTechnique,angleMort,freinage,property:bool;causeFreinage:cause; vitesses:numero; quantiteRegule: float;phares: etatPhares;retroviseurStatus:retro;essuieGlace:typeBalayage)
 contract
  assume true
  enforce property
- with (con,cclose,td,ti,cp,frein, accelerateur,normal,jour,nuit:bool;boiteDeVitesse:numero;)
+ with (con,cclose,td,ti,cp,frein, accelerateur,normal,jour,nuit,i,c,v,p:bool;boiteDeVitesse:numero;)
 var
-lmoteur,lretroviseur,lavance,lairbag,lemissionAppelUrgence,lLigne,lvolantLibre,ldefaillanceTechnique, langleMort,lfrein,letatRegulateurTemperature,lcodes,lphares,lveilleuses,prop1, prop2,prop3,prop4,prop5,prop6,prop7,prop8,prop9,prop10,prop11:bool;
+lmoteur,lretroviseur,lavance,lairbag,lemissionAppelUrgence,lLigne,lvolantLibre,ldefaillanceTechnique, langleMort,lfrein,letatRegulateurTemperature,lcodes,lphares,lveilleuses,prop1, prop2,prop3,prop4,prop5,prop6,prop7,prop8,prop9,prop10,prop11,prop12,prop13,prop14,prop15,prop16,prop17,prop18,prop19,prop20,prop21,prop22,prop23,prop24,prop25,prop26:bool;
 lessuieGlace : typeBalayage;
 lnumero:numero;
 lqt : float;
@@ -257,13 +265,13 @@ let
 	(lairbag,lemissionAppelUrgence) = inlined accident (detectionAccident);
 	(lLigne,lvolantLibre,ldefaillanceTechnique, langleMort)  = inlined avertissement (detectionLigne, detectionVolantLibre,detectionDefaillanceTechnique, detectionAngleMort);
 	(lfrein,lcause) = inlined securite (detectionPresencePieton, detectionPresencevehicule, capteurDectecteurFeu);
-	(lqt, letatRegulateurTemperature) = inlined temperature (desactiveRegulateurTemperature, capteurTemperature);
-	(lcodes,lphares,lveilleuses,lstate)= inlined controleurPhares(td,ti,cp);
+	(lqt, letatRegulateurTemperature) = inlined temperature (activeRegulateurTemperature, capteurTemperature);
+	(lcodes,lphares,lveilleuses,lstate)= inlined controleurPhares(td,ti,cp,i,c,v,p);
 
 	prop1 = lmoteur or (lnumero = PointMort);
 	prop2 = lmoteur or not lretroviseur;
 	prop3 = lmoteur or (lessuieGlace = Deactivated);
-(*ces proprietes de 4 a 7 sont pas vraiment utiles, elles sont liees au capteur, du coup non controlable et ne fonctionnne par consequent mais possible lorsqu'on fait une supposition avec assume disant que s'il n'y a pas de cle ou commande alors le detecteur est eteint*)
+(*ces proprietes de 4 a 7 sont pas vraiment inutiles, elles sont liees au capteur, du coup non controlable et ne fonctionnne pas par consequent mais possible lorsqu'on fait une supposition avec assume disant que s'il n'y a pas de cle ou commande alors le detecteur est eteint. Il est également preferable de mettre une propriete en assume tel que si le moteur est eteint alors le regulateur de temperature est desactive*)
 	prop4 = lmoteur or not lLigne;
 	prop5 = lmoteur or not lvolantLibre;
 	prop6 = lmoteur or not ldefaillanceTechnique;
@@ -272,14 +280,31 @@ let
 	prop8 = lmoteur or not lcodes;
 	prop9 = lmoteur or not lphares;
 	prop10 = lmoteur or not lveilleuses;
-	prop11 = true;
-	property= prop8 & prop9 & prop10 & prop11;
+	prop11 = lmoteur or not lavance;
+	prop12 = lavance or (lnumero = PointMort);
+	prop13 = not lavance or (lnumero <> PointMort);
+	prop14 = not lfrein or not lavance;
+	prop15 = not (lmoteur & lumiere = Normal) or (lsortie = PositionNormale);
+	prop16 = not (lmoteur & lumiere = Low) or (lsortie = PositionNuit);
+	prop17 = not (lmoteur & lumiere = High) or (lsortie = PositionJour);
+	prop18 = capteurPluie or (lessuieGlace = Deactivated);
+	prop19 = not (lmoteur & capteurPluie) or (lessuieGlace <> Deactivated);
+	prop20 = not lmoteur or (lsortie <> Desactive);
+	prop21 =  not (lmoteur & lumiere = Normal) or (lstate = Veilleuses);
+	prop22 =  not (lmoteur & lumiere = Low) or (lstate = Phares);
+
+	prop23 = not lemissionAppelUrgence or not lavance;
+	prop24 = not (lmoteur & lumiere = Null) or (lsortie = PositionNormale);
+	prop25 = not lmoteur or (lstate <> NoLum);
+	prop26 = not (lmoteur & not lairbag & not lvolantLibre & not lLigne & not ldefaillanceTechnique & not langleMort & not lfrein) or lavance;
+	property= prop1 & prop2 & prop3 & prop8 & prop9 & prop10 & prop11 & prop12 & prop13 & prop14 & prop15 & prop16 & prop17 & prop18 & prop19 & prop20 & prop21 & prop22 & prop23 & prop24 & prop25 & prop26;
 
 	moteur = lmoteur ;
 	avance = lavance;
+	vitesses = lnumero;
+	phares = lstate;
 	retroviseurActive = lretroviseur;
-	retroviseurStatus = lsortie;
-	etatRegulateurTemperature = letatRegulateurTemperature;
+	retroviseurStatus = lsortie;	
 	essuieGlace = lessuieGlace;
 	accident = lairbag or lemissionAppelUrgence;
 	ligne = lLigne;
@@ -288,9 +313,8 @@ let
 	angleMort = langleMort;
 	freinage = lfrein;
 	causeFreinage = lcause;
-	vitesses = lnumero;
+	etatRegulateurTemperature = letatRegulateurTemperature;
 	quantiteRegule = lqt;
-	phares = lstate;
 	
 tel
 

@@ -1,4 +1,4 @@
-/* --- Generated the 26/5/2016 at 18:11 --- */
+/* --- Generated the 30/5/2016 at 14:52 --- */
 /* --- heptagon compiler, version 1.03.00 (compiled tue. may. 24 19:48:24 CET 2016) --- */
 /* --- Command line: /home/seydou/.opam/4.02.3/bin/heptc -hepts -s automobile -target c -target ctrln automobile.ept --- */
 
@@ -150,7 +150,7 @@ typedef struct Automobile__temperature_out {
 
 void Automobile__temperature_reset(Automobile__temperature_mem* self);
 
-void Automobile__temperature_step(int deactivated, float capteur,
+void Automobile__temperature_step(int activated, float capteur,
                                   Automobile__temperature_out* _out,
                                   Automobile__temperature_mem* self);
 
@@ -168,7 +168,8 @@ typedef struct Automobile__controleurPhares_out {
 
 void Automobile__controleurPhares_reset(Automobile__controleurPhares_mem* self);
 
-void Automobile__controleurPhares_step(int tdn, int tin, int cpn,
+void Automobile__controleurPhares_step(int tdn, int tin, int cpn, int i,
+                                       int c, int v, int p,
                                        Automobile__controleurPhares_out* _out,
                                        Automobile__controleurPhares_mem* self);
 
@@ -225,7 +226,7 @@ void Automobile__automobile_step(int cleVoiture, int commandeVoiture,
                                  int detectionAngleMort,
                                  int detectionPresencePieton,
                                  int detectionPresencevehicule,
-                                 int desactiveRegulateurTemperature,
+                                 int activeRegulateurTemperature,
                                  Automobile_controller__lum lumiere,
                                  Automobile_controller__lum densitePluie,
                                  float capteurTemperature,

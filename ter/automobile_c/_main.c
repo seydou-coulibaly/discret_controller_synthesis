@@ -1,4 +1,4 @@
-/* --- Generated the 26/5/2016 at 18:11 --- */
+/* --- Generated the 30/5/2016 at 14:52 --- */
 /* --- heptagon compiler, version 1.03.00 (compiled tue. may. 24 19:48:24 CET 2016) --- */
 /* --- Command line: /home/seydou/.opam/4.02.3/bin/heptc -hepts -s automobile -target c -target ctrln automobile.ept --- */
 
@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
   int detectionAngleMort;
   int detectionPresencePieton;
   int detectionPresencevehicule;
-  int desactiveRegulateurTemperature;
+  int activeRegulateurTemperature;
   Automobile_controller__lum lumiere;
   Automobile_controller__lum densitePluie;
   float capteurTemperature;
@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
       return 0;
     };;
     
-    if ((scanf("%d", &desactiveRegulateurTemperature)==EOF)) {
+    if ((scanf("%d", &activeRegulateurTemperature)==EOF)) {
       return 0;
     };;
     
@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
                                 detectionDefaillanceTechnique,
                                 detectionAngleMort, detectionPresencePieton,
                                 detectionPresencevehicule,
-                                desactiveRegulateurTemperature, lumiere,
+                                activeRegulateurTemperature, lumiere,
                                 densitePluie, capteurTemperature,
                                 capteurDectecteurFeu, &_res, &mem);
     printf("%d\n", _res.moteur);

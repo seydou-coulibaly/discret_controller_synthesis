@@ -1,4 +1,4 @@
-/* --- Generated the 26/5/2016 at 18:11 --- */
+/* --- Generated the 30/5/2016 at 14:52 --- */
 /* --- heptagon compiler, version 1.03.00 (compiled tue. may. 24 19:48:24 CET 2016) --- */
 /* --- Command line: /home/seydou/.opam/4.02.3/bin/heptc -target c automobile_controller.ept --- */
 
@@ -9,18 +9,23 @@
 typedef struct Automobile_controller__automobile_ctrlr0_out {
   int accelerateur;
   Automobile_controller__numero boiteDeVitesse;
+  int c;
   int cclose;
   int con;
   int cp;
   int frein;
+  int i;
   int jour;
   int normal;
   int nuit;
+  int p;
   int td;
   int ti;
+  int v;
 } Automobile_controller__automobile_ctrlr0_out;
 
-void Automobile_controller__automobile_ctrlr0_step(Automobile_controller__couleur capteurDectecteurFeu,
+void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperature,
+                                                   Automobile_controller__couleur capteurDectecteurFeu,
                                                    int capteurPluie,
                                                    float capteurTemperature,
                                                    Automobile_controller__st_19 ck,
@@ -36,7 +41,6 @@ void Automobile_controller__automobile_ctrlr0_step(Automobile_controller__couleu
                                                    int cleVoiture,
                                                    int commandeVoiture,
                                                    Automobile_controller__lum densitePluie,
-                                                   int desactiveRegulateurTemperature,
                                                    int detectionAccident,
                                                    int detectionAngleMort,
                                                    int detectionDefaillanceTechnique,

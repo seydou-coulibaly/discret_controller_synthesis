@@ -1,4 +1,4 @@
-/* --- Generated the 26/5/2016 at 18:11 --- */
+/* --- Generated the 30/5/2016 at 14:52 --- */
 /* --- heptagon compiler, version 1.03.00 (compiled tue. may. 24 19:48:24 CET 2016) --- */
 /* --- Command line: /home/seydou/.opam/4.02.3/bin/heptc -target c automobile_controller.ept --- */
 
@@ -76,8 +76,8 @@ char* string_of_Automobile_controller__couleur(Automobile_controller__couleur x,
 
 Automobile_controller__etatPhares Automobile_controller__etatPhares_of_string(
   char* s) {
-  if ((strcmp(s, "Idle")==0)) {
-    return Automobile_controller__Idle;
+  if ((strcmp(s, "NoLum")==0)) {
+    return Automobile_controller__NoLum;
   };
   if ((strcmp(s, "Veilleuses")==0)) {
     return Automobile_controller__Veilleuses;
@@ -93,8 +93,8 @@ Automobile_controller__etatPhares Automobile_controller__etatPhares_of_string(
 char* string_of_Automobile_controller__etatPhares(Automobile_controller__etatPhares x,
                                                   char* buf) {
   switch (x) {
-    case Automobile_controller__Idle:
-      strcpy(buf, "Idle");
+    case Automobile_controller__NoLum:
+      strcpy(buf, "NoLum");
       break;
     case Automobile_controller__Veilleuses:
       strcpy(buf, "Veilleuses");
