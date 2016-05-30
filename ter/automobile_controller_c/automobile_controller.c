@@ -1,6 +1,6 @@
-/* --- Generated the 26/5/2016 at 18:11 --- */
-/* --- heptagon compiler, version 1.03.00 (compiled tue. may. 24 19:48:24 CET 2016) --- */
-/* --- Command line: /home/seydou/.opam/4.02.3/bin/heptc -target c automobile_controller.ept --- */
+/* --- Generated the 30/5/2016 at 2:10 --- */
+/* --- heptagon compiler, version 1.03.00 (compiled wed. may. 25 11:31:53 CET 2016) --- */
+/* --- Command line: /home/sey/.opam/4.02.3/bin/heptc -target c automobile_controller.ept --- */
 
 #include <stdio.h>
 #include <string.h>
@@ -41,23 +41,23 @@ void Automobile_controller__automobile_ctrlr0_step(Automobile_controller__couleu
                                                    Automobile_controller__automobile_ctrlr0_out* _out) {
   
   int v_1;
-  int v;
-  int l1;
   int l0;
   _out->con = true;
   _out->cclose = true;
+  _out->td = true;
   _out->ti = true;
   _out->cp = true;
   _out->frein = true;
   _out->accelerateur = true;
-  _out->normal = true;
-  _out->jour = true;
-  _out->nuit = true;
+  _out->i = true;
+  _out->c = true;
+  _out->v = true;
+  _out->p = true;
   _out->boiteDeVitesse = Automobile_controller__Un;
-  v_1 = (ck_28==Automobile_controller__St_10_Veilleuses);
-  v = (ck_28==Automobile_controller__St_10_Phares);
-  l0 = (v||v_1);
-  l1 = (commandeVoiture||l0);
-  _out->td = (cleVoiture||l1);;
+  v_1 = (lumiere==Automobile_controller__Null);
+  l0 = !(v_1);
+  _out->normal = l0;
+  _out->jour = _out->normal;
+  _out->nuit = _out->normal;;
 }
 

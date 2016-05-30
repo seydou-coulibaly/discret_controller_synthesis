@@ -1,6 +1,6 @@
-/* --- Generated the 26/5/2016 at 13:9 --- */
-/* --- heptagon compiler, version 1.03.00 (compiled tue. may. 24 19:48:24 CET 2016) --- */
-/* --- Command line: /home/seydou/.opam/4.02.3/bin/heptc -target c smartHome_controller.ept --- */
+/* --- Generated the 29/5/2016 at 10:19 --- */
+/* --- heptagon compiler, version 1.03.00 (compiled wed. may. 25 11:31:53 CET 2016) --- */
+/* --- Command line: /home/sey/.opam/4.02.3/bin/heptc -target c smartHome_controller.ept --- */
 
 #include <stdio.h>
 #include <string.h>
@@ -48,6 +48,11 @@ void SmartHome_controller__smartHome_ctrlr0_step(SmartHome_controller__st_21 ck,
                                                  int vigilence_2,
                                                  SmartHome_controller__smartHome_ctrlr0_out* _out) {
   
+  int v_11;
+  int v_10;
+  int v_9;
+  int v_8;
+  int v_7;
   int v_6;
   int v_5;
   int v_4;
@@ -80,13 +85,15 @@ void SmartHome_controller__smartHome_ctrlr0_step(SmartHome_controller__st_21 ck,
   l2 = !(vent);
   l3 = (luminosite&&l2);
   l4 = (presenceMaison&&l3);
-  v_6 = (ck_29==SmartHome_controller__St_11_Ouvrir);
-  l5 = (v_6||l4);
+  v_10 = (ck_29==SmartHome_controller__St_11_Fermer);
+  v_11 = !(v_10);
+  l5 = (v_11||l4);
   _out->copen = l5;
   l6 = !(presenceMaison);
   l7 = (l6||l1);
-  v_5 = (ck_29==SmartHome_controller__St_11_Fermer);
-  l8 = (v_5||l7);
+  v_8 = (ck_29==SmartHome_controller__St_11_Ouvrir);
+  v_9 = !(v_8);
+  l8 = (v_9||l7);
   _out->close = l8;
   l9 = !(presenceSortiePorte);
   l10 = !(codePorte);
@@ -102,20 +109,23 @@ void SmartHome_controller__smartHome_ctrlr0_step(SmartHome_controller__st_21 ck,
   } else {
     _out->openBarriere = l11;
   };
-  v_4 = (ck_19==SmartHome_controller__St_16_Ouvrir);
-  l13 = (v_4||presenceDevantPoubelle);
+  v_6 = (ck_19==SmartHome_controller__St_16_Fermer);
+  v_7 = !(v_6);
+  l13 = (v_7||presenceDevantPoubelle);
   _out->con = l13;
   l14 = !(presenceDevantPoubelle);
-  v_3 = (ck_19==SmartHome_controller__St_16_Fermer);
-  l15 = (v_3||l14);
+  v_4 = (ck_19==SmartHome_controller__St_16_Ouvrir);
+  v_5 = !(v_4);
+  l15 = (v_5||l14);
   _out->coff = l15;
-  v_1 = (ck_33==SmartHome_controller__St_9_Stop);
-  v_2 = !(v_1);
-  l16 = (v_2||presenceAscenseur);
+  v_2 = (ck_33==SmartHome_controller__St_9_Stop);
+  v_3 = !(v_2);
+  l16 = (v_3||presenceAscenseur);
   _out->demandeEtage = l16;
   l17 = !(presenceAscenseur);
-  v = (ck_33==SmartHome_controller__St_9_Stop);
-  l18 = (v||l17);
+  v = (ck_33==SmartHome_controller__St_9_Mouvement);
+  v_1 = !(v);
+  l18 = (v_1||l17);
   _out->arriveEtage = l18;;
 }
 

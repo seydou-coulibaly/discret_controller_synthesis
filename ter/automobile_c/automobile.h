@@ -1,6 +1,6 @@
-/* --- Generated the 26/5/2016 at 18:11 --- */
-/* --- heptagon compiler, version 1.03.00 (compiled tue. may. 24 19:48:24 CET 2016) --- */
-/* --- Command line: /home/seydou/.opam/4.02.3/bin/heptc -hepts -s automobile -target c -target ctrln automobile.ept --- */
+/* --- Generated the 30/5/2016 at 2:16 --- */
+/* --- heptagon compiler, version 1.03.00 (compiled wed. may. 25 11:31:53 CET 2016) --- */
+/* --- Command line: /home/sey/.opam/4.02.3/bin/heptc -hepts -s automobile -target c -target ctrln automobile.ept --- */
 
 #ifndef AUTOMOBILE_H
 #define AUTOMOBILE_H
@@ -168,7 +168,8 @@ typedef struct Automobile__controleurPhares_out {
 
 void Automobile__controleurPhares_reset(Automobile__controleurPhares_mem* self);
 
-void Automobile__controleurPhares_step(int tdn, int tin, int cpn,
+void Automobile__controleurPhares_step(int tdn, int tin, int cpn, int i,
+                                       int c, int v, int p,
                                        Automobile__controleurPhares_out* _out,
                                        Automobile__controleurPhares_mem* self);
 

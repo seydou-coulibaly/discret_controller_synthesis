@@ -50,23 +50,27 @@ node automobile_ctrlr0(capteurDectecteurFeu : couleur; capteurPluie : bool;
                         pnr_3 : bool; pnr_4 : bool; pnr_5 : bool;
                         pnr_6 : bool; pnr_7 : bool; pnr_8 : bool;
                         pnr_9 : bool)
-returns (accelerateur : bool; boiteDeVitesse : numero; cclose : bool;
-          con : bool; cp : bool; frein : bool; jour : bool; normal : bool;
-          nuit : bool; td : bool; ti : bool)
-var l1 : bool; l0 : bool;
+returns (accelerateur : bool; boiteDeVitesse : numero; c : bool;
+          cclose : bool; con : bool; cp : bool; frein : bool; i : bool;
+          jour : bool; normal : bool; nuit : bool; p : bool; td : bool;
+          ti : bool; v : bool)
+var l0 : bool;
 let
   con = true;
   cclose = true;
-  td = (cleVoiture or l1);
+  td = true;
   ti = true;
   cp = true;
   frein = true;
   accelerateur = true;
-  normal = true;
-  jour = true;
-  nuit = true;
+  normal = l0;
+  jour = normal;
+  nuit = normal;
+  i = true;
+  c = true;
+  v = true;
+  p = true;
   boiteDeVitesse = Un;
-  l0 = ((ck_28 = St_10_Phares) or (ck_28 = St_10_Veilleuses));
-  l1 = (commandeVoiture or l0)
+  l0 = not((lumiere = Null))
 tel
 
