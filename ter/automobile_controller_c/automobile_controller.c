@@ -1,4 +1,4 @@
-/* --- Generated the 30/5/2016 at 14:52 --- */
+/* --- Generated the 31/5/2016 at 12:49 --- */
 /* --- heptagon compiler, version 1.03.00 (compiled tue. may. 24 19:48:24 CET 2016) --- */
 /* --- Command line: /home/seydou/.opam/4.02.3/bin/heptc -target c automobile_controller.ept --- */
 
@@ -40,7 +40,6 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
                                                    int pnr_9,
                                                    Automobile_controller__automobile_ctrlr0_out* _out) {
   
-  int v_61;
   int v_60;
   int v_59;
   int v_58;
@@ -183,30 +182,30 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
   int l0;
   l0 = (cleVoiture||commandeVoiture);
   l1 = (capteurPluie&&l0);
-  v_60 = (ck_18==Automobile_controller__St_15_Desactive);
-  v_61 = !(v_60);
-  l2 = (v_61||l1);
+  v_59 = (ck_18==Automobile_controller__St_15_Desactive);
+  v_60 = !(v_59);
+  l2 = (v_60||l1);
   _out->con = l2;
   l3 = !(capteurPluie);
   l4 = !(cleVoiture);
   l5 = !(commandeVoiture);
   l6 = (l4&&l5);
   l7 = (l3||l6);
-  v_59 = (ck_18==Automobile_controller__St_15_Desactive);
-  l8 = (v_59||l7);
+  v_58 = (ck_18==Automobile_controller__St_15_Desactive);
+  l8 = (v_58||l7);
   _out->cclose = l8;
-  v_58 = (ck_28==Automobile_controller__St_10_Idle);
-  l9 = !(v_58);
-  v_57 = (lumiere==Automobile_controller__Low);
-  l10 = !(v_57);
-  v_55 = (ck_28==Automobile_controller__St_10_Idle);
-  v_56 = !(v_55);
-  l11 = (v_56||l10);
-  v_54 = (lumiere==Automobile_controller__Null);
-  v_53 = (lumiere==Automobile_controller__High);
-  l12 = (v_53||v_54);
-  v_52 = (ck_28==Automobile_controller__St_10_Veilleuses);
-  if (v_52) {
+  v_57 = (ck_28==Automobile_controller__St_10_Idle);
+  l9 = !(v_57);
+  v_56 = (lumiere==Automobile_controller__Low);
+  l10 = !(v_56);
+  v_54 = (ck_28==Automobile_controller__St_10_Idle);
+  v_55 = !(v_54);
+  l11 = (v_55||l10);
+  v_53 = (lumiere==Automobile_controller__Null);
+  v_52 = (lumiere==Automobile_controller__High);
+  l12 = (v_52||v_53);
+  v_51 = (ck_28==Automobile_controller__St_10_Veilleuses);
+  if (v_51) {
     l13 = l12;
   } else {
     l13 = l11;
@@ -221,14 +220,14 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
   } else {
     _out->td = l14;
   };
-  v_51 = (ck_28==Automobile_controller__St_10_Codes);
-  l15 = !(v_51);
-  v_49 = (ck_28==Automobile_controller__St_10_Codes);
-  v_50 = !(v_49);
-  l16 = (v_50||l10);
-  v_47 = (ck_28==Automobile_controller__St_10_Veilleuses);
-  v_48 = !(v_47);
-  l17 = (v_48&&l16);
+  v_50 = (ck_28==Automobile_controller__St_10_Codes);
+  l15 = !(v_50);
+  v_48 = (ck_28==Automobile_controller__St_10_Codes);
+  v_49 = !(v_48);
+  l16 = (v_49||l10);
+  v_46 = (ck_28==Automobile_controller__St_10_Veilleuses);
+  v_47 = !(v_46);
+  l17 = (v_47&&l16);
   if (commandeVoiture) {
     l18 = l17;
   } else {
@@ -239,12 +238,12 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
   } else {
     _out->ti = l18;
   };
-  v_46 = (ck_28==Automobile_controller__St_10_Veilleuses);
-  v_45 = (ck_28==Automobile_controller__St_10_Idle);
-  l19 = (v_45||v_46);
-  v_43 = (ck_28==Automobile_controller__St_10_Phares);
-  v_44 = !(v_43);
-  l20 = (v_44||l12);
+  v_45 = (ck_28==Automobile_controller__St_10_Veilleuses);
+  v_44 = (ck_28==Automobile_controller__St_10_Idle);
+  l19 = (v_44||v_45);
+  v_42 = (ck_28==Automobile_controller__St_10_Phares);
+  v_43 = !(v_42);
+  l20 = (v_43||l12);
   if (commandeVoiture) {
     l21 = l20;
   } else {
@@ -255,12 +254,12 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
   } else {
     _out->cp = l21;
   };
-  v_42 = (capteurDectecteurFeu==Automobile_controller__Vert);
-  l22 = !(v_42);
+  v_41 = (capteurDectecteurFeu==Automobile_controller__Vert);
+  l22 = !(v_41);
   l23 = (detectionPresencePieton||l22);
   l24 = (detectionAccident||l23);
-  v_41 = (ck_20==Automobile_controller__St_14_Active);
-  l25 = (v_41||l24);
+  v_40 = (ck_20==Automobile_controller__St_14_Active);
+  l25 = (v_40||l24);
   l26 = (detectionVolantLibre||l25);
   l27 = (detectionAngleMort||l26);
   l28 = (detectionDefaillanceTechnique||l27);
@@ -272,8 +271,8 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
   } else {
     l32 = l31;
   };
-  v_40 = (ck_14==Automobile_controller__St_17_Stop);
-  l33 = (v_40||l32);
+  v_39 = (ck_14==Automobile_controller__St_17_Stop);
+  l33 = (v_39||l32);
   _out->frein = l33;
   l34 = !(detectionPresencevehicule);
   l35 = !(detectionAccident);
@@ -281,8 +280,8 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
   l37 = (capteurDectecteurFeu==Automobile_controller__Vert);
   l38 = (l36&&l37);
   l39 = (l35&&l38);
-  v_39 = (ck_20==Automobile_controller__St_14_Desactive);
-  l40 = (v_39&&l39);
+  v_38 = (ck_20==Automobile_controller__St_14_Desactive);
+  l40 = (v_38&&l39);
   l41 = (l34&&l40);
   l42 = (commandeVoiture&&l41);
   if (cleVoiture) {
@@ -290,19 +289,18 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
   } else {
     l43 = l42;
   };
-  v_37 = (ck_14==Automobile_controller__St_17_Stop);
-  v_38 = !(v_37);
-  l44 = (v_38||l43);
+  v_37 = (ck_14==Automobile_controller__St_17_Move);
+  l44 = (v_37||l43);
   _out->accelerateur = l44;
-  v_36 = (ck_16==Automobile_controller__St_16_PositionJour);
-  l45 = !(v_36);
-  v_34 = (lumiere==Automobile_controller__High);
-  v_35 = !(v_34);
-  l46 = (v_35||l45);
-  v_33 = (ck_16==Automobile_controller__St_16_PositionNormale);
-  v_32 = (ck_16==Automobile_controller__St_16_Desacitve);
-  l47 = (v_32||v_33);
-  v_31 = (lumiere==Automobile_controller__Low);
+  v_36 = (ck_16==Automobile_controller__St_16_PositionNormale);
+  v_35 = (ck_16==Automobile_controller__St_16_Desacitve);
+  l45 = (v_35||v_36);
+  v_33 = (lumiere==Automobile_controller__Low);
+  v_34 = !(v_33);
+  l46 = (v_34||l45);
+  v_32 = (ck_16==Automobile_controller__St_16_PositionJour);
+  l47 = !(v_32);
+  v_31 = (lumiere==Automobile_controller__High);
   if (v_31) {
     l48 = l47;
   } else {
@@ -326,14 +324,14 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
   v_29 = (ck_16==Automobile_controller__St_16_PositionNuit);
   v_28 = (ck_16==Automobile_controller__St_16_PositionJour);
   l53 = (v_28||v_29);
-  v_27 = (lumiere==Automobile_controller__High);
-  if (v_27) {
-    l54 = l45;
+  v_27 = (lumiere==Automobile_controller__Low);
+  l54 = (v_27||l53);
+  v_26 = (lumiere==Automobile_controller__High);
+  if (v_26) {
+    l55 = l47;
   } else {
-    l54 = l53;
+    l55 = l54;
   };
-  v_26 = (lumiere==Automobile_controller__Low);
-  l55 = (v_26||l54);
   l56 = (commandeVoiture&&l55);
   if (cleVoiture) {
     _out->nuit = l55;
@@ -342,13 +340,13 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
   };
   l57 = !(_out->nuit);
   l58 = (_out->normal||l57);
-  v_24 = (ck_16==Automobile_controller__St_16_PositionNormale);
-  v_23 = (ck_16==Automobile_controller__St_16_Desacitve);
+  v_24 = (ck_16==Automobile_controller__St_16_PositionNuit);
+  v_23 = (ck_16==Automobile_controller__St_16_PositionJour);
   v_25 = (v_23||v_24);
   if (v_25) {
-    l59 = l57;
-  } else {
     l59 = l58;
+  } else {
+    l59 = l57;
   };
   v_21 = (ck_16==Automobile_controller__St_16_PositionJour);
   v_22 = !(v_21);
@@ -364,39 +362,39 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
   v_20 = (v_18||v_19);
   l63 = (v_20||l62);
   _out->i = l63;
-  l64 = (_out->normal||_out->nuit);
-  l65 = (_out->jour||l64);
-  v_16 = (ck_28==Automobile_controller__St_10_Codes);
-  v_17 = !(v_16);
-  l66 = (v_17||l65);
-  l67 = (_out->normal&&l57);
-  v_14 = (ck_16==Automobile_controller__St_16_PositionNormale);
-  v_13 = (ck_16==Automobile_controller__St_16_Desacitve);
-  v_15 = (v_13||v_14);
-  if (v_15) {
-    l68 = l67;
+  l64 = (_out->normal&&l57);
+  v_16 = (ck_16==Automobile_controller__St_16_PositionNormale);
+  v_15 = (ck_16==Automobile_controller__St_16_Desacitve);
+  v_17 = (v_15||v_16);
+  if (v_17) {
+    l65 = l64;
   } else {
-    l68 = _out->normal;
+    l65 = _out->normal;
   };
   if (_out->jour) {
-    l69 = l60;
+    l66 = l60;
   } else {
-    l69 = l68;
+    l66 = l65;
   };
-  v_12 = (ck_28==Automobile_controller__St_10_Idle);
+  v_13 = (ck_28==Automobile_controller__St_10_Idle);
+  v_14 = !(v_13);
+  l67 = (v_14||l66);
+  l68 = (_out->normal||_out->nuit);
+  l69 = (_out->jour||l68);
+  v_12 = (ck_28==Automobile_controller__St_10_Codes);
   if (v_12) {
     l70 = l69;
   } else {
-    l70 = l66;
+    l70 = l67;
   };
   _out->c = l70;
   v_10 = (ck_28==Automobile_controller__St_10_Phares);
   v_11 = !(v_10);
-  l71 = (v_11||l69);
+  l71 = (v_11||l66);
   _out->v = l71;
   v_8 = (ck_28==Automobile_controller__St_10_Idle);
   v_9 = !(v_8);
-  l72 = (v_9||l65);
+  l72 = (v_9||l69);
   l73 = !(_out->normal);
   v_6 = (ck_16==Automobile_controller__St_16_PositionJour);
   v_7 = !(v_6);
@@ -418,11 +416,11 @@ void Automobile_controller__automobile_ctrlr0_step(int activeRegulateurTemperatu
   };
   _out->p = l77;
   l78 = !(_out->accelerateur);
-  v_1 = (ck_14==Automobile_controller__St_17_Move);
+  v_1 = (ck_14==Automobile_controller__St_17_Stop);
   if (v_1) {
-    l79 = _out->frein;
-  } else {
     l79 = l78;
+  } else {
+    l79 = _out->frein;
   };
   if (l79) {
     _out->boiteDeVitesse = Automobile_controller__PointMort;

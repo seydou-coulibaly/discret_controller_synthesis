@@ -130,8 +130,8 @@
   l35 = not detectionAccident;
   l36 = not detectionPresencePieton;
   l37 = (capteurDectecteurFeu = Vert);
-  l45 = not ((ck_16 = St_16_PositionJour));
-  l47 = ck_16 in {St_16_Desacitve, St_16_PositionNormale};
+  l45 = ck_16 in {St_16_Desacitve, St_16_PositionNormale};
+  l47 = not ((ck_16 = St_16_PositionJour));
   l50 = (ck_16 = St_16_PositionJour);
   l53 = ck_16 in {St_16_PositionJour, St_16_PositionNuit};
   l1 = capteurPluie and l0;
@@ -141,9 +141,9 @@
   l20 = (not ((ck_28 = St_10_Phares)) or l12);
   l23 = (detectionPresencePieton or l22);
   l38 = l36 and l37;
-  l46 = (not ((lumiere = High)) or l45);
+  l46 = (not ((lumiere = Low)) or l45);
   l51 = ((lumiere = High) or l50);
-  l54 = (if (lumiere = High) then l45 else l53);
+  l54 = ((lumiere = Low) or l53);
   l2 = (not ((ck_18 = St_15_Desactive)) or l1);
   l7 = (l3 or l6);
   l13 = (if (ck_28 = St_10_Veilleuses) then l12 else l11);
@@ -151,9 +151,9 @@
   l21 = (if commandeVoiture then l20 else l19);
   l24 = (detectionAccident or l23);
   l39 = l35 and l38;
-  l48 = (if (lumiere = Low) then l47 else l46);
+  l48 = (if (lumiere = High) then l47 else l46);
   l52 = commandeVoiture and l51;
-  l55 = ((lumiere = Low) or l54);
+  l55 = (if (lumiere = High) then l47 else l54);
   con = l2;
   cp = (if cleVoiture then l20 else l21);
   jour = (if cleVoiture then l51 else l52);
@@ -174,44 +174,44 @@
   l27 = (detectionAngleMort or l26);
   l42 = commandeVoiture and l41;
   l57 = not nuit;
-  l64 = (normal or nuit);
+  l68 = (normal or nuit);
   l73 = not normal;
   l28 = (detectionDefaillanceTechnique or l27);
   l43 = (if cleVoiture then l41 else l42);
   l58 = (normal or l57);
-  l65 = (jour or l64);
-  l67 = normal and l57;
+  l64 = normal and l57;
+  l69 = (jour or l68);
   l74 = (not ((ck_16 = St_16_PositionJour)) or l73);
   l29 = (detectionPresencevehicule or l28);
-  l44 = (not ((ck_14 = St_17_Stop)) or l43);
-  l59 = (if ck_16 in {St_16_Desacitve, St_16_PositionNormale} then l57 else
-        l58);
+  l44 = ((ck_14 = St_17_Move) or l43);
+  l59 = (if ck_16 in {St_16_PositionJour, St_16_PositionNuit} then l58 else
+        l57);
   l60 = (not ((ck_16 = St_16_PositionJour)) or l58);
-  l66 = (not ((ck_28 = St_10_Codes)) or l65);
-  l68 = (if ck_16 in {St_16_Desacitve, St_16_PositionNormale} then l67 else
+  l65 = (if ck_16 in {St_16_Desacitve, St_16_PositionNormale} then l64 else
         normal);
-  l72 = (not ((ck_28 = St_10_Idle)) or l65);
+  l72 = (not ((ck_28 = St_10_Idle)) or l69);
   l75 = (if jour then l74 else l73);
   accelerateur = l44;
   l30 = (detectionLigne or l29);
   l61 = (if jour then l60 else l59);
-  l69 = (if jour then l60 else l68);
+  l66 = (if jour then l60 else l65);
   l76 = (lumiere in {Low, Null} or l75);
   l31 = (l5 or l30);
   l62 = (cp or l61);
-  l70 = (if (ck_28 = St_10_Idle) then l69 else l66);
-  l71 = (not ((ck_28 = St_10_Phares)) or l69);
+  l67 = (not ((ck_28 = St_10_Idle)) or l66);
+  l71 = (not ((ck_28 = St_10_Phares)) or l66);
   l77 = (if (ck_28 = St_10_Veilleuses) then l76 else l72);
   l78 = not accelerateur;
-  c = l70;
   v = l71;
   p = l77;
   l32 = (if cleVoiture then l30 else l31);
   l63 = (ck_28 in {St_10_Idle, St_10_Veilleuses} or l62);
+  l70 = (if (ck_28 = St_10_Codes) then l69 else l67);
   i = l63;
+  c = l70;
   l33 = ((ck_14 = St_17_Stop) or l32);
   frein = l33;
-  l79 = (if (ck_14 = St_17_Move) then frein else l78);
+  l79 = (if (ck_14 = St_17_Stop) then l78 else frein);
   boiteDeVitesse = (if l79 then PointMort else Un);
   
 !assertion

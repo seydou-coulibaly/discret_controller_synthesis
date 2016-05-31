@@ -128,47 +128,47 @@ let
   l41 = (l34 & l40);
   l42 = (commandeVoiture & l41);
   l43 = if cleVoiture then l41 else l42;
-  l44 = (not((ck_14 = St_17_Stop)) or l43);
-  l45 = not((ck_16 = St_16_PositionJour));
-  l46 = (not((lumiere = High)) or l45);
-  l47 = ((ck_16 = St_16_Desacitve) or (ck_16 = St_16_PositionNormale));
-  l48 = if (lumiere = Low) then l47 else l46;
+  l44 = ((ck_14 = St_17_Move) or l43);
+  l45 = ((ck_16 = St_16_Desacitve) or (ck_16 = St_16_PositionNormale));
+  l46 = (not((lumiere = Low)) or l45);
+  l47 = not((ck_16 = St_16_PositionJour));
+  l48 = if (lumiere = High) then l47 else l46;
   l49 = (commandeVoiture & l48);
   l50 = (ck_16 = St_16_PositionJour);
   l51 = ((lumiere = High) or l50);
   l52 = (commandeVoiture & l51);
   l53 = ((ck_16 = St_16_PositionJour) or (ck_16 = St_16_PositionNuit));
-  l54 = if (lumiere = High) then l45 else l53;
-  l55 = ((lumiere = Low) or l54);
+  l54 = ((lumiere = Low) or l53);
+  l55 = if (lumiere = High) then l47 else l54;
   l56 = (commandeVoiture & l55);
   l57 = not(nuit);
   l58 = (normal or l57);
   l59 =
-    if ((ck_16 = St_16_Desacitve) or (ck_16 = St_16_PositionNormale))
-    then l57
-    else l58;
+    if ((ck_16 = St_16_PositionJour) or (ck_16 = St_16_PositionNuit))
+    then l58
+    else l57;
   l60 = (not((ck_16 = St_16_PositionJour)) or l58);
   l61 = if jour then l60 else l59;
   l62 = (cp or l61);
   l63 = (((ck_28 = St_10_Idle) or (ck_28 = St_10_Veilleuses)) or l62);
-  l64 = (normal or nuit);
-  l65 = (jour or l64);
-  l66 = (not((ck_28 = St_10_Codes)) or l65);
-  l67 = (normal & l57);
-  l68 =
+  l64 = (normal & l57);
+  l65 =
     if ((ck_16 = St_16_Desacitve) or (ck_16 = St_16_PositionNormale))
-    then l67
+    then l64
     else normal;
-  l69 = if jour then l60 else l68;
-  l70 = if (ck_28 = St_10_Idle) then l69 else l66;
-  l71 = (not((ck_28 = St_10_Phares)) or l69);
-  l72 = (not((ck_28 = St_10_Idle)) or l65);
+  l66 = if jour then l60 else l65;
+  l67 = (not((ck_28 = St_10_Idle)) or l66);
+  l68 = (normal or nuit);
+  l69 = (jour or l68);
+  l70 = if (ck_28 = St_10_Codes) then l69 else l67;
+  l71 = (not((ck_28 = St_10_Phares)) or l66);
+  l72 = (not((ck_28 = St_10_Idle)) or l69);
   l73 = not(normal);
   l74 = (not((ck_16 = St_16_PositionJour)) or l73);
   l75 = if jour then l74 else l73;
   l76 = (((lumiere = Low) or (lumiere = Null)) or l75);
   l77 = if (ck_28 = St_10_Veilleuses) then l76 else l72;
   l78 = not(accelerateur);
-  l79 = if (ck_14 = St_17_Move) then frein else l78
+  l79 = if (ck_14 = St_17_Stop) then l78 else frein
 tel
 
