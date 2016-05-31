@@ -1,6 +1,0 @@
-package Automobile;
-
-
-public enum St_5 {
-    ST_5_DESACTIVE, ST_5_BALAYAGEUNIQUE, ST_5_BALAYAGEINTERMITTENT, ST_5_BALAYAGECONTIU
-}

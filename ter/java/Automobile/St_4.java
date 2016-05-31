@@ -1,6 +1,0 @@
-package Automobile;
-
-
-public enum St_4 {
-    ST_4_POSITIONNUIT, ST_4_POSITIONNORMALE, ST_4_POSITIONJOUR, ST_4_DESACITVE
-}

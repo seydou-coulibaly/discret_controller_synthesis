@@ -1,10 +1,11 @@
 type numero=Un|Deux|Trois|Quatre|Cinq|Six|PointMort
-type lum = Low|Normal|High
+type lum = Null|Low|Normal|High
 type couleur = Vert|Jaune|Rouge
 type position = Ville|Autoroute
 type etatPhares = Idle|Veilleuses|Codes|Phares
 type cause = PresencePieton|Presencevehicule|Feu|None
-
+type retro = Desactive|PositionJour|PositionNuit|PositionNormale
+type typeBalayage = Deactivated|Intermittent|Contiu|Unique
 node moteur(commande,cle:bool) returns (etat:bool)
 let 
 	automaton
@@ -13,7 +14,7 @@ let
 			unless not commande & not cle then Eteint
 		state Eteint
 			do etat = false;
-			unless commande & cle then Allumer
+			unless commande or cle then Allumer
 	end
 tel
 
@@ -79,65 +80,69 @@ let
 	end
 tel
 
-node acceleration(moteur,frein, accelerateur:bool) returns (avance:bool)
+node acceleration(frein, accelerateur:bool) returns (avance:bool)
 let 
 	automaton
 		state Move
 			do avance = true;
-			unless frein or not moteur then Stop
+			unless frein then Stop
 		state Stop
 			do avance = false;
-			unless moteur & accelerateur then Move
+			unless accelerateur then Move
 	end
 tel
 
-node retroviseurs (moteur: bool;lumiere:lum) returns (gerer:bool)
+node retroviseurs (normal,jour,nuit: bool) returns (gerer:bool;sortie:retro)
 let 
 	automaton
 		state Desacitve
 			do gerer = false ;
-			unless moteur & (lumiere = High) then PositionJour
-			| moteur & (lumiere = Low) then PositionNuit
-			| not moteur & (lumiere = Normal) then PositionNormale			
+			sortie = Desactive;
+			unless jour then PositionJour
+			| nuit then PositionNuit
+			| normal then PositionNormale			
 		state PositionNormale
 			do gerer = true ;
-			unless moteur & (lumiere = High) then PositionJour
-			| moteur & (lumiere = Low) then PositionNuit
-			| not moteur then Desacitve
+			sortie = PositionNormale;
+			unless jour then PositionJour
+			| nuit then PositionNuit
+			| not normal & not jour & not nuit then Desacitve
 		state PositionJour
 			do gerer = true ;
-			unless moteur & (lumiere = Normal) then PositionNormale
-			| moteur & (lumiere = Low) then PositionNuit
-			| not moteur then Desacitve
+			sortie = PositionJour;
+			unless normal then PositionNormale
+			| nuit then PositionNuit
+			|  not normal & not jour & not nuit then Desacitve
 		state PositionNuit
 			do gerer = true ;
-			unless moteur & (lumiere = High) then PositionJour
-			| moteur & (lumiere = Normal) then PositionNormale
-			| not moteur then Desacitve
+			sortie = PositionNuit;
+			unless jour then PositionJour
+			| normal then PositionNormale
+			| not normal & not jour & not nuit then Desacitve
 	end
 tel
 
-node essuieGlace (moteur, capteurPluie: bool; densite : lum) returns (etat: bool)
+node essuieGlace (con, cclose: bool; densite : lum) returns (etat: typeBalayage)
 let 
 	automaton
 		state Desactive
-			do etat = false;
-			unless moteur & capteurPluie then BalayageUnique
+			do etat = Deactivated;
+			unless con then BalayageUnique
 		state BalayageUnique
-			do etat = true;
-			unless not capteurPluie or not moteur then Desactive
-			|moteur & capteurPluie & (densite = High) then BalayageContiu
-			|moteur & capteurPluie & (densite = Normal) then BalayageIntermittent
+			do etat = Unique;
+			unless cclose then Desactive
+			| con & (densite = High) then BalayageContiu
+			| con & (densite = Normal) then BalayageIntermittent
 		state BalayageIntermittent
-			do etat = true;
-			unless not capteurPluie or not moteur then Desactive
-			|moteur & capteurPluie & (densite = High) then BalayageContiu
-			|moteur & capteurPluie & (densite = Low) then BalayageUnique
+			do etat = Intermittent;
+			unless cclose then Desactive
+			|con & (densite = High) then BalayageContiu
+			|con & (densite = Low) then BalayageUnique
 		state BalayageContiu
-			do etat = true;
-			unless not capteurPluie or not moteur then Desactive
-			|moteur & capteurPluie & (densite = Low) then BalayageUnique
-			|moteur & capteurPluie & (densite = Normal) then BalayageIntermittent
+			do etat = Contiu;
+			unless cclose then Desactive
+			|con & (densite = Low) then BalayageUnique
+			|con & (densite = Normal) then BalayageIntermittent
 	end
 tel
 
@@ -209,58 +214,93 @@ let
 	end
 tel
 
-node controleurPhares(moteur,tdn,tin,cpn:bool) returns (codes,phares,veilleuses:bool; etat:etatPhares)
+node controleurPhares(tdn,tin,cpn,i,c,v,p:bool) returns (codes,phares,veilleuses:bool; etat:etatPhares)
 let 
 	automaton
 		state Idle
 			do (codes,phares,veilleuses,etat) = (false, false, false,Idle);
-			unless tdn & moteur then Veilleuses
+			unless tdn then Veilleuses
+			|c then Codes
+			|p then Phares
 		state Veilleuses
 			do (codes,phares,veilleuses,etat) = (false, false, true,Veilleuses);
-			unless tin or not moteur then Idle
+			unless tin then Idle
 			|tdn then Codes
+			|p then Phares
 		state Codes
 			do (codes,phares,veilleuses,etat) = (true, false, false,Codes);
 			unless tin then Veilleuses
 			|cpn then Phares
-			| not moteur then Idle
+			|c then Codes
+			|i then Idle
 		state Phares
 			do (codes,phares,veilleuses,etat) = (false, true, false,Phares);
 			unless cpn then Codes
-			| not moteur then Idle
+			|v then Veilleuses
+			|i then Idle
 	end
 tel
 
 
-node automobile (lumiere,densitePluie:lum; cle,capteurPluie,commande,detectionAccident,detectionLigne, detectionVolantLibre,detectionDefaillanceTechnique, detectionAngleMort,presencePieton,presencevehicule,regulateurTemperature,td,ti,cp:bool;capteurTemperature:float;feu:couleur;boiteDeVitesse:numero) returns (moteur, etatRetroviseur, etatRegulateurTemperature,essuieGlace,accident,ligne,volantLibre,defaillanceTechnique,angleMort,stop,property:bool;causeFreinage:cause; vitesses:numero; quantiteRegule: float;phares: etatPhares;)
+node automobile (cleVoiture,commandeVoiture,capteurPluie,detectionAccident,detectionLigne, detectionVolantLibre,detectionDefaillanceTechnique, detectionAngleMort,detectionPresencePieton,detectionPresencevehicule,desactiveRegulateurTemperature:bool;lumiere,densitePluie:lum;capteurTemperature:float;capteurDectecteurFeu:couleur) returns (moteur, avance,retroviseurActive, etatRegulateurTemperature,accident,ligne,volantLibre,defaillanceTechnique,angleMort,freinage,property:bool;causeFreinage:cause; vitesses:numero; quantiteRegule: float;phares: etatPhares;retroviseurStatus:retro;essuieGlace:typeBalayage)
 contract
  assume true
  enforce property
- with (c:bool)
+ with (con,cclose,td,ti,cp,frein, accelerateur,normal,jour,nuit,i,c,v,p:bool;boiteDeVitesse:numero;)
 var
-lmoteur,lretroviseur,lessuieGlace,lairbag,lemissionAppelUrgence,lLigne,lvolantLibre,ldefaillanceTechnique, langleMort,lfrein,letatRegulateurTemperature,lcodes,lphares,lveilleuses,prop1, prop2,prop3:bool;
+lmoteur,lretroviseur,lavance,lairbag,lemissionAppelUrgence,lLigne,lvolantLibre,ldefaillanceTechnique, langleMort,lfrein,letatRegulateurTemperature,lcodes,lphares,lveilleuses,prop1, prop2,prop3,prop4,prop5,prop6,prop7,prop8,prop9,prop10,prop11,prop12,prop13,prop14,prop15,prop16,prop17,prop18,prop19,prop20,prop21,prop22,prop23,prop24:bool;
+lessuieGlace : typeBalayage;
 lnumero:numero;
 lqt : float;
 lcause: cause;
 lstate: etatPhares;
+lsortie: retro;
 let
-	lmoteur = moteur(commande,cle);
-	lnumero =  vitesse (boiteDeVitesse);
-	lretroviseur = retroviseurs (lmoteur,lumiere); 
-	lessuieGlace = essuieGlace (lmoteur, capteurPluie,densitePluie);
-	(lairbag,lemissionAppelUrgence) = accident (detectionAccident);
-	(lLigne,lvolantLibre,ldefaillanceTechnique, langleMort)  = avertissement (detectionLigne, detectionVolantLibre,detectionDefaillanceTechnique, detectionAngleMort);
-	(lfrein,lcause) = securite (presencePieton, presencevehicule, feu);
-	(lqt, letatRegulateurTemperature) = temperature (regulateurTemperature, capteurTemperature);
-	(lcodes,lphares,lveilleuses,lstate)= controleurPhares(lmoteur,td,ti,cp);
+	lmoteur = inlined moteur(commandeVoiture,cleVoiture);
+	lnumero =  inlined vitesse (boiteDeVitesse);
+	lavance = inlined acceleration(frein, accelerateur);
+	(lretroviseur,lsortie) = inlined retroviseurs (normal,jour,nuit); 
+	lessuieGlace = inlined essuieGlace (con, cclose, densitePluie);
+	(lairbag,lemissionAppelUrgence) = inlined accident (detectionAccident);
+	(lLigne,lvolantLibre,ldefaillanceTechnique, langleMort)  = inlined avertissement (detectionLigne, detectionVolantLibre,detectionDefaillanceTechnique, detectionAngleMort);
+	(lfrein,lcause) = inlined securite (detectionPresencePieton, detectionPresencevehicule, capteurDectecteurFeu);
+	(lqt, letatRegulateurTemperature) = inlined temperature (desactiveRegulateurTemperature, capteurTemperature);
+	(lcodes,lphares,lveilleuses,lstate)= inlined controleurPhares(td,ti,cp,i,c,v,p);
 
-	prop1 =
-	prop2 =
-	prop3 = 
-	property= prop1 & prop2 & prop3;
+	prop1 = lmoteur or (lnumero = PointMort);
+	prop2 = lmoteur or not lretroviseur;
+	prop3 = lmoteur or (lessuieGlace = Deactivated);
+(*ces proprietes de 4 a 7 sont pas vraiment inutiles, elles sont liees au capteur, du coup non controlable et ne fonctionnne pas par consequent mais possible lorsqu'on fait une supposition avec assume disant que s'il n'y a pas de cle ou commande alors le detecteur est eteint. Il est également preferable de mettre une propriete en assume tel que si le moteur est eteint alors le regulateur de temperature est desactive*)
+	prop4 = lmoteur or not lLigne;
+	prop5 = lmoteur or not lvolantLibre;
+	prop6 = lmoteur or not ldefaillanceTechnique;
+	prop7 = lmoteur or not langleMort;
+
+	prop8 = lmoteur or not lcodes;
+	prop9 = lmoteur or not lphares;
+	prop10 = lmoteur or not lveilleuses;
+	prop11 = lmoteur or not lavance;
+	prop12 = lavance or (lnumero = PointMort);
+	prop13 = not lavance or (lnumero <> PointMort);
+	prop14 = not lfrein or not lavance;
+	prop15 = not (lumiere = Normal) or (lsortie = PositionNormale);
+	prop16 = not (lumiere = Low) or (lsortie = PositionNuit);
+	prop17 = not (lumiere = High) or (lsortie = PositionJour);
+	prop18 = capteurPluie or (lessuieGlace = Deactivated);
+	prop19 = not capteurPluie or (lessuieGlace <> Deactivated);
+	prop20 = not lmoteur or (lsortie <> Desactive);
+	prop21 =  not (lumiere = Normal) or (lstate = Veilleuses);
+	prop22 =  not (lumiere = Low) or (lstate = Phares);
+
+	prop23 = not lemissionAppelUrgence or not lavance;
+	prop24 = not (lumiere = Null) or (lsortie = Desactive);
+
+	property= prop8 & prop9 & prop10 & prop11 & prop12 & prop13 & prop14 & prop15 & prop16 & prop17 & prop18 & prop19 & prop20 & prop21 & prop22;
 
 	moteur = lmoteur ;
-	etatRetroviseur = lretroviseur;
+	avance = lavance;
+	retroviseurActive = lretroviseur;
+	retroviseurStatus = lsortie;
 	etatRegulateurTemperature = letatRegulateurTemperature;
 	essuieGlace = lessuieGlace;
 	accident = lairbag or lemissionAppelUrgence;
@@ -268,11 +308,12 @@ let
 	volantLibre = lvolantLibre;
 	defaillanceTechnique = 	ldefaillanceTechnique;
 	angleMort = langleMort;
-	stop = lfrein;
+	freinage = lfrein;
 	causeFreinage = lcause;
 	vitesses = lnumero;
 	quantiteRegule = lqt;
 	phares = lstate;
+	
 tel
 
 

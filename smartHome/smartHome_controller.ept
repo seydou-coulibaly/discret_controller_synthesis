@@ -66,19 +66,19 @@ let
   l2 = not(vent);
   l3 = (luminosite & l2);
   l4 = (presenceMaison & l3);
-  l5 = ((ck_29 = St_11_Ouvrir) or l4);
+  l5 = (not((ck_29 = St_11_Fermer)) or l4);
   l6 = not(presenceMaison);
   l7 = (l6 or l1);
-  l8 = ((ck_29 = St_11_Fermer) or l7);
+  l8 = (not((ck_29 = St_11_Ouvrir)) or l7);
   l9 = not(presenceSortiePorte);
   l10 = not(codePorte);
   l11 = not(presenceSortieBarriere);
   l12 = not(codeBarriere);
-  l13 = ((ck_19 = St_16_Ouvrir) or presenceDevantPoubelle);
+  l13 = (not((ck_19 = St_16_Fermer)) or presenceDevantPoubelle);
   l14 = not(presenceDevantPoubelle);
-  l15 = ((ck_19 = St_16_Fermer) or l14);
+  l15 = (not((ck_19 = St_16_Ouvrir)) or l14);
   l16 = (not((ck_33 = St_9_Stop)) or presenceAscenseur);
   l17 = not(presenceAscenseur);
-  l18 = ((ck_33 = St_9_Stop) or l17)
+  l18 = (not((ck_33 = St_9_Mouvement)) or l17)
 tel
 
