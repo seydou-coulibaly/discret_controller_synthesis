@@ -1,0 +1,47 @@
+\begin{thebibliography}{1}
+\providecommand{\url}[1]{{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{DOI~\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{DOI~\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem{ref7}
+{Heptagon/BZR} manual  (2013)
+
+\bibitem{ref6}
+Berthier, N., Delaval, G.: Programming and controller synthesis with
+  {Heptagon/BZR}, manual  (2013)
+
+\bibitem{wodes-Reax}
+Berthier, N., Marchand, H.: Discrete controller synthesis for infinite state
+  systems with {ReaX}.
+\newblock In: IEEE International Workshop on Discrete Event Systems, pp.
+  46--53. Cachan, France (2014)
+
+\bibitem{drm13}
+Delaval, G., Rutten, E., Marchand, H.: Integrating discrete controller
+  synthesis in a reactive programming language compiler.
+\newblock Discrete Event Dynamic Systems : Theory and Applications
+  \textbf{23}(4), 385--418 (2013)
+
+\bibitem{Dumitrescu07b}
+Dumitrescu, E., Girault, A., Marchand, H., Rutten, E.: Optimal discrete
+  controller synthesis for the modeling of fault-tolerant distributed systems.
+\newblock In: First IFAC Workshop on Dependable Control of Discrete Systems
+  (DCDS'07). Paris, France (2007)
+
+\bibitem{marchand00c}
+Marchand, H., Bournai, P., Le~Borgne, M., Le~Guernic, P.: Synthesis of
+  discrete-event controllers based on the signal environment.
+\newblock Discrete Event Dynamic System: Theory and Applications
+  \textbf{10}(4), 325--346 (2000)
+
+\bibitem{ref8}
+Michel, L., Gérard, V., Cédric, P., Guillaume, I.: Synthèse de contrôleur
+  simplement valide dans le cadre de la programmation par contraintes  (2010)
+
+\bibitem{ref5}
+Naim, M.: Conception à base de model  (2013)
+
+\end{thebibliography}

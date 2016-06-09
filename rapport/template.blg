@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/dev/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: template.aux
+The style file: spmpsci.bst
+Database file #1: rapport.bib
+Warning--to sort, need author or key in ref7
+Warning--empty author in ref7
+Warning--empty journal in ref7
+Warning--empty journal in ref6
+Warning--empty journal in ref8
+Warning--empty journal in ref5
+You've used 8 entries,
+            2946 wiz_defined-function locations,
+            645 strings with 5907 characters,
+and the built_in function-call counts, 4770 in all, are:
+= -- 502
+> -- 115
+< -- 1
++ -- 64
+- -- 40
+* -- 234
+:= -- 514
+add.period$ -- 6
+call.type$ -- 8
+change.case$ -- 48
+chr.to.int$ -- 0
+cite$ -- 14
+duplicate$ -- 522
+empty$ -- 340
+format.name$ -- 46
+if$ -- 982
+int.to.chr$ -- 0
+int.to.str$ -- 8
+missing$ -- 75
+newline$ -- 36
+num.names$ -- 14
+pop$ -- 228
+preamble$ -- 1
+purify$ -- 36
+quote$ -- 0
+skip$ -- 235
+stack$ -- 0
+substring$ -- 180
+swap$ -- 374
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 32
+warning$ -- 6
+while$ -- 24
+width$ -- 9
+write$ -- 75
+(There were 6 warnings)
