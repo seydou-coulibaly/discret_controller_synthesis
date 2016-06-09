@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2016.6.9)  9 JUN 2016 19:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2016.6.9)  9 JUN 2016 20:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -941,118 +941,118 @@ ABD: EveryShipout initializing macros
 
 SVJour3 warning: Missing \journalname
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <13> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 51.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 48.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <9.5> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 51.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 48.
 
-Underfull \hbox (badness 2828) in paragraph at lines 51--51
+Underfull \hbox (badness 2828) in paragraph at lines 48--48
  
  []
 
 
-Package mathptmx Warning: There are no bold math fonts on input line 51.
+Package mathptmx Warning: There are no bold math fonts on input line 48.
 
-LaTeX Font Info:    Calculating math sizes for size <9.5> on input line 51.
-LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 51
+LaTeX Font Info:    Calculating math sizes for size <9.5> on input line 48.
+LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 48
 .
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
 File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 51
+LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 48
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 51
+LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 48
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsztmcm.fd
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 51
+LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 48
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxztmcm.fd
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 51.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 48.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9.5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 51.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 48.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.03004> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 51.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 48.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5.70006> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 51.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 48.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 51.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 48.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 51.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 48.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 51.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 48.
  [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 <controleur.png, id=36, 849.1725pt x 318.43968pt>
 File: controleur.png Graphic file (type png)
  <use controleur.png>
-Package pdftex.def Info: controleur.png used on input line 94.
+Package pdftex.def Info: controleur.png used on input line 88.
 (pdftex.def)             Requested size: 426.78795pt x 284.52798pt.
 
-Overfull \hbox (79.78795pt too wide) in paragraph at lines 94--95
+Overfull \hbox (79.78795pt too wide) in paragraph at lines 88--89
 [][] 
  []
 
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 95.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 89.
 LaTeX Font Info:    Font shape `T1/ptm/bx/sc' in size <8> not available
-(Font)              Font shape `T1/ptm/b/sc' tried instead on input line 95.
+(Font)              Font shape `T1/ptm/b/sc' tried instead on input line 89.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 100--111
+[2] <compilation.png, id=40, 615.80063pt x 864.22874pt>
+File: compilation.png Graphic file (type png)
+ <use compilation.png>
+Package pdftex.def Info: compilation.png used on input line 106.
+(pdftex.def)             Requested size: 426.80095pt x 426.78574pt.
+
+Overfull \hbox (79.80095pt too wide) in paragraph at lines 106--107
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 94--110
 
  []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [3 <./controleur.png>] [4] [5] [6] [7] (./template.bbl) [8]
-<compilation.png, id=60, 615.80063pt x 864.22874pt>
-File: compilation.png Graphic file (type png)
- <use compilation.png>
-Package pdftex.def Info: compilation.png used on input line 263.
-(pdftex.def)             Requested size: 426.80095pt x 426.78574pt.
+ [3 <./controleur.png>]
+Underfull \vbox (badness 4416) has occurred while \output is active []
 
-Overfull \hbox (79.80095pt too wide) in paragraph at lines 263--264
-[][] 
- []
-
-[9 <./compilation.png>]
-Overfull \hbox (0.70354pt too wide) in paragraph at lines 291--292
+ [4 <./compilation.png>] [5] [6] [7] [8] (./template.bbl) [9]
+Overfull \hbox (0.70354pt too wide) in paragraph at lines 287--288
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1496) has occurred while \output is active []
 
  [10]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [11]
-Overfull \hbox (34.90388pt too wide) in paragraph at lines 398--399
+Overfull \hbox (34.90388pt too wide) in paragraph at lines 394--395
 [][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (29.20383pt too wide) in paragraph at lines 399--400
-[][][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (34.90388pt too wide) in paragraph at lines 418--419
+Overfull \hbox (29.20383pt too wide) in paragraph at lines 395--396
 [][][][][][][][][][][][][][][][][][][][] 
  []
 
@@ -1060,173 +1060,178 @@ Overfull \hbox (34.90388pt too wide) in paragraph at lines 418--419
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [12]
-Overfull \hbox (0.70354pt too wide) in paragraph at lines 423--424
+Overfull \hbox (34.90388pt too wide) in paragraph at lines 414--415
+[][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (0.70354pt too wide) in paragraph at lines 419--420
 [][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (23.50377pt too wide) in paragraph at lines 430--431
+Overfull \hbox (23.50377pt too wide) in paragraph at lines 426--427
 [][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (29.20383pt too wide) in paragraph at lines 436--437
+Overfull \hbox (29.20383pt too wide) in paragraph at lines 432--433
 [][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (17.80371pt too wide) in paragraph at lines 447--448
+Overfull \hbox (17.80371pt too wide) in paragraph at lines 443--444
 [][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (17.80371pt too wide) in paragraph at lines 451--452
+Overfull \hbox (17.80371pt too wide) in paragraph at lines 447--448
 [][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (69.10423pt too wide) in paragraph at lines 452--453
+Overfull \hbox (69.10423pt too wide) in paragraph at lines 448--449
 [][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (52.00406pt too wide) in paragraph at lines 453--454
+Overfull \hbox (52.00406pt too wide) in paragraph at lines 449--450
 [][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (23.50377pt too wide) in paragraph at lines 455--456
+Overfull \hbox (23.50377pt too wide) in paragraph at lines 451--452
 [][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (63.40417pt too wide) in paragraph at lines 456--457
+Overfull \hbox (63.40417pt too wide) in paragraph at lines 452--453
 [][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (52.00406pt too wide) in paragraph at lines 457--458
+Overfull \hbox (52.00406pt too wide) in paragraph at lines 453--454
 [][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (12.10365pt too wide) in paragraph at lines 458--459
+Overfull \hbox (12.10365pt too wide) in paragraph at lines 454--455
 [][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (29.20383pt too wide) in paragraph at lines 467--468
-[][][][][][][][][][] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [13]
-Overfull \hbox (6.4036pt too wide) in paragraph at lines 469--470
+Overfull \hbox (29.20383pt too wide) in paragraph at lines 463--464
+[][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (6.4036pt too wide) in paragraph at lines 465--466
 [][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (23.50377pt too wide) in paragraph at lines 470--471
+Overfull \hbox (23.50377pt too wide) in paragraph at lines 466--467
 [][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (17.80371pt too wide) in paragraph at lines 480--482
+Overfull \hbox (17.80371pt too wide) in paragraph at lines 476--478
 [][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (52.00406pt too wide) in paragraph at lines 483--484
+Overfull \hbox (52.00406pt too wide) in paragraph at lines 479--480
 [][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (63.40417pt too wide) in paragraph at lines 487--488
+Overfull \hbox (63.40417pt too wide) in paragraph at lines 483--484
 [][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (97.60452pt too wide) in paragraph at lines 491--492
+Overfull \hbox (97.60452pt too wide) in paragraph at lines 487--488
 [][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (52.00406pt too wide) in paragraph at lines 495--496
+Overfull \hbox (52.00406pt too wide) in paragraph at lines 491--492
 [][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (103.30458pt too wide) in paragraph at lines 496--497
+Overfull \hbox (103.30458pt too wide) in paragraph at lines 492--493
 [][][][][][][][][] 
  []
 
 
-Overfull \hbox (34.90388pt too wide) in paragraph at lines 497--498
+Overfull \hbox (34.90388pt too wide) in paragraph at lines 493--494
 [][][][][][][][][] 
  []
 
 
-Overfull \hbox (29.20383pt too wide) in paragraph at lines 498--500
+Overfull \hbox (29.20383pt too wide) in paragraph at lines 494--496
 [][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (17.80371pt too wide) in paragraph at lines 510--511
+Overfull \hbox (17.80371pt too wide) in paragraph at lines 506--507
 [][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (74.80429pt too wide) in paragraph at lines 517--518
-[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [14]
-Overfull \hbox (29.20383pt too wide) in paragraph at lines 518--519
-[][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (17.80371pt too wide) in paragraph at lines 522--524
+Overfull \hbox (74.80429pt too wide) in paragraph at lines 513--514
 [][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (29.20383pt too wide) in paragraph at lines 528--529
+Overfull \hbox (29.20383pt too wide) in paragraph at lines 514--515
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (17.80371pt too wide) in paragraph at lines 518--520
+[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (29.20383pt too wide) in paragraph at lines 524--525
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (52.00406pt too wide) in paragraph at lines 535--536
+Overfull \hbox (52.00406pt too wide) in paragraph at lines 531--532
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (40.60394pt too wide) in paragraph at lines 541--542
+Overfull \hbox (40.60394pt too wide) in paragraph at lines 537--538
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (29.20383pt too wide) in paragraph at lines 542--543
+Overfull \hbox (29.20383pt too wide) in paragraph at lines 538--539
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (69.10423pt too wide) in paragraph at lines 543--544
+Overfull \hbox (69.10423pt too wide) in paragraph at lines 539--540
 [][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 <simulation.png, id=80, 1606.0pt x 1204.5pt>
 File: simulation.png Graphic file (type png)
  <use simulation.png>
-Package pdftex.def Info: simulation.png used on input line 563.
+Package pdftex.def Info: simulation.png used on input line 559.
 (pdftex.def)             Requested size: 426.78876pt x 426.801pt.
 
-Overfull \hbox (79.78876pt too wide) in paragraph at lines 563--564
+Overfull \hbox (79.78876pt too wide) in paragraph at lines 559--560
 [][] 
  []
 
@@ -1234,54 +1239,27 @@ Overfull \hbox (79.78876pt too wide) in paragraph at lines 563--564
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-! Package tikz Error: Giving up on this path. Did you forget a semicolon?.
-
-See the tikz package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.582 \end{tikzpicture}
-                       
-This error message was generated by an \errmessage
-command, so I can't give any explicit help.
-Pretend that you're Hercule Poirot: Examine all clues,
-and deduce the truth by order and method.
-
-! Undefined control sequence.
-<argument> \pgf@baseline 
-                         
-l.582 \end{tikzpicture}
-                       
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [15]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [16 <./simulation.png>] [17] (./template.aux) ) 
+[16 <./simulation.png>] (./template.aux) ) 
 Here is how much of TeX's memory you used:
- 16601 strings out of 493105
- 324817 string characters out of 6137073
+ 16494 strings out of 493105
+ 322600 string characters out of 6137073
  392307 words of memory out of 5000000
- 19734 multiletter control sequences out of 15000+600000
+ 19627 multiletter control sequences out of 15000+600000
  54277 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,9n,82p,441b,1612s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/
-fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb
-8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on template.pdf (17 pages, 240295 bytes).
+{/usr/share/texlive/texmf-dist/fonts/
+enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on template.pdf (16 pages, 238600 bytes).
 PDF statistics:
- 108 PDF objects out of 1000 (max. 8388607)
- 64 compressed objects within 1 object stream
+ 105 PDF objects out of 1000 (max. 8388607)
+ 62 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  124 words of extra memory for PDF output out of 10000 (max. 10000000)
 

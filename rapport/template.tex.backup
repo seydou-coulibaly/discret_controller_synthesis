@@ -6,17 +6,15 @@
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{listings}
-\usepackage{amsmath}
-\usepackage{vaucanson-g}
-%
 \smartqed  % flush right qed marks, e.g. at end of proof
 %
-\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning,automata,shadows}
 %
-% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+ \usepackage{mathptmx}      % use Times fonts if available on your TeX system
 %
 % insert here the call for the packages your document requires
-%\usepackage{latexsym}
+\usepackage{latexsym}
 % etc.
 %
 % please place your own definitions here and don't use \def but
@@ -42,9 +40,6 @@
               Saint martin d'heres, 38400, France \\
               \email{cseydou28@gmail.com}           %  \\
 %             \emph{Present address:} of F. Author  %  if needed
-           \and
-           S. Author \at
-              second address
 }
 
 \date{Juin 2016}
@@ -53,22 +48,19 @@
 \maketitle
 
 \begin{abstract}
-Cet article présente la compilation de la synthèse des contrôleurs discrets avec le Diagnostic de ce dernier. La synthèse de contrôleurs discrets est une méthode
-de conception qui génère des contrôleurs pour le contrôle d'un système devant vérifié certaines propriétés. Les approches les plus souvent utilis\'ees 
-pour sa conception sont la th\'eorie des automates, les r\'eseaux de pétri, la th\'eorie des jeux. Dans ce travail, le contrôleur est intégrée dans un langage
-synchrone flots de données capable de réprésenter les spécifications d'un système sous forme d'automates à état fini. Ce langage inclue le mécanisme de contrat, 
-necessaire pour la génération de contrôleurs. Tout au long de ce rapport, d\'ecoulera la présentation du langage Heptagon/BZR, les résultats possibles de sa 
+Cet article présente la compilation de la synthèse des contrôleurs discrets avec le diagnostic de ce dernier. La synthèse de contrôleurs discrets est une méthode
+de conception qui génère des contrôleurs sur un système pour vérifier certaines propriétés. Les approches les plus souvent utilis\'ees pour la réprésentation et la 
+conception de la synthèse de contrôleurs discrets sont la th\'eorie des automates, les r\'eseaux de pétri, la th\'eorie des jeux. Dans ce travail, le contrôleur est intégré dans un langage
+synchrone flots de données capable de réprésenter les spécifications d'un système sous forme d'automates à état fini. Tout au long de ce rapport, d\'ecoulera la présentation du langage Heptagon/BZR, les résultats possibles de sa 
 compilation qui sont variés tels que les échecs de la synthèse de contrôleurs discrets et la réalisation d'un exemple assez concret. Le choix des exemples de syst\`emes \`a concevoir reste vastes mais cadr\'e au 
-tour des syst\`emes pouvant \^etre mod\'eliser par des langages synchrones comme par exemple les syst\`emes automatiques, les syst\`emes industrielles, 
-les automates programmables. \newline Heptagon/BZR a \'egalement la particularit\'e d'\^etre r\'eactif assurant une leg\`ere mod\'elisation de telle syst\`emes qui sont
-g\'eneralement critique, deterministe et surtout incluant la notion de parrall\'elisme .
-C'est un programme qui décrit sous forme d'automates les comportements d'un système en premettant la mod\'elisation de ses \'etats, 
-ses transitions, ses sorties ainsi que leurs actions. 
+tour des syst\`emes pouvant \^etre mod\'eliser par des langages synchrones comme par exemple les syst\`emes automatiques, les syst\`emes industriels, 
+les automates programmables. Le langage synchrone Heptagon/BZR est \'egalement r\'eactif et décrit les comportements possible d'un système, de ses entrées aux sorties. 
+
 \keywords{langage synchrone \and compilation \and syntheses de controleurs discretes \and BZR \and Heptagon \and Reax \and syst\`eme reactif \and contrats \and CTRL-A}
 % \PACS{PACS code1 \and PACS code2 \and more}
 % \subclass{MSC code1 \and MSC code2 \and more}
 \end{abstract}
-
+\newpage
 \section{Introduction}
 \label{intro}
 On s'interesse à la compilation et au Diagnostic de la synthèse des contrôleurs discrets, une méthode de conception et de validation permettant de contrôler un système 
@@ -99,17 +91,23 @@ de recherche à part entière et reste l'une des m\'ethodes de conception et de 
 \end{figure}
 \newpage
 \subsection{Le langage Heptagon/BZR}
-Heptagon/BZR est un langage de programmation de la famille des langages synchrones, des langages développés dans les années 1980 pour 
-programmer des système réactifs. Ce sont des systèmes de contrôle automatique qui doivent réagir continuellement à leur environement. 
+Heptagon/BZR \cite{ref6} \cite{ref7} est un langage de programmation de la famille des langages synchrones, des langages développés dans les années 1980 pour 
+programmer des système réactifs. Les systèmes réactifs sont des systèmes de contrôle automatique qui doivent réagir continuellement à leur environement. 
 Leur vitesse de réaction est imposée par l'environement qui ne peut pas attendre (ne pas confondre avec les 
-systèmes intéractifs: Le rythme de l'intéraction est déterminé par le système et non par l'environement) \cite{ref5}. Ces systèmes sont le plus souvent 
-détermistes, critiques et exigent la notion de temps-réel.
+systèmes interactifs: Le rythme de l'interaction est déterminé par le système et non par l'environement) \cite{ref5}. Ces systèmes sont le plus souvent 
+déterministes, critiques et exigent la notion de temps-réel.
 \\
 \\
-Heptagon/BZR a la particularité d'être flots de données dont la fonctionnalité principale est l'intégration de la synthèse de contrôleurs discrets dans sa 
-compilation. C'est grâce au mecanisme de contrat (programmation par contrat) qu'il décrit les contraintes rélatif aux propriétes devant être verifier par
-le système contrôlé. Sa compilation permet de générer du code C ou JAVA (voir figure \ref{schemaCompile} en annexe) et les références suivantes permettent la prise
-en main de sa syntaxe et les commandes de sa compilation \cite{ref6} \cite{ref7}.
+Heptagon/BZR est un langage synchrone flots de données dont la fonctionnalité principale est l'intégration de la synthèse de contrôleurs discrets dans sa 
+compilation. C'est grâce à un mécanisme de contrat qu'il décrit les contraintes rélatif aux propriétes devant être verifier par
+le système contrôlé. Ce mécanisme permet la separation de la partie modélisation du problème à la partie résolution ou contrat dont la particularité 
+réside dans l'utilisation des contraintes pour réduire la taille de l'espace des solutions. La compilation de Heptagon/BZR permet de générer du code C ou JAVA (voir figure \ref{schemaCompile}).
+\begin{figure}[!h]
+ \includegraphics[height=15cm, width=15cm]{compilation.png}
+ \caption{Schema de la chaine de la compilation de Heptagon/BZR}
+ \label{schemaCompile}
+\end{figure}
+
 \section{Diagnostic pour le langage Heptagon/BZR}
 \label{sec:1}
 La synthèse de contrôleurs discrets est une méthode de conception et de validation dont l'objectif principale est d'interdire le fonctionnement non 
@@ -261,11 +259,7 @@ synthèse de contrôleurs discrets et les intégrer dans la compilation du langa
 \bibliography{rapport}   % name your BibTeX data base
 \newpage
 \section{Annexe}
-\begin{figure}[!h]
- \includegraphics[height=15cm, width=15cm]{compilation.png}
- \caption{Schema de chainage de la compilation de Heptagon/BZR}
- \label{schemaCompile}
-\end{figure}
+
 
 \subsection*{Le code source du cas d'études}
 
@@ -568,6 +562,7 @@ tel
 \end{figure}
 
 \subsection*{Le noeud porte}
+
 
 \end{document}
 
