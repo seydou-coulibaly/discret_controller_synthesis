@@ -1,0 +1,906 @@
+(* --- Generated the 17/6/2016 at 14:1 --- *)
+(* --- heptagon compiler, version 1.03.00 (compiled tue. may. 24 19:48:24 CET 2016) --- *)
+(* --- Command line: /home/seydou/.opam/4.02.3/bin/heptc -target c -target ctrln smartHome.ept --- *)
+
+!typedef
+  St_21 = enum {St_21_Presence, St_21_Nothing};
+  St_20 = enum {St_20_Presence, St_20_Nothing};
+  St_19 = enum {St_19_Presence, St_19_Nothing};
+  St_18 = enum {St_18_On, St_18_Off};
+  St_17 = enum {St_17_Presence, St_17_Nothing};
+  St_16 = enum {St_16_Ouvrir, St_16_Fermer};
+  St_15 = enum {St_15_Ouvrir, St_15_Fermer};
+  St_14 = enum {St_14_Idle, St_14_Avant, St_14_Arriere};
+  St_13 = enum {St_13_Ouvrir, St_13_Fermer};
+  St_12 = enum {St_12_Idle, St_12_Avant, St_12_Arriere};
+  St_11 = enum {St_11_Ouvrir, St_11_Fermer};
+  St_10 = enum {St_10_Vigilence, St_10_Sonner, St_10_Arret, St_10_Allume};
+  St_9 = enum {St_9_Stop, St_9_Mouvement};
+  St_8 = enum {St_8_Stop, St_8_Mouvement};
+  St_7 = enum {St_7_Vigilence, St_7_Sonner, St_7_Arret, St_7_Allume};
+  St_6 = enum {St_6_Ouvrir, St_6_Fermer};
+  St_5 = enum {St_5_Ouvrir, St_5_Fermer};
+  St_4 = enum {St_4_Ouvrir, St_4_Fermer};
+  St_3 = enum {St_3_On, St_3_Off};
+  St_2 = enum {St_2_Idle, St_2_Avant, St_2_Arriere};
+  St_1 = enum {St_1_NoPresence, St_1_Avant, St_1_Arriere};
+  St = enum {St_Presence, St_Nothing};
+  Position = enum {Avant, Arriere, Null};
+  Porte = enum {Ouvert, Fermer};
+  Lum = enum {Rouge, Vert, Jaune};
+  Stat = enum {Arret, EnMouvement};
+  
+!state
+  ck: St_21;
+  ck_11: St_20;
+  ck_13: St_19;
+  ck_15: St_18;
+  ck_17: St_17;
+  ck_19: St_16;
+  ck_21: St_15;
+  ck_23: St_14;
+  ck_25: St_13;
+  ck_27: St_12;
+  ck_29: St_11;
+  ck_31: St_10;
+  v_172: int;
+  v_177: int;
+  v_185: int;
+  ck_33: St_9;
+  pnr_12: bool;
+  pnr_11: bool;
+  pnr_10: bool;
+  pnr_9: bool;
+  pnr_8: bool;
+  pnr_7: bool;
+  pnr_6: bool;
+  pnr_5: bool;
+  pnr_4: bool;
+  pnr_3: bool;
+  pnr_2: bool;
+  pnr_1: bool;
+  pnr: bool;
+  reprise_2: int;
+  vigilence_2: int;
+  temps_2: int;
+  __init__: bool;
+  ok: bool;
+  property: bool;
+  ascenseur: bool;
+  etatAlarme: Lum;
+  alarmeSonne: bool;
+  ouvertureStore: bool;
+  capteurPositionBarriere: Position;
+  barriere: Porte;
+  capteurPositionPorte: Position;
+  porteStatus: Porte;
+  poubelleOuvert: bool;
+  lumiere: bool;
+  etatMaison: bool;
+  
+!input
+  presenceMaison: bool;
+  presenceAscenseur: bool;
+  presenceGarage: bool;
+  presenceDevantPoubelle: bool;
+  vent: bool;
+  luminosite: bool;
+  marcheArretAlarme: bool;
+  codeAlarme: bool;
+  codePorte: bool;
+  codeBarriere: bool;
+  presenceEntreePorte: bool;
+  presenceSortiePorte: bool;
+  presenceEntreeBarriere: bool;
+  presenceSortieBarriere: bool;
+  dReprise: int;
+  dVigilence: int;
+  dAlarme: int;
+  
+!controllable
+  interrupteur: bool;
+  copen: bool;
+  close: bool;
+  openPorte: bool;
+  openBarriere: bool;
+  con: bool;
+  coff: bool;
+  demandeEtage: bool;
+  arriveEtage: bool;
+  
+!local
+  v_129, r_12_St_21_Presence, r_12_St_21_Nothing, nr_12_St_21_Presence,
+  occuper_St_21_Presence, nr_12_St_21_Nothing, occuper_St_21_Nothing, v_130,
+  r_11_St_20_Presence, r_11_St_20_Nothing, nr_11_St_20_Presence,
+  occuper_1_St_20_Presence, nr_11_St_20_Nothing, occuper_1_St_20_Nothing,
+  v_131, r_10_St_19_Presence, r_10_St_19_Nothing, nr_10_St_19_Presence,
+  occuper_2_St_19_Presence, nr_10_St_19_Nothing, occuper_2_St_19_Nothing,
+  v_132, r_9_St_18_On, r_9_St_18_Off, nr_9_St_18_On, lumiere_1_St_18_On,
+  nr_9_St_18_Off, lumiere_1_St_18_Off, v_133, r_8_St_17_Presence,
+  r_8_St_17_Nothing, nr_8_St_17_Presence, occuper_3_St_17_Presence,
+  nr_8_St_17_Nothing, occuper_3_St_17_Nothing, r_7_St_16_Ouvrir,
+  r_7_St_16_Fermer, nr_7_St_16_Ouvrir, ouvrir_St_16_Ouvrir,
+  nr_7_St_16_Fermer, ouvrir_St_16_Fermer, v_134, r_6_St_15_Ouvrir,
+  r_6_St_15_Fermer, nr_6_St_15_Ouvrir, nr_6_St_15_Fermer, v_139, v_137,
+  v_136, v_135, v_146, v_144, v_143, v_142, v_141, v_140, v_150, v_148,
+  v_147, r_5_St_14_Arriere, r_5_St_14_Avant, r_5_St_14_Idle,
+  nr_5_St_14_Arriere, nr_5_St_14_Avant, nr_5_St_14_Idle, v_151,
+  r_4_St_13_Ouvrir, r_4_St_13_Fermer, nr_4_St_13_Ouvrir, nr_4_St_13_Fermer,
+  v_156, v_154, v_153, v_152, v_163, v_161, v_160, v_159, v_158, v_157,
+  v_167, v_165, v_164, r_3_St_12_Arriere, r_3_St_12_Avant, r_3_St_12_Idle,
+  nr_3_St_12_Arriere, nr_3_St_12_Avant, nr_3_St_12_Idle, r_2_St_11_Ouvrir,
+  r_2_St_11_Fermer, nr_2_St_11_Ouvrir, store_St_11_Ouvrir, nr_2_St_11_Fermer,
+  store_St_11_Fermer, r_1_St_10_Vigilence, r_1_St_10_Sonner,
+  r_1_St_10_Allume, r_1_St_10_Arret, v_170, v_168, v_175, v_173, v_183,
+  v_181, v_179, v_178, nr_1_St_10_Vigilence, sonnerAlarme_St_10_Vigilence,
+  nr_1_St_10_Sonner, sonnerAlarme_St_10_Sonner, nr_1_St_10_Allume,
+  sonnerAlarme_St_10_Allume, nr_1_St_10_Arret, sonnerAlarme_St_10_Arret,
+  v_187, v_186, r_St_9_Mouvement, r_St_9_Stop, nr_St_9_Mouvement,
+  etat_St_9_Mouvement, nr_St_9_Stop, etat_St_9_Stop, v_128, v_127, v_126,
+  v_125, v_124, v_123, v_122, v_121, v_120, v_119, v_118, v_117, v_116,
+  v_115, v_114, v_113, v_112, v_111, v_110, v_109, v_108, v_107, v_106,
+  v_105, v_104, v_103, v_102, v_101, v_100, v_99, v_98, v_97, v_96, v_95,
+  v_94, v_93, v_92, v_91, v_90, v_89, v_88, v_87, v_86, v_85, v_84, v_83,
+  v_82, v_81, v_80, v_79, v_78, v_77, v_76, v_75, v_74, v_73, v_72, v_71,
+  v_70, v_69, v_68, v_67, v_66, v_65, v_64, v_63, v_62, v_61, v_60, v_59,
+  v_58, v_57, v_56, v_55, v_54, v_53, v_52, v_51, v_50, v_49, v_48, v_47,
+  v_46, v, r_12, nr_12, r_11, nr_11, r_10, nr_10, r_9, nr_9, r_8, nr_8, r_7,
+  nr_7, r_6, nr_6, r_5, nr_5, r_4, nr_4, r_3, nr_3, r_2, nr_2, r_1, nr_1, r,
+  nr, demandeEtage_1, arriveEtage_1, etat, marcheArret, code, pbGar, pbHab,
+  sonnerAlarme, copen_3, close_1, store, entree_1, sortie_1, copen_2, entree,
+  sortie, copen_1, con_1, coff_1, ouvrir, presence_3, occuper_3,
+  interrupteur_1, lumiere_1, presence_2, occuper_2, presence_1, occuper_1,
+  presence, occuper, loccuperMaison, loccuperGarage, loccuperAscenseur,
+  lpresencePoubelle, lLumiere, louvrirPoubelle, lstores, lsonnerAlarme,
+  lascenseur, prop1, prop2, prop3, prop4, prop5, prop6, prop7, prop8, prop8a,
+  prop9, prop10, prop11, prop12, prop13, prop14, prop15, prop16, prop12a,
+  prop12b, prop17, prop18, prop19, prop20, prop21, prop22, prop23, prop24:
+  bool;
+  v_171, v_176, v_184, reprise_St_10_Vigilence, vigilence_St_10_Vigilence,
+  temps_St_10_Vigilence, reprise_St_10_Sonner, vigilence_St_10_Sonner,
+  temps_St_10_Sonner, reprise_St_10_Allume, vigilence_St_10_Allume,
+  temps_St_10_Allume, reprise_St_10_Arret, vigilence_St_10_Arret,
+  temps_St_10_Arret, dReprise_1, dVigilence_1, dAlarme_1, temps, vigilence,
+  reprise: int;
+  s_12_St_21_Presence: St_21;
+  s_12_St_21_Nothing: St_21;
+  ns_12_St_21_Presence: St_21;
+  ns_12_St_21_Nothing: St_21;
+  ck_10: St_21;
+  s_11_St_20_Presence: St_20;
+  s_11_St_20_Nothing: St_20;
+  ns_11_St_20_Presence: St_20;
+  ns_11_St_20_Nothing: St_20;
+  ck_12: St_20;
+  s_10_St_19_Presence: St_19;
+  s_10_St_19_Nothing: St_19;
+  ns_10_St_19_Presence: St_19;
+  ns_10_St_19_Nothing: St_19;
+  ck_14: St_19;
+  s_9_St_18_On: St_18;
+  s_9_St_18_Off: St_18;
+  ns_9_St_18_On: St_18;
+  ns_9_St_18_Off: St_18;
+  ck_16: St_18;
+  s_8_St_17_Presence: St_17;
+  s_8_St_17_Nothing: St_17;
+  ns_8_St_17_Presence: St_17;
+  ns_8_St_17_Nothing: St_17;
+  ck_18: St_17;
+  s_7_St_16_Ouvrir: St_16;
+  s_7_St_16_Fermer: St_16;
+  ns_7_St_16_Ouvrir: St_16;
+  ns_7_St_16_Fermer: St_16;
+  ck_20: St_16;
+  s_6_St_15_Ouvrir: St_15;
+  s_6_St_15_Fermer: St_15;
+  ns_6_St_15_Ouvrir: St_15;
+  ouvrir_1_St_15_Ouvrir: Porte;
+  ns_6_St_15_Fermer: St_15;
+  ouvrir_1_St_15_Fermer: Porte;
+  ck_22: St_15;
+  v_138: St_14;
+  v_145: St_14;
+  v_149: St_14;
+  s_5_St_14_Arriere: St_14;
+  s_5_St_14_Avant: St_14;
+  s_5_St_14_Idle: St_14;
+  ns_5_St_14_Arriere: St_14;
+  pos_St_14_Arriere: Position;
+  ns_5_St_14_Avant: St_14;
+  pos_St_14_Avant: Position;
+  ns_5_St_14_Idle: St_14;
+  pos_St_14_Idle: Position;
+  ck_24: St_14;
+  s_4_St_13_Ouvrir: St_13;
+  s_4_St_13_Fermer: St_13;
+  ns_4_St_13_Ouvrir: St_13;
+  ouvrir_2_St_13_Ouvrir: Porte;
+  ns_4_St_13_Fermer: St_13;
+  ouvrir_2_St_13_Fermer: Porte;
+  ck_26: St_13;
+  v_155: St_12;
+  v_162: St_12;
+  v_166: St_12;
+  s_3_St_12_Arriere: St_12;
+  s_3_St_12_Avant: St_12;
+  s_3_St_12_Idle: St_12;
+  ns_3_St_12_Arriere: St_12;
+  pos_1_St_12_Arriere: Position;
+  ns_3_St_12_Avant: St_12;
+  pos_1_St_12_Avant: Position;
+  ns_3_St_12_Idle: St_12;
+  pos_1_St_12_Idle: Position;
+  ck_28: St_12;
+  s_2_St_11_Ouvrir: St_11;
+  s_2_St_11_Fermer: St_11;
+  ns_2_St_11_Ouvrir: St_11;
+  ns_2_St_11_Fermer: St_11;
+  ck_30: St_11;
+  s_1_St_10_Vigilence: St_10;
+  s_1_St_10_Sonner: St_10;
+  s_1_St_10_Allume: St_10;
+  s_1_St_10_Arret: St_10;
+  v_169: St_10;
+  v_174: St_10;
+  v_182: St_10;
+  v_180: St_10;
+  ns_1_St_10_Vigilence: St_10;
+  enMarche_St_10_Vigilence: Lum;
+  ns_1_St_10_Sonner: St_10;
+  enMarche_St_10_Sonner: Lum;
+  ns_1_St_10_Allume: St_10;
+  enMarche_St_10_Allume: Lum;
+  ns_1_St_10_Arret: St_10;
+  enMarche_St_10_Arret: Lum;
+  ck_32: St_10;
+  s_St_9_Mouvement: St_9;
+  s_St_9_Stop: St_9;
+  ns_St_9_Mouvement: St_9;
+  ns_St_9_Stop: St_9;
+  ck_34: St_9;
+  s_12: St_21;
+  ns_12: St_21;
+  s_11: St_20;
+  ns_11: St_20;
+  s_10: St_19;
+  ns_10: St_19;
+  s_9: St_18;
+  ns_9: St_18;
+  s_8: St_17;
+  ns_8: St_17;
+  s_7: St_16;
+  ns_7: St_16;
+  s_6: St_15;
+  ns_6: St_15;
+  s_5: St_14;
+  ns_5: St_14;
+  s_4: St_13;
+  ns_4: St_13;
+  s_3: St_12;
+  ns_3: St_12;
+  s_2: St_11;
+  ns_2: St_11;
+  s_1: St_10;
+  ns_1: St_10;
+  s: St_9;
+  ns: St_9;
+  enMarche: Lum;
+  pos_1: Position;
+  ouvrir_2: Porte;
+  pos: Position;
+  ouvrir_1: Porte;
+  louvrirPorte: Porte;
+  louvrirBarriere: Porte;
+  lenMarche: Lum;
+  lpositionDevantPorte: Position;
+  lpositionDevantBarriere: Position;
+  
+!definition
+  v_129 = not presence;
+  r_12_St_21_Presence = (v_129 or pnr_12);
+  s_12_St_21_Presence = (if v_129 then St_21_Nothing else St_21_Presence);
+  r_12_St_21_Nothing = (presence or pnr_12);
+  s_12_St_21_Nothing = (if presence then St_21_Presence else St_21_Nothing);
+  nr_12_St_21_Presence = false;
+  ns_12_St_21_Presence = St_21_Presence;
+  occuper_St_21_Presence = true;
+  nr_12_St_21_Nothing = false;
+  ns_12_St_21_Nothing = St_21_Nothing;
+  occuper_St_21_Nothing = false;
+  ck_10 = s_12;
+  v_130 = not presence_1;
+  r_11_St_20_Presence = (v_130 or pnr_11);
+  s_11_St_20_Presence = (if v_130 then St_20_Nothing else St_20_Presence);
+  r_11_St_20_Nothing = (presence_1 or pnr_11);
+  s_11_St_20_Nothing = (if presence_1 then St_20_Presence else St_20_Nothing);
+  nr_11_St_20_Presence = false;
+  ns_11_St_20_Presence = St_20_Presence;
+  occuper_1_St_20_Presence = true;
+  nr_11_St_20_Nothing = false;
+  ns_11_St_20_Nothing = St_20_Nothing;
+  occuper_1_St_20_Nothing = false;
+  ck_12 = s_11;
+  v_131 = not presence_2;
+  r_10_St_19_Presence = (v_131 or pnr_10);
+  s_10_St_19_Presence = (if v_131 then St_19_Nothing else St_19_Presence);
+  r_10_St_19_Nothing = (presence_2 or pnr_10);
+  s_10_St_19_Nothing = (if presence_2 then St_19_Presence else St_19_Nothing);
+  nr_10_St_19_Presence = false;
+  ns_10_St_19_Presence = St_19_Presence;
+  occuper_2_St_19_Presence = true;
+  nr_10_St_19_Nothing = false;
+  ns_10_St_19_Nothing = St_19_Nothing;
+  occuper_2_St_19_Nothing = false;
+  ck_14 = s_10;
+  v_132 = not interrupteur_1;
+  r_9_St_18_On = (v_132 or pnr_9);
+  s_9_St_18_On = (if v_132 then St_18_Off else St_18_On);
+  r_9_St_18_Off = (interrupteur_1 or pnr_9);
+  s_9_St_18_Off = (if interrupteur_1 then St_18_On else St_18_Off);
+  nr_9_St_18_On = false;
+  ns_9_St_18_On = St_18_On;
+  lumiere_1_St_18_On = true;
+  nr_9_St_18_Off = false;
+  ns_9_St_18_Off = St_18_Off;
+  lumiere_1_St_18_Off = false;
+  ck_16 = s_9;
+  v_133 = not presence_3;
+  r_8_St_17_Presence = (v_133 or pnr_8);
+  s_8_St_17_Presence = (if v_133 then St_17_Nothing else St_17_Presence);
+  r_8_St_17_Nothing = (presence_3 or pnr_8);
+  s_8_St_17_Nothing = (if presence_3 then St_17_Presence else St_17_Nothing);
+  nr_8_St_17_Presence = false;
+  ns_8_St_17_Presence = St_17_Presence;
+  occuper_3_St_17_Presence = true;
+  nr_8_St_17_Nothing = false;
+  ns_8_St_17_Nothing = St_17_Nothing;
+  occuper_3_St_17_Nothing = false;
+  ck_18 = s_8;
+  r_7_St_16_Ouvrir = (coff_1 or pnr_7);
+  s_7_St_16_Ouvrir = (if coff_1 then St_16_Fermer else St_16_Ouvrir);
+  r_7_St_16_Fermer = (con_1 or pnr_7);
+  s_7_St_16_Fermer = (if con_1 then St_16_Ouvrir else St_16_Fermer);
+  nr_7_St_16_Ouvrir = false;
+  ns_7_St_16_Ouvrir = St_16_Ouvrir;
+  ouvrir_St_16_Ouvrir = true;
+  nr_7_St_16_Fermer = false;
+  ns_7_St_16_Fermer = St_16_Fermer;
+  ouvrir_St_16_Fermer = false;
+  ck_20 = s_7;
+  v_134 = not copen_1;
+  r_6_St_15_Ouvrir = (v_134 or pnr_6);
+  s_6_St_15_Ouvrir = (if v_134 then St_15_Fermer else St_15_Ouvrir);
+  r_6_St_15_Fermer = (copen_1 or pnr_6);
+  s_6_St_15_Fermer = (if copen_1 then St_15_Ouvrir else St_15_Fermer);
+  nr_6_St_15_Ouvrir = false;
+  ns_6_St_15_Ouvrir = St_15_Ouvrir;
+  ouvrir_1_St_15_Ouvrir = Fermer;
+  nr_6_St_15_Fermer = false;
+  ns_6_St_15_Fermer = St_15_Fermer;
+  ouvrir_1_St_15_Fermer = Ouvert;
+  ck_22 = s_6;
+  v_139 = (v_137 or pnr_5);
+  v_138 = (if v_137 then St_14_Idle else St_14_Arriere);
+  v_137 = v_135 and v_136;
+  v_136 = not sortie;
+  v_135 = not entree;
+  v_146 = (v_144 or pnr_5);
+  v_145 = (if v_144 then St_14_Arriere else St_14_Avant);
+  v_144 = sortie and v_143;
+  v_143 = not entree;
+  v_142 = v_140 and v_141;
+  v_141 = not sortie;
+  v_140 = not entree;
+  v_150 = (v_148 or pnr_5);
+  v_149 = (if v_148 then St_14_Arriere else St_14_Idle);
+  v_148 = v_147 and sortie;
+  v_147 = not entree;
+  r_5_St_14_Arriere = (entree or v_139);
+  s_5_St_14_Arriere = (if entree then St_14_Avant else v_138);
+  r_5_St_14_Avant = (v_142 or v_146);
+  s_5_St_14_Avant = (if v_142 then St_14_Idle else v_145);
+  r_5_St_14_Idle = (entree or v_150);
+  s_5_St_14_Idle = (if entree then St_14_Avant else v_149);
+  nr_5_St_14_Arriere = false;
+  ns_5_St_14_Arriere = St_14_Arriere;
+  pos_St_14_Arriere = Arriere;
+  nr_5_St_14_Avant = false;
+  ns_5_St_14_Avant = St_14_Avant;
+  pos_St_14_Avant = Avant;
+  nr_5_St_14_Idle = false;
+  ns_5_St_14_Idle = St_14_Idle;
+  pos_St_14_Idle = Null;
+  ck_24 = s_5;
+  v_151 = not copen_2;
+  r_4_St_13_Ouvrir = (v_151 or pnr_4);
+  s_4_St_13_Ouvrir = (if v_151 then St_13_Fermer else St_13_Ouvrir);
+  r_4_St_13_Fermer = (copen_2 or pnr_4);
+  s_4_St_13_Fermer = (if copen_2 then St_13_Ouvrir else St_13_Fermer);
+  nr_4_St_13_Ouvrir = false;
+  ns_4_St_13_Ouvrir = St_13_Ouvrir;
+  ouvrir_2_St_13_Ouvrir = Fermer;
+  nr_4_St_13_Fermer = false;
+  ns_4_St_13_Fermer = St_13_Fermer;
+  ouvrir_2_St_13_Fermer = Ouvert;
+  ck_26 = s_4;
+  v_156 = (v_154 or pnr_3);
+  v_155 = (if v_154 then St_12_Idle else St_12_Arriere);
+  v_154 = v_152 and v_153;
+  v_153 = not sortie_1;
+  v_152 = not entree_1;
+  v_163 = (v_161 or pnr_3);
+  v_162 = (if v_161 then St_12_Arriere else St_12_Avant);
+  v_161 = sortie_1 and v_160;
+  v_160 = not entree_1;
+  v_159 = v_157 and v_158;
+  v_158 = not sortie_1;
+  v_157 = not entree_1;
+  v_167 = (v_165 or pnr_3);
+  v_166 = (if v_165 then St_12_Arriere else St_12_Idle);
+  v_165 = v_164 and sortie_1;
+  v_164 = not entree_1;
+  r_3_St_12_Arriere = (entree_1 or v_156);
+  s_3_St_12_Arriere = (if entree_1 then St_12_Avant else v_155);
+  r_3_St_12_Avant = (v_159 or v_163);
+  s_3_St_12_Avant = (if v_159 then St_12_Idle else v_162);
+  r_3_St_12_Idle = (entree_1 or v_167);
+  s_3_St_12_Idle = (if entree_1 then St_12_Avant else v_166);
+  nr_3_St_12_Arriere = false;
+  ns_3_St_12_Arriere = St_12_Arriere;
+  pos_1_St_12_Arriere = Arriere;
+  nr_3_St_12_Avant = false;
+  ns_3_St_12_Avant = St_12_Avant;
+  pos_1_St_12_Avant = Avant;
+  nr_3_St_12_Idle = false;
+  ns_3_St_12_Idle = St_12_Idle;
+  pos_1_St_12_Idle = Null;
+  ck_28 = s_3;
+  r_2_St_11_Ouvrir = (close_1 or pnr_2);
+  s_2_St_11_Ouvrir = (if close_1 then St_11_Fermer else St_11_Ouvrir);
+  r_2_St_11_Fermer = (copen_3 or pnr_2);
+  s_2_St_11_Fermer = (if copen_3 then St_11_Ouvrir else St_11_Fermer);
+  nr_2_St_11_Ouvrir = false;
+  ns_2_St_11_Ouvrir = St_11_Ouvrir;
+  store_St_11_Ouvrir = true;
+  nr_2_St_11_Fermer = false;
+  ns_2_St_11_Fermer = St_11_Fermer;
+  store_St_11_Fermer = false;
+  ck_30 = s_2;
+  r_1_St_10_Vigilence = pnr_1;
+  s_1_St_10_Vigilence = St_10_Vigilence;
+  r_1_St_10_Sonner = pnr_1;
+  s_1_St_10_Sonner = St_10_Sonner;
+  r_1_St_10_Allume = pnr_1;
+  s_1_St_10_Allume = St_10_Allume;
+  r_1_St_10_Arret = (marcheArret or pnr_1);
+  s_1_St_10_Arret = (if marcheArret then St_10_Allume else St_10_Arret);
+  v_171 = (vigilence + 1);
+  v_170 = v_168;
+  v_169 = (if v_168 then St_10_Arret else St_10_Vigilence);
+  v_168 = (dVigilence_1 <= vigilence);
+  v_176 = (reprise + 1);
+  v_175 = v_173;
+  v_174 = (if v_173 then St_10_Allume else St_10_Sonner);
+  v_173 = (dReprise_1 <= reprise);
+  v_184 = (temps + 1);
+  v_183 = (pbHab or v_181);
+  v_182 = (if pbHab then St_10_Sonner else v_180);
+  v_181 = v_179;
+  v_180 = (if v_179 then St_10_Sonner else St_10_Allume);
+  v_179 = pbGar and v_178;
+  v_178 = (dVigilence_1 <= temps);
+  nr_1_St_10_Vigilence = (pbHab or v_170);
+  ns_1_St_10_Vigilence = (if pbHab then St_10_Sonner else v_169);
+  reprise_St_10_Vigilence = reprise_2;
+  vigilence_St_10_Vigilence = (if r_1 then 0 else v_172);
+  temps_St_10_Vigilence = temps_2;
+  enMarche_St_10_Vigilence = Jaune;
+  sonnerAlarme_St_10_Vigilence = false;
+  nr_1_St_10_Sonner = (code or v_175);
+  ns_1_St_10_Sonner = (if code then St_10_Arret else v_174);
+  reprise_St_10_Sonner = (if r_1 then 0 else v_177);
+  vigilence_St_10_Sonner = vigilence_2;
+  temps_St_10_Sonner = temps_2;
+  enMarche_St_10_Sonner = Vert;
+  sonnerAlarme_St_10_Sonner = true;
+  nr_1_St_10_Allume = (code or v_183);
+  ns_1_St_10_Allume = (if code then St_10_Vigilence else v_182);
+  reprise_St_10_Allume = reprise_2;
+  vigilence_St_10_Allume = vigilence_2;
+  temps_St_10_Allume = (if r_1 then 0 else v_185);
+  enMarche_St_10_Allume = Vert;
+  sonnerAlarme_St_10_Allume = false;
+  nr_1_St_10_Arret = false;
+  ns_1_St_10_Arret = St_10_Arret;
+  reprise_St_10_Arret = reprise_2;
+  vigilence_St_10_Arret = vigilence_2;
+  temps_St_10_Arret = temps_2;
+  enMarche_St_10_Arret = Rouge;
+  sonnerAlarme_St_10_Arret = false;
+  ck_32 = s_1;
+  v_187 = (v_186 or arriveEtage_1);
+  v_186 = not demandeEtage_1;
+  r_St_9_Mouvement = (v_187 or pnr);
+  s_St_9_Mouvement = (if v_187 then St_9_Stop else St_9_Mouvement);
+  r_St_9_Stop = (demandeEtage_1 or pnr);
+  s_St_9_Stop = (if demandeEtage_1 then St_9_Mouvement else St_9_Stop);
+  nr_St_9_Mouvement = false;
+  ns_St_9_Mouvement = St_9_Mouvement;
+  etat_St_9_Mouvement = true;
+  nr_St_9_Stop = false;
+  ns_St_9_Stop = St_9_Stop;
+  etat_St_9_Stop = false;
+  ck_34 = s;
+  v_128 = not lLumiere;
+  v_127 = not lstores;
+  v_126 = (lstores or lLumiere);
+  v_125 = not loccuperMaison;
+  v_124 = not luminosite;
+  v_123 = not lstores;
+  v_122 = not vent;
+  v_121 = not lstores;
+  v_120 = not v_119;
+  v_119 = v_118 and loccuperMaison;
+  v_118 = not lstores;
+  v_117 = not lLumiere;
+  v_116 = not lstores;
+  v_115 = not louvrirPoubelle;
+  v_114 = not lpresencePoubelle;
+  v_113 = not v_112;
+  v_112 = v_111 and luminosite;
+  v_111 = not vent;
+  v_110 = not v_109;
+  v_109 = v_108 and loccuperMaison;
+  v_108 = v_107 and luminosite;
+  v_107 = not vent;
+  v_106 = not lstores;
+  v_105 = not v_104;
+  v_104 = v_102 and v_103;
+  v_103 = not loccuperMaison;
+  v_102 = v_101 and luminosite;
+  v_101 = not vent;
+  v_100 = not lstores;
+  v_99 = not v_98;
+  v_98 = vent and v_97;
+  v_97 = not luminosite;
+  v_96 = not lstores;
+  v_95 = not v_94;
+  v_94 = vent and luminosite;
+  v_93 = not lstores;
+  v_92 = not v_91;
+  v_91 = v_89 and v_90;
+  v_90 = not luminosite;
+  v_89 = not vent;
+  v_88 = (louvrirPorte = Ouvert);
+  v_87 = not v_86;
+  v_86 = (lpositionDevantPorte = Arriere);
+  v_85 = not v_84;
+  v_84 = (louvrirPorte = Ouvert);
+  v_83 = not v_82;
+  v_82 = (lpositionDevantPorte = Null);
+  v_81 = (louvrirPorte = Ouvert);
+  v_80 = not v_79;
+  v_79 = codePorte and v_78;
+  v_78 = (lpositionDevantPorte = Avant);
+  v_77 = (louvrirBarriere = Ouvert);
+  v_76 = not v_75;
+  v_75 = (lpositionDevantBarriere = Arriere);
+  v_74 = not v_73;
+  v_73 = (louvrirBarriere = Ouvert);
+  v_72 = not v_71;
+  v_71 = (lpositionDevantBarriere = Null);
+  v_70 = (louvrirBarriere = Ouvert);
+  v_69 = not v_68;
+  v_68 = codeBarriere and v_67;
+  v_67 = (lpositionDevantBarriere = Avant);
+  v_66 = not lascenseur;
+  v_65 = not loccuperAscenseur;
+  v_64 = not v_63;
+  v_63 = (lenMarche = Rouge);
+  v_62 = v_61 and prop20;
+  v_61 = v_60 and prop16;
+  v_60 = v_59 and prop24;
+  v_59 = v_58 and prop23;
+  v_58 = v_57 and prop19;
+  v_57 = v_56 and prop18;
+  v_56 = v_55 and prop17;
+  v_55 = v_54 and prop15;
+  v_54 = v_53 and prop14;
+  v_53 = v_52 and prop13;
+  v_52 = v_51 and prop12b;
+  v_51 = v_50 and prop12a;
+  v_50 = v_49 and prop11;
+  v_49 = v_48 and prop10;
+  v_48 = v_47 and prop9;
+  v_47 = v_46 and prop8a;
+  v_46 = v and prop3;
+  v = prop1 and prop2;
+  s_12 = (if (ck = St_21_Nothing) then s_12_St_21_Nothing else
+         s_12_St_21_Presence);
+  ns_12 = (if (ck_10 = St_21_Nothing) then ns_12_St_21_Nothing else
+          ns_12_St_21_Presence);
+  r_12 = (if (ck = St_21_Nothing) then r_12_St_21_Nothing else
+         r_12_St_21_Presence);
+  nr_12 = (if (ck_10 = St_21_Nothing) then nr_12_St_21_Nothing else
+          nr_12_St_21_Presence);
+  s_11 = (if (ck_11 = St_20_Nothing) then s_11_St_20_Nothing else
+         s_11_St_20_Presence);
+  ns_11 = (if (ck_12 = St_20_Nothing) then ns_11_St_20_Nothing else
+          ns_11_St_20_Presence);
+  r_11 = (if (ck_11 = St_20_Nothing) then r_11_St_20_Nothing else
+         r_11_St_20_Presence);
+  nr_11 = (if (ck_12 = St_20_Nothing) then nr_11_St_20_Nothing else
+          nr_11_St_20_Presence);
+  s_10 = (if (ck_13 = St_19_Nothing) then s_10_St_19_Nothing else
+         s_10_St_19_Presence);
+  ns_10 = (if (ck_14 = St_19_Nothing) then ns_10_St_19_Nothing else
+          ns_10_St_19_Presence);
+  r_10 = (if (ck_13 = St_19_Nothing) then r_10_St_19_Nothing else
+         r_10_St_19_Presence);
+  nr_10 = (if (ck_14 = St_19_Nothing) then nr_10_St_19_Nothing else
+          nr_10_St_19_Presence);
+  s_9 = (if (ck_15 = St_18_Off) then s_9_St_18_Off else s_9_St_18_On);
+  ns_9 = (if (ck_16 = St_18_Off) then ns_9_St_18_Off else ns_9_St_18_On);
+  r_9 = (if (ck_15 = St_18_Off) then r_9_St_18_Off else r_9_St_18_On);
+  nr_9 = (if (ck_16 = St_18_Off) then nr_9_St_18_Off else nr_9_St_18_On);
+  s_8 = (if (ck_17 = St_17_Nothing) then s_8_St_17_Nothing else
+        s_8_St_17_Presence);
+  ns_8 = (if (ck_18 = St_17_Nothing) then ns_8_St_17_Nothing else
+         ns_8_St_17_Presence);
+  r_8 = (if (ck_17 = St_17_Nothing) then r_8_St_17_Nothing else
+        r_8_St_17_Presence);
+  nr_8 = (if (ck_18 = St_17_Nothing) then nr_8_St_17_Nothing else
+         nr_8_St_17_Presence);
+  s_7 = (if (ck_19 = St_16_Fermer) then s_7_St_16_Fermer else
+        s_7_St_16_Ouvrir);
+  ns_7 = (if (ck_20 = St_16_Fermer) then ns_7_St_16_Fermer else
+         ns_7_St_16_Ouvrir);
+  r_7 = (if (ck_19 = St_16_Fermer) then r_7_St_16_Fermer else
+        r_7_St_16_Ouvrir);
+  nr_7 = (if (ck_20 = St_16_Fermer) then nr_7_St_16_Fermer else
+         nr_7_St_16_Ouvrir);
+  s_6 = (if (ck_21 = St_15_Fermer) then s_6_St_15_Fermer else
+        s_6_St_15_Ouvrir);
+  ns_6 = (if (ck_22 = St_15_Fermer) then ns_6_St_15_Fermer else
+         ns_6_St_15_Ouvrir);
+  r_6 = (if (ck_21 = St_15_Fermer) then r_6_St_15_Fermer else
+        r_6_St_15_Ouvrir);
+  nr_6 = (if (ck_22 = St_15_Fermer) then nr_6_St_15_Fermer else
+         nr_6_St_15_Ouvrir);
+  s_5 = (if (ck_23 = St_14_Idle) then s_5_St_14_Idle else
+        (if (ck_23 = St_14_Avant) then s_5_St_14_Avant else
+        s_5_St_14_Arriere));
+  ns_5 = (if (ck_24 = St_14_Idle) then ns_5_St_14_Idle else
+         (if (ck_24 = St_14_Avant) then ns_5_St_14_Avant else
+         ns_5_St_14_Arriere));
+  r_5 = (if (ck_23 = St_14_Idle) then r_5_St_14_Idle else
+        (if (ck_23 = St_14_Avant) then r_5_St_14_Avant else
+        r_5_St_14_Arriere));
+  nr_5 = (if (ck_24 = St_14_Idle) then nr_5_St_14_Idle else
+         (if (ck_24 = St_14_Avant) then nr_5_St_14_Avant else
+         nr_5_St_14_Arriere));
+  s_4 = (if (ck_25 = St_13_Fermer) then s_4_St_13_Fermer else
+        s_4_St_13_Ouvrir);
+  ns_4 = (if (ck_26 = St_13_Fermer) then ns_4_St_13_Fermer else
+         ns_4_St_13_Ouvrir);
+  r_4 = (if (ck_25 = St_13_Fermer) then r_4_St_13_Fermer else
+        r_4_St_13_Ouvrir);
+  nr_4 = (if (ck_26 = St_13_Fermer) then nr_4_St_13_Fermer else
+         nr_4_St_13_Ouvrir);
+  s_3 = (if (ck_27 = St_12_Idle) then s_3_St_12_Idle else
+        (if (ck_27 = St_12_Avant) then s_3_St_12_Avant else
+        s_3_St_12_Arriere));
+  ns_3 = (if (ck_28 = St_12_Idle) then ns_3_St_12_Idle else
+         (if (ck_28 = St_12_Avant) then ns_3_St_12_Avant else
+         ns_3_St_12_Arriere));
+  r_3 = (if (ck_27 = St_12_Idle) then r_3_St_12_Idle else
+        (if (ck_27 = St_12_Avant) then r_3_St_12_Avant else
+        r_3_St_12_Arriere));
+  nr_3 = (if (ck_28 = St_12_Idle) then nr_3_St_12_Idle else
+         (if (ck_28 = St_12_Avant) then nr_3_St_12_Avant else
+         nr_3_St_12_Arriere));
+  s_2 = (if (ck_29 = St_11_Fermer) then s_2_St_11_Fermer else
+        s_2_St_11_Ouvrir);
+  ns_2 = (if (ck_30 = St_11_Fermer) then ns_2_St_11_Fermer else
+         ns_2_St_11_Ouvrir);
+  r_2 = (if (ck_29 = St_11_Fermer) then r_2_St_11_Fermer else
+        r_2_St_11_Ouvrir);
+  nr_2 = (if (ck_30 = St_11_Fermer) then nr_2_St_11_Fermer else
+         nr_2_St_11_Ouvrir);
+  s_1 = (if (ck_31 = St_10_Arret) then s_1_St_10_Arret else
+        (if (ck_31 = St_10_Allume) then s_1_St_10_Allume else
+        (if (ck_31 = St_10_Sonner) then s_1_St_10_Sonner else
+        s_1_St_10_Vigilence)));
+  ns_1 = (if (ck_32 = St_10_Arret) then ns_1_St_10_Arret else
+         (if (ck_32 = St_10_Allume) then ns_1_St_10_Allume else
+         (if (ck_32 = St_10_Sonner) then ns_1_St_10_Sonner else
+         ns_1_St_10_Vigilence)));
+  r_1 = (if (ck_31 = St_10_Arret) then r_1_St_10_Arret else
+        (if (ck_31 = St_10_Allume) then r_1_St_10_Allume else
+        (if (ck_31 = St_10_Sonner) then r_1_St_10_Sonner else
+        r_1_St_10_Vigilence)));
+  nr_1 = (if (ck_32 = St_10_Arret) then nr_1_St_10_Arret else
+         (if (ck_32 = St_10_Allume) then nr_1_St_10_Allume else
+         (if (ck_32 = St_10_Sonner) then nr_1_St_10_Sonner else
+         nr_1_St_10_Vigilence)));
+  s = (if (ck_33 = St_9_Stop) then s_St_9_Stop else s_St_9_Mouvement);
+  ns = (if (ck_34 = St_9_Stop) then ns_St_9_Stop else ns_St_9_Mouvement);
+  r = (if (ck_33 = St_9_Stop) then r_St_9_Stop else r_St_9_Mouvement);
+  nr = (if (ck_34 = St_9_Stop) then nr_St_9_Stop else nr_St_9_Mouvement);
+  demandeEtage_1 = demandeEtage;
+  arriveEtage_1 = arriveEtage;
+  etat = (if (ck_34 = St_9_Stop) then etat_St_9_Stop else
+         etat_St_9_Mouvement);
+  marcheArret = marcheArretAlarme;
+  code = codeAlarme;
+  pbGar = loccuperGarage;
+  pbHab = loccuperMaison;
+  dReprise_1 = dReprise;
+  dVigilence_1 = dVigilence;
+  dAlarme_1 = dAlarme;
+  temps = (if (ck_32 = St_10_Arret) then temps_St_10_Arret else
+          (if (ck_32 = St_10_Allume) then temps_St_10_Allume else
+          (if (ck_32 = St_10_Sonner) then temps_St_10_Sonner else
+          temps_St_10_Vigilence)));
+  vigilence = (if (ck_32 = St_10_Arret) then vigilence_St_10_Arret else
+              (if (ck_32 = St_10_Allume) then vigilence_St_10_Allume else
+              (if (ck_32 = St_10_Sonner) then vigilence_St_10_Sonner else
+              vigilence_St_10_Vigilence)));
+  reprise = (if (ck_32 = St_10_Arret) then reprise_St_10_Arret else
+            (if (ck_32 = St_10_Allume) then reprise_St_10_Allume else
+            (if (ck_32 = St_10_Sonner) then reprise_St_10_Sonner else
+            reprise_St_10_Vigilence)));
+  sonnerAlarme = (if (ck_32 = St_10_Arret) then sonnerAlarme_St_10_Arret else
+                 (if (ck_32 = St_10_Allume) then sonnerAlarme_St_10_Allume
+                 else
+                 (if (ck_32 = St_10_Sonner) then sonnerAlarme_St_10_Sonner
+                 else sonnerAlarme_St_10_Vigilence)));
+  enMarche = (if (ck_32 = St_10_Arret) then enMarche_St_10_Arret else
+             (if (ck_32 = St_10_Allume) then enMarche_St_10_Allume else
+             (if (ck_32 = St_10_Sonner) then enMarche_St_10_Sonner else
+             enMarche_St_10_Vigilence)));
+  copen_3 = copen;
+  close_1 = close;
+  store = (if (ck_30 = St_11_Fermer) then store_St_11_Fermer else
+          store_St_11_Ouvrir);
+  entree_1 = presenceEntreeBarriere;
+  sortie_1 = presenceSortieBarriere;
+  pos_1 = (if (ck_28 = St_12_Idle) then pos_1_St_12_Idle else
+          (if (ck_28 = St_12_Avant) then pos_1_St_12_Avant else
+          pos_1_St_12_Arriere));
+  copen_2 = openBarriere;
+  ouvrir_2 = (if (ck_26 = St_13_Fermer) then ouvrir_2_St_13_Fermer else
+             ouvrir_2_St_13_Ouvrir);
+  entree = presenceEntreePorte;
+  sortie = presenceSortiePorte;
+  pos = (if (ck_24 = St_14_Idle) then pos_St_14_Idle else
+        (if (ck_24 = St_14_Avant) then pos_St_14_Avant else
+        pos_St_14_Arriere));
+  copen_1 = openPorte;
+  ouvrir_1 = (if (ck_22 = St_15_Fermer) then ouvrir_1_St_15_Fermer else
+             ouvrir_1_St_15_Ouvrir);
+  con_1 = con;
+  coff_1 = coff;
+  ouvrir = (if (ck_20 = St_16_Fermer) then ouvrir_St_16_Fermer else
+           ouvrir_St_16_Ouvrir);
+  presence_3 = presenceDevantPoubelle;
+  occuper_3 = (if (ck_18 = St_17_Nothing) then occuper_3_St_17_Nothing else
+              occuper_3_St_17_Presence);
+  interrupteur_1 = interrupteur;
+  lumiere_1 = (if (ck_16 = St_18_Off) then lumiere_1_St_18_Off else
+              lumiere_1_St_18_On);
+  presence_2 = presenceAscenseur;
+  occuper_2 = (if (ck_14 = St_19_Nothing) then occuper_2_St_19_Nothing else
+              occuper_2_St_19_Presence);
+  presence_1 = presenceGarage;
+  occuper_1 = (if (ck_12 = St_20_Nothing) then occuper_1_St_20_Nothing else
+              occuper_1_St_20_Presence);
+  presence = presenceMaison;
+  occuper = (if (ck_10 = St_21_Nothing) then occuper_St_21_Nothing else
+            occuper_St_21_Presence);
+  loccuperMaison = occuper;
+  loccuperGarage = occuper_1;
+  loccuperAscenseur = occuper_2;
+  lpresencePoubelle = occuper_3;
+  lLumiere = lumiere_1;
+  louvrirPoubelle = ouvrir;
+  lstores = store;
+  lsonnerAlarme = sonnerAlarme;
+  lascenseur = etat;
+  prop1 = (loccuperMaison or v_128);
+  prop2 = (loccuperMaison or v_127);
+  prop3 = (v_125 or v_126);
+  prop4 = (vent or lstores);
+  prop5 = (v_124 or lstores);
+  prop6 = (v_122 or v_123);
+  prop7 = (luminosite or v_121);
+  prop8 = (lstores or lLumiere);
+  prop8a = (v_120 or lLumiere);
+  prop9 = (v_116 or v_117);
+  prop10 = (lpresencePoubelle or v_115);
+  prop11 = (v_114 or louvrirPoubelle);
+  prop12 = (v_113 or lstores);
+  prop13 = (v_99 or v_100);
+  prop14 = (v_95 or v_96);
+  prop15 = (v_92 or v_93);
+  prop16 = (v_80 or v_81);
+  prop12a = (v_110 or lstores);
+  prop12b = (v_105 or v_106);
+  prop17 = (v_87 or v_88);
+  prop18 = (v_69 or v_70);
+  prop19 = (v_76 or v_77);
+  prop20 = (loccuperAscenseur or v_66);
+  prop21 = (v_65 or lascenseur);
+  prop22 = (loccuperMaison or v_64);
+  prop23 = (v_83 or v_85);
+  prop24 = (v_72 or v_74);
+  louvrirPorte = ouvrir_1;
+  louvrirBarriere = ouvrir_2;
+  lenMarche = enMarche;
+  lpositionDevantPorte = pos;
+  lpositionDevantBarriere = pos_1;
+  
+!transition
+  ck'= ns_12;
+  ck_11'= ns_11;
+  ck_13'= ns_10;
+  ck_15'= ns_9;
+  ck_17'= ns_8;
+  ck_19'= ns_7;
+  ck_21'= ns_6;
+  ck_23'= ns_5;
+  ck_25'= ns_4;
+  ck_27'= ns_3;
+  ck_29'= ns_2;
+  ck_31'= ns_1;
+  v_172'= (if (ck_32 = St_10_Vigilence) then v_171 else v_172);
+  v_177'= (if (ck_32 = St_10_Sonner) then v_176 else v_177);
+  v_185'= (if (ck_32 = St_10_Allume) then v_184 else v_185);
+  ck_33'= ns;
+  pnr_12'= nr_12;
+  pnr_11'= nr_11;
+  pnr_10'= nr_10;
+  pnr_9'= nr_9;
+  pnr_8'= nr_8;
+  pnr_7'= nr_7;
+  pnr_6'= nr_6;
+  pnr_5'= nr_5;
+  pnr_4'= nr_4;
+  pnr_3'= nr_3;
+  pnr_2'= nr_2;
+  pnr_1'= nr_1;
+  pnr'= nr;
+  reprise_2'= reprise;
+  vigilence_2'= vigilence;
+  temps_2'= temps;
+  __init__'= false;
+  ok'= true;
+  property'= v_62 and prop21;
+  ascenseur'= lascenseur;
+  etatAlarme'= lenMarche;
+  alarmeSonne'= lsonnerAlarme;
+  ouvertureStore'= lstores;
+  capteurPositionBarriere'= lpositionDevantBarriere;
+  barriere'= louvrirBarriere;
+  capteurPositionPorte'= lpositionDevantPorte;
+  porteStatus'= louvrirPorte;
+  poubelleOuvert'= louvrirPoubelle;
+  lumiere'= lLumiere;
+  etatMaison'= loccuperMaison;
+  
+!initial
+  (ck = St_21_Nothing) and not pnr_12 and (ck_11 = St_20_Nothing) and not
+  pnr_11 and (ck_13 = St_19_Nothing) and not pnr_10 and
+  (ck_15 = St_18_Off) and not pnr_9 and (ck_17 = St_17_Nothing) and not
+  pnr_8 and (ck_19 = St_16_Fermer) and not pnr_7 and
+  (ck_21 = St_15_Fermer) and not pnr_6 and (ck_23 = St_14_Idle) and not
+  pnr_5 and (ck_25 = St_13_Fermer) and not pnr_4 and (ck_27 = St_12_Idle) and
+  not pnr_3 and (ck_29 = St_11_Fermer) and not pnr_2 and
+  (ck_31 = St_10_Arret) and not pnr_1 and (ck_33 = St_9_Stop) and not pnr and
+  (temps_2 = 0) and (vigilence_2 = 0) and (reprise_2 = 0) and (v_172 = 0) and
+  (v_177 = 0) and (v_185 = 0) and __init__;
+!assertion
+  true;
+!invariant
+  (__init__ or ok and property);

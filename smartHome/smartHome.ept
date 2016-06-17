@@ -242,7 +242,7 @@ let
 	prop20 = loccuperAscenseur or  not lascenseur;
 	prop21 = not loccuperAscenseur or lascenseur;
 	prop22 = loccuperMaison or (lenMarche <> Rouge);
-	(*prop22 est mis en evidence dans un autre fichier, decrivant ce meme systeme*)
+	(*Avec prop22, on constate un probleme de specification avec le systme controle au niveau du composant d'alarme*)
 	property = prop1 & prop2 & prop3 & prop8a & prop9 & prop10 & prop11 & prop12a & prop12b & prop13 & prop14 & prop15 & prop17 & prop18 & prop19 & prop23 & prop24 & prop16 & prop20 & prop21;
 
 	etatMaison = loccuperMaison;

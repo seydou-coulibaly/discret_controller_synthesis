@@ -1,4 +1,4 @@
-/* --- Generated the 26/5/2016 at 13:14 --- */
+/* --- Generated the 17/6/2016 at 14:9 --- */
 /* --- heptagon compiler, version 1.03.00 (compiled tue. may. 24 19:48:24 CET 2016) --- */
 /* --- Command line: /home/seydou/.opam/4.02.3/bin/heptc -target c train_controller.ept --- */
 
@@ -31,7 +31,6 @@ void Train_controller__train_ctrlr0_step(Train_controller__st_14 ck,
                                          int presenceSection2,
                                          Train_controller__train_ctrlr0_out* _out) {
   
-  int v_5;
   int v_4;
   int v_3;
   int v_2;
@@ -57,18 +56,18 @@ void Train_controller__train_ctrlr0_step(Train_controller__st_14 ck,
   } else {
     l2 = l0;
   };
-  v_5 = (ck_17==Train_controller__St_7_PresenceNiveau);
-  l3 = (v_5&&l2);
-  v_4 = (ck_17==Train_controller__St_7_NiveauVide);
-  l4 = (v_4&&l2);
+  v_4 = (ck_17==Train_controller__St_7_PresenceNiveau);
+  l3 = (v_4&&l2);
+  v_2 = (ck_17==Train_controller__St_7_PresenceNiveau);
+  v_3 = !(v_2);
+  l4 = (v_3&&l2);
   if (presenceAiguillage1) {
     l5 = l4;
   } else {
     l5 = l3;
   };
-  v_2 = (ck==Train_controller__St_14_Haut);
-  v_3 = !(v_2);
-  l6 = (v_3||l5);
+  v_1 = (ck==Train_controller__St_14_Bas);
+  l6 = (v_1||l5);
   _out->demandeActionnerAig1Bas = l6;
   l7 = (ck_19==Train_controller__St_6_PresenceNiveau);
   l8 = (ck_19==Train_controller__St_6_NiveauVide);
@@ -77,9 +76,8 @@ void Train_controller__train_ctrlr0_step(Train_controller__st_14 ck,
   } else {
     l9 = l7;
   };
-  v = (ck_5==Train_controller__St_13_Bas);
-  v_1 = !(v);
-  l10 = (v_1||l9);
+  v = (ck_5==Train_controller__St_13_Haut);
+  l10 = (v||l9);
   _out->demandeActionnerAig2Haut = l10;;
 }
 

@@ -1,0 +1,65 @@
+type command = Open|Close|SwitchOn|SwitchOff|Nothing
+type lampState = On|Off
+type lumValue = Null|Low|Normal|High
+type shutterState = Closed|Opened|Closing|Opening
+type st = St_Opening|St_Opened|St_Closing|St_Closed
+type st_1 = St_1_On|St_1_Off
+type st_2 = St_2_Somebody|St_2_Nobody
+type st_3 = St_3_Somebody|St_3_Nobody
+type st_4 = St_4_On|St_4_Off
+type st_5 = St_5_Opening|St_5_Opened|St_5_Closing|St_5_Closed
+node lum_ctrlr0(ck : st_5; ck_11 : st_4; ck_14 : st_3; ok : bool;
+                 outdoorlum : lumValue; outlumbefore : lumValue; pnr : bool;
+                 pnr_1 : bool; pnr_2 : bool; presence : bool;
+                 stopdown : bool; stopup : bool)
+returns (cclose : bool; coff : bool; con : bool; copen : bool)
+var v_19 : bool; v_18 : bool; v_17 : bool; v_16 : bool; v_15 : bool;
+    v_14 : bool; v_13 : bool; v_12 : bool; v_11 : bool; v_10 : bool;
+    v_9 : bool; v_8 : bool; v_7 : bool; v_6 : bool; v_5 : bool; v_4 : bool;
+    v_3 : bool; v_2 : bool; v_1 : bool; v : bool; l15 : bool; l14 : bool;
+    l13 : bool; l12 : bool; l11 : bool; l10 : bool; l9 : bool; l8 : bool;
+    l7 : bool; l6 : bool; l5 : bool; l4 : bool; l3 : bool; l2 : bool;
+    l1 : bool; l0 : bool;
+let
+  v = (ck = St_5_Opened);
+  l15 = not(v);
+  v_1 = (ck = St_5_Opened);
+  l14 = if v_1 then l13 else l12;
+  v_2 = (ck_11 = St_4_On);
+  v_3 = not(v_2);
+  l13 = (v_3 or l8);
+  v_4 = (ck = St_5_Closed);
+  l12 = if v_4 then l11 else l10;
+  v_5 = (ck_11 = St_4_On);
+  v_6 = not(v_5);
+  l11 = (v_6 or l7);
+  v_7 = (ck_11 = St_4_On);
+  v_8 = not(v_7);
+  l10 = (v_8 or l9);
+  l9 = if stopup then l8 else l7;
+  v_9 = (outdoorlum = Normal);
+  l8 = (v_9 or l7);
+  l7 = not(presence);
+  v_10 = (ck = St_5_Closed);
+  l6 = if v_10 then l5 else l4;
+  v_11 = (ck_11 = St_4_Off);
+  v_12 = not(v_11);
+  l5 = (v_12 or presence);
+  v_13 = (ck = St_5_Opened);
+  l4 = if v_13 then l3 else l2;
+  v_14 = (ck_11 = St_4_Off);
+  v_15 = not(v_14);
+  l3 = (v_15 or l0);
+  v_16 = (ck_11 = St_4_Off);
+  v_17 = not(v_16);
+  l2 = (v_17 or l1);
+  l1 = if stopup then l0 else presence;
+  v_18 = (outdoorlum = Normal);
+  v_19 = not(v_18);
+  l0 = (v_19 & presence);
+  cclose = l15;
+  coff = l14;
+  con = l6;
+  copen = true
+tel
+

@@ -1,0 +1,264 @@
+(* --- Generated the 17/6/2016 at 14:11 --- *)
+(* --- heptagon compiler, version 1.03.00 (compiled tue. may. 24 19:48:24 CET 2016) --- *)
+(* --- Command line: /home/seydou/.opam/4.02.3/bin/heptc -target c -target ctrln lum.ept --- *)
+
+!typedef
+  St_5 = enum {St_5_Opening, St_5_Opened, St_5_Closing, St_5_Closed};
+  St_4 = enum {St_4_On, St_4_Off};
+  St_3 = enum {St_3_Somebody, St_3_Nobody};
+  St_2 = enum {St_2_Somebody, St_2_Nobody};
+  St_1 = enum {St_1_On, St_1_Off};
+  St = enum {St_Opening, St_Opened, St_Closing, St_Closed};
+  LumValue = enum {Null, Low, Normal, High};
+  Command = enum {Open, Close, SwitchOn, SwitchOff, Nothing};
+  LampState = enum {On, Off};
+  ShutterState = enum {Closed, Opened, Closing, Opening};
+  
+!state
+  ck: St_5;
+  ck_11: St_4;
+  ck_14: St_3;
+  pnr_2: bool;
+  pnr_1: bool;
+  pnr: bool;
+  outlumbefore: LumValue;
+  __init__: bool;
+  ok: bool;
+  property: bool;
+  cmdShutter: Command;
+  shutterstate: ShutterState;
+  cmdLamp: Command;
+  lampstate: LampState;
+  
+!input
+  presence: bool;
+  stopdown: bool;
+  stopup: bool;
+  outdoorlum: LumValue;
+  
+!controllable
+  copen: bool;
+  con: bool;
+  coff: bool;
+  cclose: bool;
+  
+!local
+  ck_10, ck_9, ck_8, ck_7, nr_2_St_5_Closing, nr_2_St_5_Opened,
+  nr_2_St_5_Opening, nr_2_St_5_Closed, ck_13, ck_12, nr_1_St_4_On,
+  nr_1_St_4_Off, v_19, nr_St_3_Somebody, occupied_1_St_3_Somebody,
+  nr_St_3_Nobody, occupied_1_St_3_Nobody, v_18, v_17, v_16, v_15, v_14, v_13,
+  v_12, v_11, v_10, v_9, v_8, v_7, v_6, v_5, v_4, v_3, v_2, v_1, v, r_2,
+  nr_2, r_1, nr_1, r, nr, presence_1, occupied_1, c1, c2, copen_1, cclose_1,
+  stopdown_1, stopup_1, occupied, prop1, prop2, prop3, prop4, prop5: bool;
+  shutterlum_1_St_5_Closing_false: LumValue;
+  shutterlum_1_St_5_Closing_true: LumValue;
+  cmd_St_5_Opened_false: Command;
+  cmd_St_5_Opened_true: Command;
+  shutterlum_1_St_5_Opening_false: LumValue;
+  shutterlum_1_St_5_Opening_true: LumValue;
+  cmd_St_5_Closed_false: Command;
+  cmd_St_5_Closed_true: Command;
+  ns_2_St_5_Closing: St_5;
+  shutterstate_1_St_5_Closing: ShutterState;
+  shutterlum_1_St_5_Closing: LumValue;
+  cmd_St_5_Closing: Command;
+  ns_2_St_5_Opened: St_5;
+  shutterstate_1_St_5_Opened: ShutterState;
+  shutterlum_1_St_5_Opened: LumValue;
+  cmd_St_5_Opened: Command;
+  ns_2_St_5_Opening: St_5;
+  shutterstate_1_St_5_Opening: ShutterState;
+  shutterlum_1_St_5_Opening: LumValue;
+  cmd_St_5_Opening: Command;
+  ns_2_St_5_Closed: St_5;
+  shutterstate_1_St_5_Closed: ShutterState;
+  shutterlum_1_St_5_Closed: LumValue;
+  cmd_St_5_Closed: Command;
+  cmd_1_St_4_On_false: Command;
+  cmd_1_St_4_On_true: Command;
+  cmd_1_St_4_Off_false: Command;
+  cmd_1_St_4_Off_true: Command;
+  ns_1_St_4_On: St_4;
+  lampstate_1_St_4_On: LampState;
+  lumlamp_St_4_On: LumValue;
+  cmd_1_St_4_On: Command;
+  ns_1_St_4_Off: St_4;
+  lampstate_1_St_4_Off: LampState;
+  lumlamp_St_4_Off: LumValue;
+  cmd_1_St_4_Off: Command;
+  ns_St_3_Somebody: St_3;
+  ns_St_3_Nobody: St_3;
+  ns_2: St_5;
+  ns_1: St_4;
+  ns: St_3;
+  cmd_1: Command;
+  lumlamp: LumValue;
+  lampstate_1: LampState;
+  outdoorlum_1: LumValue;
+  cmd: Command;
+  shutterlum_1: LumValue;
+  shutterstate_1: ShutterState;
+  shutterlum: LumValue;
+  lamplum: LumValue;
+  shutter_state: ShutterState;
+  lamp_state: LampState;
+  
+!definition
+  shutterlum_1_St_5_Closing_false = Low;
+  shutterlum_1_St_5_Closing_true = Null;
+  ck_10 = (outdoorlum_1 = Null);
+  cmd_St_5_Opened_false = Nothing;
+  cmd_St_5_Opened_true = Close;
+  ck_9 = cclose_1;
+  shutterlum_1_St_5_Opening_false = Low;
+  shutterlum_1_St_5_Opening_true = Null;
+  ck_8 = (outdoorlum_1 = Null);
+  cmd_St_5_Closed_false = Nothing;
+  cmd_St_5_Closed_true = Open;
+  ck_7 = copen_1;
+  nr_2_St_5_Closing = stopdown_1;
+  ns_2_St_5_Closing = (if stopdown_1 then St_5_Closed else St_5_Closing);
+  shutterstate_1_St_5_Closing = Closing;
+  shutterlum_1_St_5_Closing = (if (ck_10 = true) then
+                              shutterlum_1_St_5_Closing_true else
+                              shutterlum_1_St_5_Closing_false);
+  cmd_St_5_Closing = Nothing;
+  nr_2_St_5_Opened = cclose_1;
+  ns_2_St_5_Opened = (if cclose_1 then St_5_Closing else St_5_Opened);
+  shutterstate_1_St_5_Opened = Opened;
+  shutterlum_1_St_5_Opened = outdoorlum_1;
+  cmd_St_5_Opened = (if (ck_9 = true) then cmd_St_5_Opened_true else
+                    cmd_St_5_Opened_false);
+  nr_2_St_5_Opening = stopup_1;
+  ns_2_St_5_Opening = (if stopup_1 then St_5_Opened else St_5_Opening);
+  shutterstate_1_St_5_Opening = Opening;
+  shutterlum_1_St_5_Opening = (if (ck_8 = true) then
+                              shutterlum_1_St_5_Opening_true else
+                              shutterlum_1_St_5_Opening_false);
+  cmd_St_5_Opening = Nothing;
+  nr_2_St_5_Closed = copen_1;
+  ns_2_St_5_Closed = (if copen_1 then St_5_Opening else St_5_Closed);
+  shutterstate_1_St_5_Closed = Closed;
+  shutterlum_1_St_5_Closed = Null;
+  cmd_St_5_Closed = (if (ck_7 = true) then cmd_St_5_Closed_true else
+                    cmd_St_5_Closed_false);
+  cmd_1_St_4_On_false = Nothing;
+  cmd_1_St_4_On_true = SwitchOff;
+  ck_13 = c2;
+  cmd_1_St_4_Off_false = Nothing;
+  cmd_1_St_4_Off_true = SwitchOn;
+  ck_12 = c1;
+  nr_1_St_4_On = c2;
+  ns_1_St_4_On = (if c2 then St_4_Off else St_4_On);
+  lampstate_1_St_4_On = On;
+  lumlamp_St_4_On = Normal;
+  cmd_1_St_4_On = (if (ck_13 = true) then cmd_1_St_4_On_true else
+                  cmd_1_St_4_On_false);
+  nr_1_St_4_Off = c1;
+  ns_1_St_4_Off = (if c1 then St_4_On else St_4_Off);
+  lampstate_1_St_4_Off = Off;
+  lumlamp_St_4_Off = Null;
+  cmd_1_St_4_Off = (if (ck_12 = true) then cmd_1_St_4_Off_true else
+                   cmd_1_St_4_Off_false);
+  v_19 = not presence_1;
+  nr_St_3_Somebody = v_19;
+  ns_St_3_Somebody = (if v_19 then St_3_Nobody else St_3_Somebody);
+  occupied_1_St_3_Somebody = true;
+  nr_St_3_Nobody = presence_1;
+  ns_St_3_Nobody = (if presence_1 then St_3_Somebody else St_3_Nobody);
+  occupied_1_St_3_Nobody = false;
+  v_18 = (v_16 or v_17);
+  v_17 = (lamplum = Normal);
+  v_16 = (shutterlum = Normal);
+  v_15 = not occupied;
+  v_14 = not v_13;
+  v_13 = (shutter_state = Closed);
+  v_12 = not v_11;
+  v_11 = occupied and v_10;
+  v_10 = (outlumbefore = Normal);
+  v_9 = (lamp_state = Off);
+  v_8 = not v_7;
+  v_7 = (shutterlum = Normal);
+  v_6 = (lamp_state = Off);
+  v_5 = (shutter_state = Closing);
+  v_4 = not v_3;
+  v_3 = occupied and v_2;
+  v_2 = (shutterlum = High);
+  v_1 = v and prop3;
+  v = prop1 and prop2;
+  ns_2 = (if (ck = St_5_Closed) then ns_2_St_5_Closed else
+         (if (ck = St_5_Opening) then ns_2_St_5_Opening else
+         (if (ck = St_5_Opened) then ns_2_St_5_Opened else ns_2_St_5_Closing)));
+  r_2 = pnr_2;
+  nr_2 = (if (ck = St_5_Closed) then nr_2_St_5_Closed else
+         (if (ck = St_5_Opening) then nr_2_St_5_Opening else
+         (if (ck = St_5_Opened) then nr_2_St_5_Opened else nr_2_St_5_Closing)));
+  ns_1 = (if (ck_11 = St_4_Off) then ns_1_St_4_Off else ns_1_St_4_On);
+  r_1 = pnr_1;
+  nr_1 = (if (ck_11 = St_4_Off) then nr_1_St_4_Off else nr_1_St_4_On);
+  ns = (if (ck_14 = St_3_Nobody) then ns_St_3_Nobody else ns_St_3_Somebody);
+  r = pnr;
+  nr = (if (ck_14 = St_3_Nobody) then nr_St_3_Nobody else nr_St_3_Somebody);
+  presence_1 = presence;
+  occupied_1 = (if (ck_14 = St_3_Nobody) then occupied_1_St_3_Nobody else
+               occupied_1_St_3_Somebody);
+  c1 = con;
+  c2 = coff;
+  cmd_1 = (if (ck_11 = St_4_Off) then cmd_1_St_4_Off else cmd_1_St_4_On);
+  lumlamp = (if (ck_11 = St_4_Off) then lumlamp_St_4_Off else
+            lumlamp_St_4_On);
+  lampstate_1 = (if (ck_11 = St_4_Off) then lampstate_1_St_4_Off else
+                lampstate_1_St_4_On);
+  copen_1 = copen;
+  cclose_1 = cclose;
+  stopdown_1 = stopdown;
+  stopup_1 = stopup;
+  outdoorlum_1 = outlumbefore;
+  cmd = (if (ck = St_5_Closed) then cmd_St_5_Closed else
+        (if (ck = St_5_Opening) then cmd_St_5_Opening else
+        (if (ck = St_5_Opened) then cmd_St_5_Opened else cmd_St_5_Closing)));
+  shutterlum_1 = (if (ck = St_5_Closed) then shutterlum_1_St_5_Closed else
+                 (if (ck = St_5_Opening) then shutterlum_1_St_5_Opening else
+                 (if (ck = St_5_Opened) then shutterlum_1_St_5_Opened else
+                 shutterlum_1_St_5_Closing)));
+  shutterstate_1 = (if (ck = St_5_Closed) then shutterstate_1_St_5_Closed
+                   else
+                   (if (ck = St_5_Opening) then shutterstate_1_St_5_Opening
+                   else
+                   (if (ck = St_5_Opened) then shutterstate_1_St_5_Opened
+                   else shutterstate_1_St_5_Closing)));
+  occupied = occupied_1;
+  shutterlum = shutterlum_1;
+  lamplum = lumlamp;
+  shutter_state = shutterstate_1;
+  lamp_state = lampstate_1;
+  prop1 = (v_15 or v_18);
+  prop2 = (v_12 or v_14);
+  prop3 = (v_8 or v_9);
+  prop4 = (occupied or v_6);
+  prop5 = (v_4 or v_5);
+  
+!transition
+  ck'= ns_2;
+  ck_11'= ns_1;
+  ck_14'= ns;
+  pnr_2'= nr_2;
+  pnr_1'= nr_1;
+  pnr'= nr;
+  outlumbefore'= outdoorlum;
+  __init__'= false;
+  ok'= true;
+  property'= v_1 and prop4;
+  cmdShutter'= cmd;
+  shutterstate'= shutter_state;
+  cmdLamp'= cmd_1;
+  lampstate'= lamp_state;
+  
+!initial
+  (outlumbefore = Null) and (ck = St_5_Closed) and not pnr_2 and
+  (ck_11 = St_4_Off) and not pnr_1 and (ck_14 = St_3_Nobody) and not pnr and
+  __init__;
+!assertion
+  true;
+!invariant
+  (__init__ or ok and property);

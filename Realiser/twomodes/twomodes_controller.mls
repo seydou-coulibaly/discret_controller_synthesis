@@ -1,7 +1,0 @@
-type st = St_Up|St_Down
-node twomodes_ctrlr0(ck : st; ok : bool; pnr : bool; v : int; x_1 : int)
-returns (c : bool)
-let
-  c = false
-tel
-

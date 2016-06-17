@@ -25,24 +25,23 @@ node train_ctrlr0(ck : st_14; ck_11 : st_10; ck_13 : st_9; ck_15 : st_8;
                    presenceSection2 : bool)
 returns (demandeActionnerAig1Bas : bool; demandeActionnerAig1Haut : bool;
           demandeActionnerAig2Bas : bool; demandeActionnerAig2Haut : bool)
-var v_5 : bool; v_4 : bool; v_3 : bool; v_2 : bool; v_1 : bool; v : bool;
-    l10 : bool; l9 : bool; l8 : bool; l7 : bool; l6 : bool; l5 : bool;
-    l4 : bool; l3 : bool; l2 : bool; l1 : bool; l0 : bool;
+var v_4 : bool; v_3 : bool; v_2 : bool; v_1 : bool; v : bool; l10 : bool;
+    l9 : bool; l8 : bool; l7 : bool; l6 : bool; l5 : bool; l4 : bool;
+    l3 : bool; l2 : bool; l1 : bool; l0 : bool;
 let
-  v = (ck_5 = St_13_Bas);
-  v_1 = not(v);
-  l10 = (v_1 or l9);
+  v = (ck_5 = St_13_Haut);
+  l10 = (v or l9);
   l9 = if presenceAiguillage2 then l8 else l7;
   l8 = (ck_19 = St_6_NiveauVide);
   l7 = (ck_19 = St_6_PresenceNiveau);
-  v_2 = (ck = St_14_Haut);
-  v_3 = not(v_2);
-  l6 = (v_3 or l5);
+  v_1 = (ck = St_14_Bas);
+  l6 = (v_1 or l5);
   l5 = if presenceAiguillage1 then l4 else l3;
-  v_4 = (ck_17 = St_7_NiveauVide);
-  l4 = (v_4 & l2);
-  v_5 = (ck_17 = St_7_PresenceNiveau);
-  l3 = (v_5 & l2);
+  v_2 = (ck_17 = St_7_PresenceNiveau);
+  v_3 = not(v_2);
+  l4 = (v_3 & l2);
+  v_4 = (ck_17 = St_7_PresenceNiveau);
+  l3 = (v_4 & l2);
   l2 = if presenceGare2 then l1 else l0;
   l1 = (ck_23 = St_4_NiveauVide);
   l0 = (ck_23 = St_4_PresenceNiveau);

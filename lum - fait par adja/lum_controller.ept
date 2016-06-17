@@ -1,0 +1,41 @@
+type command = Open|Close|SwitchOn|SwitchOff|Nothing
+type lampState = On|Off
+type lumValue = Null|Low|Normal|High
+type shutterState = Closed|Opened|Closing|Opening
+type st = St_Opening|St_Opened|St_Closing|St_Closed
+type st_1 = St_1_On|St_1_Off
+type st_2 = St_2_Somebody|St_2_Nobody
+type st_3 = St_3_Somebody|St_3_Nobody
+type st_4 = St_4_On|St_4_Off
+type st_5 = St_5_Opening|St_5_Opened|St_5_Closing|St_5_Closed
+node lum_ctrlr0(ck : st_5; ck_11 : st_4; ck_14 : st_3; ok : bool;
+                 outdoorlum : lumValue; outlumbefore : lumValue; pnr : bool;
+                 pnr_1 : bool; pnr_2 : bool; presence : bool;
+                 stopdown : bool; stopup : bool)
+returns (cclose : bool; coff : bool; con : bool; copen : bool)
+var l15 : bool; l14 : bool; l13 : bool; l12 : bool; l11 : bool; l10 : bool;
+    l9 : bool; l8 : bool; l7 : bool; l6 : bool; l5 : bool; l4 : bool;
+    l3 : bool; l2 : bool; l1 : bool; l0 : bool;
+let
+  copen = true;
+  con = l6;
+  coff = l14;
+  cclose = l15;
+  l0 = (not((outdoorlum = Normal)) & presence);
+  l1 = if stopup then l0 else presence;
+  l2 = (not((ck_11 = St_4_Off)) or l1);
+  l3 = (not((ck_11 = St_4_Off)) or l0);
+  l4 = if (ck = St_5_Opened) then l3 else l2;
+  l5 = (not((ck_11 = St_4_Off)) or presence);
+  l6 = if (ck = St_5_Closed) then l5 else l4;
+  l7 = not(presence);
+  l8 = ((outdoorlum = Normal) or l7);
+  l9 = if stopup then l8 else l7;
+  l10 = (not((ck_11 = St_4_On)) or l9);
+  l11 = (not((ck_11 = St_4_On)) or l7);
+  l12 = if (ck = St_5_Closed) then l11 else l10;
+  l13 = (not((ck_11 = St_4_On)) or l8);
+  l14 = if (ck = St_5_Opened) then l13 else l12;
+  l15 = not((ck = St_5_Opened))
+tel
+

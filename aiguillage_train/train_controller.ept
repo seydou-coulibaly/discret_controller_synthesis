@@ -36,12 +36,12 @@ let
   l1 = (ck_23 = St_4_NiveauVide);
   l2 = if presenceGare2 then l1 else l0;
   l3 = ((ck_17 = St_7_PresenceNiveau) & l2);
-  l4 = ((ck_17 = St_7_NiveauVide) & l2);
+  l4 = (not((ck_17 = St_7_PresenceNiveau)) & l2);
   l5 = if presenceAiguillage1 then l4 else l3;
-  l6 = (not((ck = St_14_Haut)) or l5);
+  l6 = ((ck = St_14_Bas) or l5);
   l7 = (ck_19 = St_6_PresenceNiveau);
   l8 = (ck_19 = St_6_NiveauVide);
   l9 = if presenceAiguillage2 then l8 else l7;
-  l10 = (not((ck_5 = St_13_Bas)) or l9)
+  l10 = ((ck_5 = St_13_Haut) or l9)
 tel
 
